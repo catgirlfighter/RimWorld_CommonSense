@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+<!-- Meditative -->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/JoyGiverDef[defName="Skygaze"]</xpath>
+		<value>
+			<unroofedOnly>true</unroofedOnly>
+		</value>
+	</Operation>
+
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/JoyGiverDef[defName="GoForWalk"]</xpath>
+		<value>
+			<unroofedOnly>true</unroofedOnly>
+		</value>
+	</Operation>
+
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/JoyGiverDef[defName="BuildSnowman"]</xpath>
+		<value>
+			<unroofedOnly>true</unroofedOnly>
+		</value>
+	</Operation>
+
+</Patch>
