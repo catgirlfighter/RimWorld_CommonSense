@@ -14,7 +14,7 @@ namespace CommonSense
         {
             Listing_Standard listing_Standard = new Listing_Standard();
             listing_Standard.Begin(inRect);
-            listing_Standard.CheckboxLabeled("Pawns are encouraged to fulfill their need of outdoors by seeking outdoors (unroofed) activities", ref fulfill_outdoors, "Too bad, but it doesn't mean 'any', only those, that marked as 'unroofed'.");
+            listing_Standard.CheckboxLabeled("Pawns are encouraged to fulfill their need of outdoors by seeking recreation outdoors", ref fulfill_outdoors, "NOTE: Don't place the same joy giving sources both indoors and outdoors to avoid indecisiveness.");
             listing_Standard.CheckboxLabeled("Separate meals with negative thoughts about them", ref separate_meals);
             listing_Standard.CheckboxLabeled("Count odd meat (ex. insect) as normal, allowing to stack it with normal meals", ref odd_is_normal);
 

@@ -6,6 +6,7 @@ using Harmony;
 using RimWorld;
 using Verse;
 using Verse.AI;
+using UnityEngine;
 
 namespace CommonSense
 {
@@ -31,33 +32,71 @@ namespace CommonSense
                     return TryGiveJobFromJoyGiverDefDirect(def, pawn);
                 }
             }
-            //Don't bother thinking about what to do if you're starved for one of the things
+
+            //double pass on trying to give a job. At first, we'll try to give a job, that located outside;
             static bool Prefix(ref Job __result, ref JobCrutch __instance,  ref Pawn pawn)
             {
-                
+
                 if (!Settings.fulfill_outdoors || !__instance.CanDoDuringMedicalRestCrutch() && pawn.InBed() && HealthAIUtility.ShouldSeekMedicalRest(pawn)
                     || pawn.needs.outdoors == null || pawn.needs.outdoors.CurLevel >= 0.4f)
                 {
                     return true;
                 }
 
-
-                List<JoyGiverDef> l = DefDatabase<JoyGiverDef>.AllDefsListForReading.FindAll(x => x.unroofedOnly);
-                Random rand = new Random();
-                int n = rand.Next(0,l.Count)+1;
-
-                for(int i = 0; i < l.Count; i++)
+                //Log.Message("needs_outdoors=" + pawn.Name);
+                List<JoyGiverDef> allDefsListForReading = DefDatabase<JoyGiverDef>.AllDefsListForReading;
+                JoyToleranceSet tolerances = pawn.needs.joy.tolerances;
+                DefMap<JoyGiverDef, float> joyGiverChances = new DefMap<JoyGiverDef, float>();
+                //Log.Message("joy_defs_for_reading_count=" + allDefsListForReading.Count.ToString());
+                for (int i = 0; i < allDefsListForReading.Count; i++)
                 {
-                    JoyGiverDef jgd = l[(n + i) % l.Count];
-                    if (!__instance.JoyGiverAllowedCrutch(jgd) || pawn.needs.joy.tolerances.BoredOf(jgd.joyKind) || jgd.Worker.MissingRequiredCapacity(pawn) != null)
-                        continue;
-
-                    Job job = __instance.TryGiveJobFromJoyGiverDefDirectCrutch(jgd, pawn);
-                    if (job != null)
+                    JoyGiverDef joyGiverDef = allDefsListForReading[i];
+                    joyGiverChances[joyGiverDef] = 0f;
+                    if (__instance.JoyGiverAllowedCrutch(joyGiverDef) && !pawn.needs.joy.tolerances.BoredOf(joyGiverDef.joyKind) && joyGiverDef.Worker.MissingRequiredCapacity(pawn) == null)
                     {
-                        __result = job;
-                        return false;
+                        if (joyGiverDef.pctPawnsEverDo < 1f)
+                        {
+                            Rand.PushState(pawn.thingIDNumber ^ 0x3C49C49);
+                            if (Rand.Value >= joyGiverDef.pctPawnsEverDo)
+                            {
+                                Rand.PopState();
+                                continue;
+                            }
+                            Rand.PopState();
+                        }
+                        float num = tolerances[joyGiverDef.joyKind];
+                        float b = Mathf.Pow(1f - num, 5f);
+                        b = Mathf.Max(0.001f, b);
+                        joyGiverChances[joyGiverDef] = joyGiverDef.Worker.GetChance(pawn) * b;
                     }
+                }
+                for (int j = 0; j < joyGiverChances.Count; j++)
+                {
+                    if (!allDefsListForReading.TryRandomElementByWeight((JoyGiverDef d) => joyGiverChances[d], out JoyGiverDef result))
+                    {
+                        break;
+                    }
+                    Job job = __instance.TryGiveJobFromJoyGiverDefDirectCrutch(result, pawn);
+                    if (job != null && job.targetA != null)
+                            if (job.targetA.Thing != null)
+                            {
+                                //Log.Message("joy_source_thing=" + job.targetA.Thing.def.defName);
+                                if (job.targetA.Thing.Position.GetRoom(job.targetA.Thing.Map).PsychologicallyOutdoors)
+                                {
+                                    __result = job;
+                                    return false;
+                                }
+                            } else if (job.targetA.Cell != null)
+                            {
+                                IntVec3 vec3 = (IntVec3)job.targetA;
+                                //Log.Message("joy_source_place");
+                                if (job.targetA.Cell.GetRoom(pawn.Map).PsychologicallyOutdoors)
+                                {
+                                    __result = job;
+                                    return false;
+                                }
+                            }
+                    joyGiverChances[result] = 0f;
                 }
                 return true;
             }
