@@ -104,6 +104,9 @@ namespace CommonSense
                 //    return true;
                 //Log.Message("Job=" + newJob.def.defName);
                 //long d = DateTime.Now.Ticks;
+                if (!Settings.clean_before_work)
+                    return true;
+
                 IntVec3 cell = newJob.targetA.Cell;
                 if (!newJob.def.allowOpportunisticPrefix ||
                     newJob.playerForced ||
@@ -204,7 +207,7 @@ namespace CommonSense
         {
             static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition, bool startNewJob)
             {
-                if (__instance.curJob.def.defName == "TendPatient" && condition == JobCondition.Succeeded && __instance.curJob != null &&
+                if (Settings.clean_before_work && __instance.curJob.def.defName == "TendPatient" && condition == JobCondition.Succeeded && __instance.curJob != null &&
                     __instance.jobQueue.Count == 0 && __instance.curJob.targetA.Thing != null && __instance.curJob.targetA.Thing != __instance._pawn)
                 {
                     //LocalTargetInfo ti = new LocalTargetInfo(__instance._pawn.Position);
