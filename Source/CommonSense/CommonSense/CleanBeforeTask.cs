@@ -109,6 +109,7 @@ namespace CommonSense
                     newJob.playerForced ||
                     !cell.IsValid || cell.IsForbidden(__instance._pawn) ||
                     newJob.targetA == null ||
+                    __instance._pawn.Downed ||
                     (newJob.targetA.Thing == null || !newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building))) &&
                     (newJob.def.joyKind == null || newJob.targetA.Cell == null))
                 {
