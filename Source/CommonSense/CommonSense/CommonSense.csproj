@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CleanBeforeTask.cs" />
     <Compile Include="MealStacking.cs" />
     <Compile Include="CravingForOutdoors.cs" />
     <Compile Include="CommonSense.cs" />
