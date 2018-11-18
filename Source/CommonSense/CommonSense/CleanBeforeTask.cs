@@ -17,7 +17,7 @@ namespace CommonSense
             Room room = null;
             if (target.Thing == null)
                 if (target.Cell == null)
-                    Log.Error("Invalid target: cell or thing it msut be");
+                    Log.Error("Invalid target: cell or thing it must be");
                 else
                     room = GridsUtility.GetRoom(target.Cell, pawn.Map);
             else
@@ -177,7 +177,7 @@ namespace CommonSense
                     }
                     //Log.Message("Stage3=" + (DateTime.Now.Ticks - d).ToString());
 
-                    Log.Message("S_T=" + stot.ToString() + " S_B=" + stob.ToString() + " B_T=" + btot.ToString());
+                    //Log.Message("S_T=" + stot.ToString() + " S_B=" + stob.ToString() + " B_T=" + btot.ToString());
                     if (b)
                         return true;
                 }
