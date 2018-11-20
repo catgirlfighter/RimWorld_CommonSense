@@ -47,10 +47,11 @@ namespace CommonSense
             }
         }
 
-        //public static IEnumerable<Thing> MakeRecipeProducts(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
-        [HarmonyPatch/*(typeof(GenRecipe), "MakeRecipeProducts")*/]
+        [HarmonyPatch]
         static class GenRecipe_MakeRecipeProducts_CommonSensePatch
         {
+            private static FieldInfo field;
+
             internal static void ClearIngs(CompIngredients ings)
             {
                 ings.ingredients.Clear();
@@ -59,21 +60,29 @@ namespace CommonSense
             internal static MethodBase TargetMethod()
             {
                 Type nestedTypeResult = null;
-                const string targetMethod = "<MakeRecipeProducts>";
-                using (StreamWriter file = new StreamWriter(@"d:\Games\steam\steamapps\common\RimWorld\Mods\CommonSense\Source\CommonSense\log.txt" + Guid.NewGuid().ToString(), true))
+                const string targetMethod = "MakeRecipeProducts";
+
+                foreach (var nestedType in typeof(GenRecipe).GetNestedTypes(AccessTools.all))
                 {
-                    foreach (var nestedType in typeof(GenRecipe).GetNestedTypes(AccessTools.all))
-                    {
-                        if (nestedType == typeof(CompIngredients))
-                            file.WriteLine("Lines=" + nestedType.Name);
-                    
                     if (!nestedType.Name.Contains(targetMethod)) continue;
 
-                        nestedTypeResult = nestedType;
-                    }
+                    nestedTypeResult = nestedType;
                 }
 
                 if (nestedTypeResult == null) throw new Exception($"Could not find {targetMethod} Iterator Class");
+
+                if (field == null)
+                {
+                    var fields = AccessTools.GetDeclaredFields(nestedTypeResult);
+                    foreach (var i in fields)
+                    {
+                        if (i.FieldType == typeof(CompIngredients))
+                            if (field == null)
+                                field = i;
+                            else
+                                throw new Exception("Multiple CompIngredients fields found");
+                    }
+                }
 
                 var result = AccessTools.Method(nestedTypeResult, "MoveNext");
 
@@ -85,57 +94,42 @@ namespace CommonSense
             [HarmonyTranspiler]
             internal static IEnumerable<CodeInstruction> CleanIngList(IEnumerable<CodeInstruction> instrs)
             {
-                using (StreamWriter file = new StreamWriter(@"d:\Games\steam\steamapps\common\RimWorld\Mods\CommonSense\Source\CommonSense\log.txt" + Guid.NewGuid().ToString(), true))
+
+                foreach (CodeInstruction instr in instrs)
                 {
-                    file.WriteLine("Lines=" + instrs.Count().ToString());
-                    //foreach(var c in AccessTools.GetMethodNames(typeof(Thing)))
-                    //{
-                    //    file.WriteLine(c);
-                    //}
 
-                    foreach (var s in AccessTools.GetDeclaredFields(typeof(GenRecipe)))
-                    { 
-                        file.WriteLine(s.ToString());
-                    }
-
-                    foreach (CodeInstruction instr in instrs)
+                    if (instr.opcode == OpCodes.Stfld && instr.operand == field)
                     {
-                        if (instr.operand != null)
-                            file.WriteLine("opr=" + instr.opcode + " opd=" + instr.operand.GetType().ToString() + ":" + (instr.operand is LocalBuilder ? ((LocalBuilder)instr.operand).LocalType.ToString() : instr.operand.ToString()));
-                        else
-                            file.WriteLine("opr=" + instr.opcode);
-                        yield return instr;
-                        if (instr.opcode == OpCodes.Stfld && instr.operand == AccessTools.Field(typeof(GenRecipe), 9))
-                        {
-                            file.WriteLine("addedline");
-                        }
-                        /*
-                                                if (instr.operand is Label)
-                                                {
-                                                    l1 = instr;
-                                                    l2 = l1;
-                                                }
+                        FileLog.Log("Found");
+                    }
+                    yield return instr;
+                    /*
+                                            if (instr.operand is Label)
+                                            {
+                                                l1 = instr;
+                                                l2 = l1;
+                                            }
 
-                                                if (instr.opcode == OpCodes.Callvirt && instr.operand == typeof(CompIngredients).GetMethod(nameof(CompIngredients.RegisterIngredient)))
-                                                    break;
-                        */
-                    }
-/*
-                    foreach (CodeInstruction instr in instrs)
-                    {
-                        yield return instr;
-                        if (instr == l2)
-                        {
-                            file.WriteLine("addedline");
-                            yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GenRecipe_MakeRecipeProducts_CommonSensePatch), nameof(GenRecipe_TryDispenseFood_CommonSensePatch.ClearIngs), new Type[] { typeof(CompIngredients) }));
-                        }
-                    }
-*/
+                                            if (instr.opcode == OpCodes.Callvirt && instr.operand == typeof(CompIngredients).GetMethod(nameof(CompIngredients.RegisterIngredient)))
+                                                break;
+                    */
+                    //                    }
+                    /*
+                                        foreach (CodeInstruction instr in instrs)
+                                        {
+                                            yield return instr;
+                                            if (instr == l2)
+                                            {
+                                                file.WriteLine("addedline");
+                                                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GenRecipe_MakeRecipeProducts_CommonSensePatch), nameof(GenRecipe_TryDispenseFood_CommonSensePatch.ClearIngs), new Type[] { typeof(CompIngredients) }));
+                                            }
+                                        }
+                    */
                 }
             }
         }
 
-            //public virtual Thing TryDispenseFood()
+        //public virtual Thing TryDispenseFood()
         [HarmonyPatch(typeof(Building_NutrientPasteDispenser), "TryDispenseFood")]
         static class GenRecipe_TryDispenseFood_CommonSensePatch
         {
