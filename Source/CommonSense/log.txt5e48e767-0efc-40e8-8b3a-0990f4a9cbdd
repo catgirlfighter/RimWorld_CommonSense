@@ -1,0 +1,386 @@
+Lines=385
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 $PC
+opr=stloc.0
+opr=ldarg.0
+opr=ldc.i4.m1
+opr=stfld opd=System.Reflection.MonoField:System.Int32 $PC
+opr=ldc.i4.0
+opr=stloc.1
+opr=ldloc.0
+opr=switch opd=System.Reflection.Emit.Label[]:System.Reflection.Emit.Label[]
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.StatDef efficiencyStat
+opr=brtrue opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldc.r4 opd=System.Single:1
+opr=stfld opd=System.Reflection.MonoField:System.Single <efficiency>__0
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Pawn worker
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.StatDef efficiencyStat
+opr=ldc.i4.1
+opr=call opd=System.Reflection.MonoMethod:Single GetStatValue(Verse.Thing, RimWorld.StatDef, Boolean)
+opr=stfld opd=System.Reflection.MonoField:System.Single <efficiency>__0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.StatDef workTableEfficiencyStat
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.IBillGiver billGiver
+opr=isinst opd=System.MonoType:RimWorld.Building_WorkTable
+opr=stloc.2
+opr=ldloc.2
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Single <efficiency>__0
+opr=ldloc.2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.StatDef workTableEfficiencyStat
+opr=ldc.i4.1
+opr=call opd=System.Reflection.MonoMethod:Single GetStatValue(Verse.Thing, RimWorld.StatDef, Boolean)
+opr=mul
+opr=stfld opd=System.Reflection.MonoField:System.Single <efficiency>__0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.ThingDefCountClass] products
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldc.i4.0
+opr=stfld opd=System.Reflection.MonoField:System.Int32 <i>__1
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.ThingDefCountClass] products
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <i>__1
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Verse.ThingDefCountClass get_Item(Int32)
+opr=stfld opd=System.Reflection.MonoField:Verse.ThingDefCountClass <prod>__2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.ThingDefCountClass <prod>__2
+opr=ldfld opd=System.Reflection.MonoField:Verse.ThingDef thingDef
+opr=callvirt opd=System.Reflection.MonoMethod:Boolean get_MadeFromStuff()
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing dominantIngredient
+opr=ldfld opd=System.Reflection.MonoField:Verse.ThingDef def
+opr=stfld opd=System.Reflection.MonoField:Verse.ThingDef <stuffDef>__2
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldnull
+opr=stfld opd=System.Reflection.MonoField:Verse.ThingDef <stuffDef>__2
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.ThingDefCountClass <prod>__2
+opr=ldfld opd=System.Reflection.MonoField:Verse.ThingDef thingDef
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.ThingDef <stuffDef>__2
+opr=call opd=System.Reflection.MonoMethod:Verse.Thing MakeThing(Verse.ThingDef, Verse.ThingDef)
+opr=stfld opd=System.Reflection.MonoField:Verse.Thing <product>__2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <product>__2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.ThingDefCountClass <prod>__2
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 count
+opr=conv.r4
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Single <efficiency>__0
+opr=mul
+opr=call opd=System.Reflection.MonoMethod:Int32 CeilToInt(Single)
+opr=stfld opd=System.Reflection.MonoField:System.Int32 stackCount
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing dominantIngredient
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <product>__2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing dominantIngredient
+opr=callvirt opd=System.Reflection.MonoMethod:Color get_DrawColor()
+opr=ldc.i4.0
+opr=call opd=System.Reflection.MonoMethod:Void SetColor(Verse.Thing, Color, Boolean)
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <product>__2
+opr=call opd=System.Reflection.MonoGenericMethod:RimWorld.CompIngredients TryGetComp[CompIngredients](Verse.Thing)
+opr=stfld opd=System.Reflection.MonoField:RimWorld.CompIngredients <ingredientsComp>__2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.CompIngredients <ingredientsComp>__2
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldc.i4.0
+opr=stloc.3
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.CompIngredients <ingredientsComp>__2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.Thing] ingredients
+opr=ldloc.3
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Verse.Thing get_Item(Int32)
+opr=ldfld opd=System.Reflection.MonoField:Verse.ThingDef def
+opr=callvirt opd=System.Reflection.MonoMethod:Void RegisterIngredient(Verse.ThingDef)
+opr=ldloc.3
+opr=ldc.i4.1
+opr=add
+opr=stloc.3
+opr=ldloc.3
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.Thing] ingredients
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Int32 get_Count()
+opr=blt opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <product>__2
+opr=call opd=System.Reflection.MonoGenericMethod:RimWorld.CompFoodPoisonable TryGetComp[CompFoodPoisonable](Verse.Thing)
+opr=stfld opd=System.Reflection.MonoField:RimWorld.CompFoodPoisonable <foodPoisonable>__2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.CompFoodPoisonable <foodPoisonable>__2
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Pawn worker
+opr=ldc.i4.6
+opr=call opd=System.Reflection.MonoMethod:Verse.Room GetRoom(Verse.Thing, RegionType)
+opr=stloc.s opd=System.Reflection.Emit.LocalBuilder:Verse.Room
+opr=ldloc.s opd=System.Reflection.Emit.LocalBuilder:Verse.Room
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldloc.s opd=System.Reflection.Emit.LocalBuilder:Verse.Room
+opr=ldsfld opd=System.Reflection.MonoField:Verse.RoomStatDef FoodPoisonChance
+opr=callvirt opd=System.Reflection.MonoMethod:Single GetStat(Verse.RoomStatDef)
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldsfld opd=System.Reflection.MonoField:Verse.RoomStatDef FoodPoisonChance
+opr=ldfld opd=System.Reflection.MonoField:System.Single roomlessScore
+opr=stloc.s opd=System.Reflection.Emit.LocalBuilder:System.Single
+opr=ldloc.s opd=System.Reflection.Emit.LocalBuilder:System.Single
+opr=call opd=System.Reflection.MonoMethod:Boolean Chance(Single)
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.CompFoodPoisonable <foodPoisonable>__2
+opr=ldc.i4.2
+opr=callvirt opd=System.Reflection.MonoMethod:Void SetPoisoned(FoodPoisonCause)
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Pawn worker
+opr=ldsfld opd=System.Reflection.MonoField:RimWorld.StatDef FoodPoisonChance
+opr=ldc.i4.1
+opr=call opd=System.Reflection.MonoMethod:Single GetStatValue(Verse.Thing, RimWorld.StatDef, Boolean)
+opr=stloc.s opd=System.Reflection.Emit.LocalBuilder:System.Single
+opr=ldloc.s opd=System.Reflection.Emit.LocalBuilder:System.Single
+opr=call opd=System.Reflection.MonoMethod:Boolean Chance(Single)
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:RimWorld.CompFoodPoisonable <foodPoisonable>__2
+opr=ldc.i4.1
+opr=callvirt opd=System.Reflection.MonoMethod:Void SetPoisoned(FoodPoisonCause)
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <product>__2
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Pawn worker
+opr=call opd=System.Reflection.MonoMethod:Verse.Thing PostProcessProduct(Verse.Thing, Verse.RecipeDef, Verse.Pawn)
+opr=stfld opd=System.Reflection.MonoField:Verse.Thing $current
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Boolean $disposing
+opr=brtrue opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldc.i4.1
+opr=stfld opd=System.Reflection.MonoField:System.Int32 $PC
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <i>__1
+opr=ldc.i4.1
+opr=add
+opr=stfld opd=System.Reflection.MonoField:System.Int32 <i>__1
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <i>__1
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.ThingDefCountClass] products
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Int32 get_Count()
+opr=blt opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.SpecialProductType] specialProducts
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldc.i4.0
+opr=stfld opd=System.Reflection.MonoField:System.Int32 <i>__3
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldc.i4.0
+opr=stfld opd=System.Reflection.MonoField:System.Int32 <j>__4
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.Thing] ingredients
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <j>__4
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Verse.Thing get_Item(Int32)
+opr=stfld opd=System.Reflection.MonoField:Verse.Thing <ing>__5
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.SpecialProductType] specialProducts
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <i>__3
+opr=callvirt opd=System.Reflection.MonoGenericMethod:SpecialProductType get_Item(Int32)
+opr=stfld opd=System.Reflection.MonoField:Verse.SpecialProductType $locvar0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.SpecialProductType $locvar0
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.SpecialProductType $locvar0
+opr=ldc.i4.1
+opr=beq opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <ing>__5
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Pawn worker
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Single <efficiency>__0
+opr=callvirt opd=System.Reflection.MonoMethod:IEnumerable`1 ButcherProducts(Verse.Pawn, Single)
+opr=callvirt opd=System.Reflection.MonoGenericMethod:IEnumerator`1 GetEnumerator()
+opr=stfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar1
+opr=ldc.i4.s opd=System.SByte:-3
+opr=stloc.0
+opr=ldloc.0
+opr=ldc.i4.2
+opr=sub
+opr=switch opd=System.Reflection.Emit.Label[]:System.Reflection.Emit.Label[]
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar1
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Verse.Thing get_Current()
+opr=stfld opd=System.Reflection.MonoField:Verse.Thing <product>__6
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <product>__6
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Pawn worker
+opr=call opd=System.Reflection.MonoMethod:Verse.Thing PostProcessProduct(Verse.Thing, Verse.RecipeDef, Verse.Pawn)
+opr=stfld opd=System.Reflection.MonoField:Verse.Thing $current
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Boolean $disposing
+opr=brtrue opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldc.i4.2
+opr=stfld opd=System.Reflection.MonoField:System.Int32 $PC
+opr=ldc.i4.1
+opr=stloc.1
+opr=leave opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar1
+opr=callvirt opd=System.Reflection.MonoMethod:Boolean MoveNext()
+opr=brtrue opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=leave opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldloc.1
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=endfinally
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar1
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar1
+opr=callvirt opd=System.Reflection.MonoMethod:Void Dispose()
+opr=endfinally
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <ing>__5
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Single <efficiency>__0
+opr=callvirt opd=System.Reflection.MonoMethod:IEnumerable`1 SmeltProducts(Single)
+opr=callvirt opd=System.Reflection.MonoGenericMethod:IEnumerator`1 GetEnumerator()
+opr=stfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar2
+opr=ldc.i4.s opd=System.SByte:-3
+opr=stloc.0
+opr=ldloc.0
+opr=ldc.i4.3
+opr=sub
+opr=switch opd=System.Reflection.Emit.Label[]:System.Reflection.Emit.Label[]
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar2
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Verse.Thing get_Current()
+opr=stfld opd=System.Reflection.MonoField:Verse.Thing <product>__7
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Thing <product>__7
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.Pawn worker
+opr=call opd=System.Reflection.MonoMethod:Verse.Thing PostProcessProduct(Verse.Thing, Verse.RecipeDef, Verse.Pawn)
+opr=stfld opd=System.Reflection.MonoField:Verse.Thing $current
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Boolean $disposing
+opr=brtrue opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldc.i4.3
+opr=stfld opd=System.Reflection.MonoField:System.Int32 $PC
+opr=ldc.i4.1
+opr=stloc.1
+opr=leave opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar2
+opr=callvirt opd=System.Reflection.MonoMethod:Boolean MoveNext()
+opr=brtrue opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=leave opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldloc.1
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=endfinally
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar2
+opr=brfalse opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.IEnumerator`1[Verse.Thing] $locvar2
+opr=callvirt opd=System.Reflection.MonoMethod:Void Dispose()
+opr=endfinally
+opr=br opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <j>__4
+opr=ldc.i4.1
+opr=add
+opr=stfld opd=System.Reflection.MonoField:System.Int32 <j>__4
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <j>__4
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.Thing] ingredients
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Int32 get_Count()
+opr=blt opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <i>__3
+opr=ldc.i4.1
+opr=add
+opr=stfld opd=System.Reflection.MonoField:System.Int32 <i>__3
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:System.Int32 <i>__3
+opr=ldarg.0
+opr=ldfld opd=System.Reflection.MonoField:Verse.RecipeDef recipeDef
+opr=ldfld opd=System.Reflection.MonoField:System.Collections.Generic.List`1[Verse.SpecialProductType] specialProducts
+opr=callvirt opd=System.Reflection.MonoGenericMethod:Int32 get_Count()
+opr=blt opd=System.Reflection.Emit.Label:System.Reflection.Emit.Label
+opr=ldarg.0
+opr=ldc.i4.m1
+opr=stfld opd=System.Reflection.MonoField:System.Int32 $PC
+opr=ldc.i4.0
+opr=ret
+opr=ldc.i4.1
+opr=ret

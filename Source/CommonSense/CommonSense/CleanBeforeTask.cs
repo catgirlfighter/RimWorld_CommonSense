@@ -56,12 +56,13 @@ namespace CommonSense
 
         static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target)
         {
-            if ((int)pawn.def.race.intelligence < 2 || 
+            if ((int)pawn.def.race.intelligence < 2 ||
                 pawn.Faction != Faction.OfPlayer ||
                 //pawn.Drafted || 
                 (int)pawn.RaceProps.intelligence < 2 ||
-                pawn.story.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
-                pawn.InMentalState || pawn.IsBurning())
+                //pawn.story.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
+                pawn.InMentalState || pawn.IsBurning() ||
+                pawn.workSettings == null || !pawn.workSettings.WorkIsActive(DefDatabase<WorkTypeDef>.GetNamed("Cleaning")))
                 return null;
 
             IEnumerable<Filth> el = SelectAllFilth(pawn, target);
@@ -207,7 +208,7 @@ namespace CommonSense
         {
             static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition, bool startNewJob)
             {
-                if (Settings.clean_before_work && __instance.curJob.def.defName == "TendPatient" && condition == JobCondition.Succeeded && __instance.curJob != null &&
+                if (Settings.clean_after_tanding && __instance.curJob.def.defName == "TendPatient" && condition == JobCondition.Succeeded && __instance.curJob != null &&
                     __instance.jobQueue.Count == 0 && __instance.curJob.targetA.Thing != null && __instance.curJob.targetA.Thing != __instance._pawn)
                 {
                     //LocalTargetInfo ti = new LocalTargetInfo(__instance._pawn.Position);

@@ -17,7 +17,7 @@ namespace CommonSense
         //ThingWithComps
         //public override bool CanStackWith(Thing other)
         [HarmonyPatch(typeof(Thing), "CanStackWith", new Type[] { typeof(Thing) })]
-        static class CompIngredients__AllowStackWith_RegularMeatPatch
+        static class CompIngredients_CanStackWith_CommonSensePatch
         {
             static int getflags(CompIngredients compIngredients)
             {
