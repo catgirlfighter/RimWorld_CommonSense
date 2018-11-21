@@ -26,7 +26,7 @@ namespace CommonSense
             if (room != null)
                 Log.Message(room.IsHuge.ToString() + " " + room.CellCount);
 
-            if (room == null || room.IsHuge)
+            if (room == null )
                 return new List<Filth>();
 
             PathGrid pathGrid = pawn.Map.pathGrid;
@@ -34,7 +34,7 @@ namespace CommonSense
                 return new List<Filth>();
 
             IEnumerable<Filth> enumerable = null;
-            if (room.CellCount > 200)
+            if (room.IsHuge || room.CellCount > 200)
             {
                 enumerable = new List<Filth>();
                 for (int i = 0; i < 200; i++)
