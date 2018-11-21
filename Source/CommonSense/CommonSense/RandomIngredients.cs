@@ -39,7 +39,7 @@ namespace CommonSense
                 foreach (IngredientCount c in d.ingredients)
                 {
                     ThingDef td = c.filter.AllowedThingDefs.Where(
-                        x => !x.IsIngestible || x.thingClass != typeof(ThingWithComps) && !FoodUtility.IsHumanlikeMeat(x) && x.ingestible.specialThoughtAsIngredient == null
+                        x => !x.IsIngestible || !FoodUtility.IsHumanlikeMeat(x) && x.ingestible.specialThoughtAsIngredient == null
                     ).RandomElement();
                     if (td != null)
                         ings.RegisterIngredient(td);
