@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<!-- settings -->
+	<fulfill_outdoors_head>Need of Outdoors</fulfill_outdoors_head>
+	<fulfill_outdoors_label>Pawns are encouraged to fulfill their need of outdoors by seeking recreation outdoors</fulfill_outdoors_label>
+	<fulfill_outdoors_note>NOTE: Don't place the same joy giving sources both indoors and outdoors to avoid indecisiveness.</fulfill_outdoors_note>
+	<clean_head>Cleaning</clean_head>
+	<clean_before_working_label>Pawns are encouraged to clean the room before operating a building in it</clean_before_working_label>
+	<clean_before_working_note>NOTE: don't expect cleaning from those guys, that don't like to clean</clean_before_working_note>
+	<bill_job_pathing_label>Calculate accurate path to the building for bill jobs</bill_job_pathing_label>
+	<bill_job_pathing_note>It'll help to avoid making unreasonable hooks around when your pawns need to bring resources first, but it may be costly on CPU</bill_job_pathing_note>
+	<clean_after_tending_label>Pawns are encouraged clean the room after tending to a patient</clean_after_tending_label>
+	<clean_after_tending_note>NOTE: don't expect cleaning from those guys, that don't like to clean</clean_after_tending_note>
+	<meal_stacking_head>Meal stacking</meal_stacking_head>
+	<meal_stacking_label>Pawns avoid mixing negative thoughts when stacking meals</meal_stacking_label>
+	<meal_stacking_note>That way pawns will never mix disgusting meals with normal ones</meal_stacking_note>
+	<dont_count_odd_label>Count odd meat (ex.: insect) as normal, allowing to stack it with normal meals</dont_count_odd_label>
+	<dont_count_odd_note>Insect meat isn't so bad...</dont_count_odd_note>
+	<gen_ingredients_head>Meal generation</gen_ingredients_head>
+	<gen_ingredients_label>Add random ingredients to randomly generated meals</gen_ingredients_label>
+	<gen_ingredients_note>Ex.: gifted by story teller, sold by a trader, looted from corpse. Only mood neutral components are used. With this option on, the game will never be the same</gen_ingredients_note>
+</LanguageData>

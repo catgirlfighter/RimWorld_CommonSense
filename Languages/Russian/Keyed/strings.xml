@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<!-- settings -->
+	<fulfill_outdoors_head>Потребность в свежем воздухе</fulfill_outdoors_head>
+	<fulfill_outdoors_label>Поощрять пешек удовлетворять потребность в свежем воздухе через поиск развлечений на свежем воздухе</fulfill_outdoors_label>
+	<fulfill_outdoors_note>ПРИМЕЧАНИЕ: Не размещайте одинаковые источники радости в комнатах и вне комнат чтобы избежать неопределенности</fulfill_outdoors_note>
+	<clean_head>Уборка</clean_head>
+	<clean_before_working_label>Поощрать пешек убирать комнату перед тем как оперировать постройку в ней</clean_before_working_label>
+	<clean_before_working_note>ПРИМЕЧАНИЕ: пешки, которым не нравится убирать, не будут убирать</clean_before_working_note>
+	<bill_job_pathing_label>Рассчитывать точный путь до постройки при выполнении заказа</bill_job_pathing_label>
+	<bill_job_pathing_note>Это поможет избегать необоснованные крюки когда пешка нужно сначала принести ресурсы к постройке, но это может повлиять на производительность</bill_job_pathing_note>
+	<clean_after_tending_label>Поощрять пешек убирать комнату после лечения ран пацианта</clean_after_tending_label>
+	<clean_after_tending_note>ПРИМЕЧАНИЕ: пешки, которым не нравится убирать, не будут убирать</clean_after_tending_note>
+	<meal_stacking_head>Складывание блюд</meal_stacking_head>
+	<meal_stacking_label>Пешки будут избегать смешивать негативные мысли при складывании обедов</meal_stacking_label>
+	<meal_stacking_note>Таким образом отвратительные блюда никогда не перемешаются с простыми</meal_stacking_note>
+	<dont_count_odd_label>Считать странное мясо (напр.: насекомых) нормальным, позволяя складывать его с обычными блюдами</dont_count_odd_label>
+	<dont_count_odd_note>Меся насекомых не на столько уж и плохое...</dont_count_odd_note>
+	<gen_ingredients_head>Генерация блюд</gen_ingredients_head>
+	<gen_ingredients_label>Добавлять случайные ингредиенты в случайно сгенерированные обеды</gen_ingredients_label>
+	<gen_ingredients_note>Прим.: подаренные рассказчиком, проданные торговцем, взятые с трупа. Используются только нейтральные ингредиенты. После включения этой опции, игра никогда не станет прежней</gen_ingredients_note>
+</LanguageData>
