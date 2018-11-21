@@ -23,6 +23,9 @@ namespace CommonSense
             else
                 room = target.Thing.GetRoom();
 
+            if (room != null)
+                Log.Message(room.IsHuge.ToString() + " " + room.CellCount);
+
             if (room == null || room.IsHuge)
                 return new List<Filth>();
 
@@ -30,18 +33,32 @@ namespace CommonSense
             if (pathGrid == null)
                 return new List<Filth>();
 
-            IEnumerable<Filth> enumerable = room.ContainedAndAdjacentThings.OfType<Filth>().Where(delegate (Filth f)
+            IEnumerable<Filth> enumerable = null;
+            if (room.CellCount > 200)
             {
-                if (f == null || f.Destroyed || !pathGrid.Walkable(f.Position))
-                    return false;
+                enumerable = new List<Filth>();
+                for (int i = 0; i < 200; i++)
+                {
+                    IntVec3 intVec = target.Cell + GenRadial.RadialPattern[i];
+                    if (intVec.InBounds(pawn.Map) && intVec.GetRoom(pawn.Map) == room && pawn.CanReach(intVec, PathEndMode.Touch, pawn.NormalMaxDanger()))
+                        ((List<Filth>)enumerable).AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>().Where(f => !f.Destroyed && f.Map.areaManager.Home[f.Position]
+                            && pathGrid.Walkable(f.Position) && pawn.CanReserve(f)));
+                }
+            }
+            else
+                enumerable = room.ContainedAndAdjacentThings.OfType<Filth>().Where(delegate (Filth f)
+                {
+                    if (f == null || f.Destroyed || !f.Map.areaManager.Home[f.Position] || !pathGrid.Walkable(f.Position))
+                        return false;
 
-                Room room2 = f.GetRoom();
-                if (room2 == null || room2 != room && !room2.IsDoorway ||
-                !pawn.CanReach(f, PathEndMode.Touch, pawn.NormalMaxDanger()) || !pawn.CanReserve(f))
-                    return false;
+                    Room room2 = f.GetRoom();
+                    if (room2 == null || room2 != room && !room2.IsDoorway ||
+                    !pawn.CanReach(f, PathEndMode.Touch, pawn.NormalMaxDanger()) || !pawn.CanReserve(f))
+                        return false;
 
-                return true;
-            });
+                    return true;
+                });
+
             int num = enumerable.Count();
             if (num > 0)
             {
@@ -65,10 +82,10 @@ namespace CommonSense
                 pawn.workSettings == null || !pawn.workSettings.WorkIsActive(DefDatabase<WorkTypeDef>.GetNamed("Cleaning")))
                 return null;
 
-            IEnumerable<Filth> el = SelectAllFilth(pawn, target);
-            List<Filth> l = el.ToList<Filth>();
+            IEnumerable<Filth> l = SelectAllFilth(pawn, target);
+            //List<Filth> l = el.ToList<Filth>();
 
-            if (l.Count == 0)
+            if (l.Count() == 0)
                 return null;
 
             Job job = new Job(JobDefOf.Clean);
