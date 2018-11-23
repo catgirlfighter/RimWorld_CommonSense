@@ -1,0 +1,18 @@
+1.0.5:
+- fixed allowed area cleaning issue;
+
+1.0.4:
+- pawns will not try to clean dirt outside of home area any more;
+- made a limit, how big room can be. If room is > than 200 cells, pawns will clean only filth that is nearby. Due to added limitation, I also made so pawns will clean even if it's not a room;
+
+1.0.3:
+- added translation possibility;
+- cleaned up settings;
+- separated cleaning after tending as it's own option. Those, who disabled cleaning, sorry for inconvenience. You have to disable it again;
+- added an option to generate random ingredients to non-crafted meals. Disabled by default;
+
+1.0.2:
+- added a behavior, according to which pawns gonna clean the place where they're supposed to operate a building, or if it's some sort of joy activity. Also pawns clean the room after tending to patient.
+
+1.0.1:
+- although still suboptimal, the way, how outdoor recreation is chosen, was significantly improved. Now pawns pick up any activity that would result in hanging out outdoors. It's suboptimal because they still can't chose items, it means they may skip activities, that sometimes done indoors. It would require too much coding and would make this mod likely to conflict with other mods, that's why first case is preferable. So, in order to avoid indecisiveness, don't make the same recreational items both indoors and outdoors ;)
