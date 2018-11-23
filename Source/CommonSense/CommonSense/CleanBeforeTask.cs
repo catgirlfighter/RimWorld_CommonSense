@@ -23,9 +23,6 @@ namespace CommonSense
             else
                 room = target.Thing.GetRoom();
 
-            if (room != null)
-                Log.Message(room.IsHuge.ToString() + " " + room.CellCount);
-
             if (room == null )
                 return new List<Filth>();
 
@@ -40,7 +37,7 @@ namespace CommonSense
                 for (int i = 0; i < 200; i++)
                 {
                     IntVec3 intVec = target.Cell + GenRadial.RadialPattern[i];
-                    if (intVec.InBounds(pawn.Map) && intVec.GetRoom(pawn.Map) == room && pawn.CanReach(intVec, PathEndMode.Touch, pawn.NormalMaxDanger()))
+                    if (intVec.InBounds(pawn.Map) && intVec.InAllowedArea(pawn) && intVec.GetRoom(pawn.Map) == room && pawn.CanReach(intVec, PathEndMode.OnCell, pawn.NormalMaxDanger()))
                         ((List<Filth>)enumerable).AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>().Where(f => !f.Destroyed && f.Map.areaManager.Home[f.Position]
                             && pathGrid.Walkable(f.Position) && pawn.CanReserve(f)));
                 }
@@ -48,12 +45,12 @@ namespace CommonSense
             else
                 enumerable = room.ContainedAndAdjacentThings.OfType<Filth>().Where(delegate (Filth f)
                 {
-                    if (f == null || f.Destroyed || !f.Map.areaManager.Home[f.Position] || !pathGrid.Walkable(f.Position))
+                    if (f == null || f.Destroyed || !f.Position.InAllowedArea(pawn) || !f.Map.areaManager.Home[f.Position] || !pathGrid.Walkable(f.Position))
                         return false;
 
                     Room room2 = f.GetRoom();
                     if (room2 == null || room2 != room && !room2.IsDoorway ||
-                    !pawn.CanReach(f, PathEndMode.Touch, pawn.NormalMaxDanger()) || !pawn.CanReserve(f))
+                    !pawn.CanReach(f, PathEndMode.OnCell, pawn.NormalMaxDanger()) || !pawn.CanReserve(f))
                         return false;
 
                     return true;
@@ -118,10 +115,6 @@ namespace CommonSense
         {
             static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, JobCondition lastJobEndCondition, ThinkNode jobGiver, bool resumeCurJobAfterwards, bool cancelBusyStances, ThinkTreeDef thinkTree, JobTag? tag, bool fromQueue)
             {
-                //if (newJob.def.defName.Contains("Wait") || newJob.def.defName.Contains("Goto"))
-                //    return true;
-                //Log.Message("Job=" + newJob.def.defName);
-                //long d = DateTime.Now.Ticks;
                 if (!Settings.clean_before_work)
                     return true;
 
@@ -134,10 +127,8 @@ namespace CommonSense
                     (newJob.targetA.Thing == null || !newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building))) &&
                     (newJob.def.joyKind == null || newJob.targetA.Cell == null))
                 {
-                    //Log.Message("Stage0=" + (DateTime.Now.Ticks - d).ToString());
                     return true;
                 }
-                //Log.Message("Stage1=" + (DateTime.Now.Ticks - d).ToString());
 
                 Thing target = null;
                 IntVec3 source = __instance._pawn.Position;
@@ -151,7 +142,6 @@ namespace CommonSense
                     if (target == null && newJob.targetQueueB != null && newJob.targetQueueB.Count > 0)
                         target = newJob.targetQueueB[0].Thing;
                 }
-                //Log.Message("Stage2=" + (DateTime.Now.Ticks - d).ToString());
                 if (target != null)
                 {
 
@@ -197,9 +187,6 @@ namespace CommonSense
                         btot = Mathf.Sqrt(building.Position.DistanceToSquared(target.Position));
                         b = stob > 10 && stot / (stob + btot) < 0.7f;
                     }
-                    //Log.Message("Stage3=" + (DateTime.Now.Ticks - d).ToString());
-
-                    //Log.Message("S_T=" + stot.ToString() + " S_B=" + stob.ToString() + " B_T=" + btot.ToString());
                     if (b)
                         return true;
                 }
@@ -214,7 +201,6 @@ namespace CommonSense
                     __instance.curDriver = null;
                     return false;
                 }
-                //Log.Message("Stage4=" + (DateTime.Now.Ticks - d).ToString());
                 return true;
             }
         }
@@ -228,7 +214,6 @@ namespace CommonSense
                 if (Settings.clean_after_tanding && __instance.curJob.def.defName == "TendPatient" && condition == JobCondition.Succeeded && __instance.curJob != null &&
                     __instance.jobQueue.Count == 0 && __instance.curJob.targetA.Thing != null && __instance.curJob.targetA.Thing != __instance._pawn)
                 {
-                    //LocalTargetInfo ti = new LocalTargetInfo(__instance._pawn.Position);
                     Job job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA);
                     if (job != null)
                         __instance.jobQueue.EnqueueFirst(job);
