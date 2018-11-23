@@ -4,7 +4,7 @@ using System;
 
 namespace CommonSense
 {
-    class Settings : ModSettings
+    public class Settings : ModSettings
     {
         public static bool separate_meals = true;
         public static bool fulfill_outdoors = true;

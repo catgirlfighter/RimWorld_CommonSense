@@ -8,7 +8,7 @@ using UnityEngine;
 namespace CommonSense
 {
     [StaticConstructorOnStartup]
-    class CommonSense : Mod
+    public class CommonSense : Mod
     {
 #pragma warning disable 0649
         public static Settings Settings;

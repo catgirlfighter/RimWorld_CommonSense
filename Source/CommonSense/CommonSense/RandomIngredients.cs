@@ -20,7 +20,7 @@ namespace CommonSense
             public static Dictionary<ThingDef, RecipeDef> hTable = new Dictionary<ThingDef, RecipeDef>();
             static void Postfix(Thing __result, ThingDef def, ThingDef stuff)
             {
-                if (!Settings.add_meal_ingredients || __result == null || stuff != null)
+                if (!Settings.add_meal_ingredients || __result == null || !__result.def.IsIngestible)
                     return;
 
                 CompIngredients ings = __result.TryGetComp<CompIngredients>();
@@ -38,8 +38,10 @@ namespace CommonSense
 
                 foreach (IngredientCount c in d.ingredients)
                 {
+                    
                     ThingDef td = c.filter.AllowedThingDefs.Where(
-                        x => !x.IsIngestible || !FoodUtility.IsHumanlikeMeat(x) && x.ingestible.specialThoughtAsIngredient == null
+                        x => x.IsIngestible && !x.comps.Any(y => y.compClass == typeof(CompIngredients)) &&
+                        !FoodUtility.IsHumanlikeMeat(x) && x.ingestible.specialThoughtAsIngredient == null
                     ).RandomElement();
                     if (td != null)
                         ings.RegisterIngredient(td);
