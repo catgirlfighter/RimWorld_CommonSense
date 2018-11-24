@@ -38,7 +38,7 @@ namespace CommonSense
 
                 foreach (IngredientCount c in d.ingredients)
                 {
-                    
+
                     ThingDef td = c.filter.AllowedThingDefs.Where(
                         x => x.IsIngestible && !x.comps.Any(y => y.compClass == typeof(CompIngredients)) &&
                         !FoodUtility.IsHumanlikeMeat(x) && x.ingestible.specialThoughtAsIngredient == null
@@ -136,6 +136,17 @@ namespace CommonSense
                         yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GenRecipe_MakeRecipeProducts_CommonSensePatch), nameof(GenRecipe_TryDispenseFood_CommonSensePatch.ClearIngs), new Type[] { typeof(CompIngredients) }));
                     }
                 }
+            }
+        }
+
+        //public override void PostSplitOff(Thing piece)
+        [HarmonyPatch(typeof(CompIngredients), "PostSplitOff", new Type[] {typeof(Thing)})]
+        static class Thing_SplitOff_CommonSensePatch
+        {
+            static bool Prefix(Thing piece)
+            {
+                piece.TryGetComp<CompIngredients>().ingredients.Clear();
+                return true;
             }
         }
     }   
