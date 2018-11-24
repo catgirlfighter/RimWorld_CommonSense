@@ -6,8 +6,6 @@ using Verse;
 using RimWorld;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.IO;
-using UnityEngine;
 
 namespace CommonSense
 {
@@ -99,7 +97,6 @@ namespace CommonSense
             {
 
                 CodeInstruction prei = null;
-
                 foreach (var i in (instrs))
                 {
                     yield return i;
@@ -139,15 +136,34 @@ namespace CommonSense
             }
         }
 
-        //public override void PostSplitOff(Thing piece)
-        [HarmonyPatch(typeof(CompIngredients), "PostSplitOff", new Type[] {typeof(Thing)})]
+        //[HarmonyPatch(typeof(CompIngredients), "PostSplitOff", new Type[] {typeof(Thing)})]
+        [HarmonyPatch(typeof(Thing), "SplitOff", new Type[] { typeof(int) })]
         static class Thing_SplitOff_CommonSensePatch
         {
-            static bool Prefix(Thing piece)
+
+            public static void ClearIngs(Thing thing)
             {
-                piece.TryGetComp<CompIngredients>().ingredients.Clear();
-                return true;
+                CompIngredients comp = thing.TryGetComp<CompIngredients>();
+                if (comp != null)
+                    comp.ingredients.Clear();
+            }
+
+            [HarmonyTranspiler]
+            internal static IEnumerable<CodeInstruction> CleanIngList(IEnumerable<CodeInstruction> instrs)
+            {
+                CodeInstruction prei = null;
+                foreach (var i in (instrs))
+                {
+                    yield return i;
+
+                    if(i.opcode == OpCodes.Stloc_0 && prei.opcode == OpCodes.Call && prei.operand == typeof(ThingMaker).GetMethod(nameof(ThingMaker.MakeThing)))
+                    {
+                        yield return new CodeInstruction(OpCodes.Ldloc_0);
+                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Thing_SplitOff_CommonSensePatch), nameof(Thing_SplitOff_CommonSensePatch.ClearIngs), new Type[] { typeof(Thing) }));
+                    }
+                    prei = i;
+                }
             }
         }
-    }   
+    }
 }
