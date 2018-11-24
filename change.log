@@ -1,3 +1,6 @@
+1.0.6:
+- revorked, how cleaking job is assigned. Now it uses built in CleanFilth checks instead of it's own. This way, if CleanFilth is rewrited/replaced by a mod, CommonSense will use rules of another mod instead;
+
 1.0.5:
 - fixed allowed area cleaning issue;
 

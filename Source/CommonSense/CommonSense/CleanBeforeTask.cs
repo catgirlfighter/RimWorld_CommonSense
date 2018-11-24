@@ -12,6 +12,8 @@ namespace CommonSense
 {
     class CleanBeforeTask
     {
+        static private WorkGiverDef cleanFilth = null;
+        
         static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target)
         {
             Room room = null;
@@ -30,42 +32,50 @@ namespace CommonSense
             if (pathGrid == null)
                 return new List<Filth>();
 
+            if (cleanFilth == null)
+                cleanFilth = DefDatabase<WorkGiverDef>.GetNamed("CleanFilth");
+
+            if (cleanFilth.Worker == null)
+                return new List<Filth>();
+
             IEnumerable<Filth> enumerable = null;
-            if (room.IsHuge || room.CellCount > 200)
+            if (room.IsHuge || room.CellCount > 160)
             {
                 enumerable = new List<Filth>();
                 for (int i = 0; i < 200; i++)
                 {
                     IntVec3 intVec = target.Cell + GenRadial.RadialPattern[i];
-                    if (intVec.InBounds(pawn.Map) && intVec.InAllowedArea(pawn) && intVec.GetRoom(pawn.Map) == room && pawn.CanReach(intVec, PathEndMode.OnCell, pawn.NormalMaxDanger()))
-                        ((List<Filth>)enumerable).AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>().Where(f => !f.Destroyed && f.Map.areaManager.Home[f.Position]
-                            && pathGrid.Walkable(f.Position) && pawn.CanReserve(f)));
+                    if (intVec.InBounds(pawn.Map) && intVec.InAllowedArea(pawn) && intVec.GetRoom(pawn.Map) == room)
+                        ((List<Filth>)enumerable).AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>().Where(f => !f.Destroyed
+                            && ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)));
                 }
             }
             else
                 enumerable = room.ContainedAndAdjacentThings.OfType<Filth>().Where(delegate (Filth f)
                 {
-                    if (f == null || f.Destroyed || !f.Position.InAllowedArea(pawn) || !f.Map.areaManager.Home[f.Position] || !pathGrid.Walkable(f.Position))
+                    if (f == null || f.Destroyed || !f.Position.InAllowedArea(pawn) || !((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)) 
                         return false;
 
                     Room room2 = f.GetRoom();
-                    if (room2 == null || room2 != room && !room2.IsDoorway ||
-                    !pawn.CanReach(f, PathEndMode.OnCell, pawn.NormalMaxDanger()) || !pawn.CanReserve(f))
+                    if (room2 == null || room2 != room && !room2.IsDoorway)
                         return false;
 
                     return true;
                 });
-
-            int num = enumerable.Count();
-            if (num > 0)
-            {
-                IntVec3 center = enumerable.Aggregate(IntVec3.Zero, (IntVec3 prev, Filth f) => prev + f.Position);
-                center = new IntVec3(center.x / num, 0, center.z / num);
-                enumerable = from f in enumerable
-                             orderby (target.Cell - f.Position).LengthHorizontalSquared - 2 * (center - f.Position).LengthHorizontalSquared
-                             select f;
-            }
             return enumerable;
+        }
+
+        static private WorkTypeDef fCleaningDef = null;
+        static private WorkTypeDef CleaningDef
+        {
+            get
+            {
+                if (fCleaningDef == null)
+                {
+                   fCleaningDef = DefDatabase<WorkTypeDef>.GetNamed("Cleaning");
+                }
+                return fCleaningDef;
+            }
         }
 
         static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target)
@@ -76,19 +86,24 @@ namespace CommonSense
                 (int)pawn.RaceProps.intelligence < 2 ||
                 //pawn.story.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
                 pawn.InMentalState || pawn.IsBurning() ||
-                pawn.workSettings == null || !pawn.workSettings.WorkIsActive(DefDatabase<WorkTypeDef>.GetNamed("Cleaning")))
+                pawn.workSettings == null || !pawn.workSettings.WorkIsActive(CleaningDef))
                 return null;
 
+
             IEnumerable<Filth> l = SelectAllFilth(pawn, target);
-            //List<Filth> l = el.ToList<Filth>();
+
+            Job job = new Job(JobDefOf.Clean);
 
             if (l.Count() == 0)
                 return null;
 
-            Job job = new Job(JobDefOf.Clean);
-
             foreach (Filth f in (l))
                 job.AddQueuedTarget(TargetIndex.A, f);
+
+            if (job.targetQueueA != null && job.targetQueueA.Count >= 5)
+            {
+                job.targetQueueA.SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
+            }
 
             return job;
         }
