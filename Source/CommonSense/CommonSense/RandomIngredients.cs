@@ -16,6 +16,8 @@ namespace CommonSense
         static class ThingMaker_MakeThing_CommonSensePatch
         {
             public static Dictionary<ThingDef, RecipeDef> hTable = new Dictionary<ThingDef, RecipeDef>();
+
+            [HarmonyBefore(new string[] { "net.avilmask.rimworld.mod.PackedMeat" })]
             static void Postfix(Thing __result, ThingDef def, ThingDef stuff)
             {
                 if (!Settings.add_meal_ingredients || __result == null || !__result.def.IsIngestible)
@@ -33,13 +35,11 @@ namespace CommonSense
                         return;
                     hTable.Add(def, d);
                 }
-
                 foreach (IngredientCount c in d.ingredients)
                 {
-
                     ThingDef td = c.filter.AllowedThingDefs.Where(
                         x => x.IsIngestible && !x.comps.Any(y => y.compClass == typeof(CompIngredients)) &&
-                        !FoodUtility.IsHumanlikeMeat(x) && x.ingestible.specialThoughtAsIngredient == null
+                        !FoodUtility.IsHumanlikeMeat(x) && (x.ingestible.specialThoughtAsIngredient == null || x.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect >= 0)
                     ).RandomElement();
                     if (td != null)
                         ings.RegisterIngredient(td);
