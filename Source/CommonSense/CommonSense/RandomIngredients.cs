@@ -17,7 +17,6 @@ namespace CommonSense
         {
             public static Dictionary<ThingDef, RecipeDef> hTable = new Dictionary<ThingDef, RecipeDef>();
 
-            [HarmonyBefore(new string[] { "net.avilmask.rimworld.mod.PackedMeat" })]
             static void Postfix(Thing __result, ThingDef def, ThingDef stuff)
             {
                 if (!Settings.add_meal_ingredients || __result == null || !__result.def.IsIngestible)

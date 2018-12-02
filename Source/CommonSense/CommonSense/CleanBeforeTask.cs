@@ -80,7 +80,8 @@ namespace CommonSense
 
         static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target)
         {
-            if ((int)pawn.def.race.intelligence < 2 ||
+            if (pawn.def.race == null ||
+                (int)pawn.def.race.intelligence < 2 ||
                 pawn.Faction != Faction.OfPlayer ||
                 //pawn.Drafted || 
                 (int)pawn.RaceProps.intelligence < 2 ||
@@ -226,8 +227,10 @@ namespace CommonSense
         {
             static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition, bool startNewJob)
             {
-                if (Settings.clean_after_tanding && __instance.curJob.def.defName == "TendPatient" && condition == JobCondition.Succeeded && __instance.curJob != null &&
-                    __instance.jobQueue.Count == 0 && __instance.curJob.targetA.Thing != null && __instance.curJob.targetA.Thing != __instance._pawn)
+                if (Settings.clean_after_tanding && condition == JobCondition.Succeeded && __instance != null && __instance.curJob != null &&
+                    __instance.curJob.def.defName == "TendPatient" && __instance.jobQueue != null &&
+                    __instance.jobQueue.Count == 0 && __instance.curJob.targetA != null && __instance.curJob.targetA.Thing != null && 
+                    __instance.curJob.targetA.Thing != __instance._pawn)
                 {
                     Job job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA);
                     if (job != null)
