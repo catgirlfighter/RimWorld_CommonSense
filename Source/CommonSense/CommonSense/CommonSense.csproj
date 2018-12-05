@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RandomIngredients.cs" />
-    <Compile Include="CleanBeforeTask.cs" />
+    <Compile Include="OpportunisticTasks.cs" />
     <Compile Include="MealStacking.cs" />
     <Compile Include="CravingForOutdoors.cs" />
     <Compile Include="CommonSense.cs" />

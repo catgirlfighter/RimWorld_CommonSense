@@ -13,6 +13,8 @@ namespace CommonSense
         public static bool clean_after_tanding = true;
         public static bool calculate_full_path = true;
         public static bool add_meal_ingredients = false;
+        public static bool add_to_que = false;
+        public static bool hauling_over_bills = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -23,8 +25,11 @@ namespace CommonSense
             listing_Standard.GapLine();
             listing_Standard.Label("clean_head".Translate());
             listing_Standard.CheckboxLabeled("clean_before_working_label".Translate(), ref clean_before_work, "clean_before_working_note".Translate());
-            listing_Standard.CheckboxLabeled("bill_job_pathing_label".Translate(), ref calculate_full_path, "bill_job_pathing_note".Translate());
             listing_Standard.CheckboxLabeled("clean_after_tending_label".Translate(), ref clean_after_tanding, "clean_after_tending_note".Translate());
+            listing_Standard.CheckboxLabeled("hauling_over_bills_label".Translate(), ref hauling_over_bills, "hauling_over_bills_note".Translate());
+            listing_Standard.CheckboxLabeled("bill_job_pathing_label".Translate(), ref calculate_full_path, "bill_job_pathing_note".Translate());
+            listing_Standard.CheckboxLabeled("add_to_que_label".Translate(), ref add_to_que, "add_to_que_note".Translate());
+
             listing_Standard.GapLine();
             listing_Standard.Label("meal_stacking_head".Translate());
             listing_Standard.CheckboxLabeled("meal_stacking_label".Translate(), ref separate_meals, "meal_stacking_note".Translate());
