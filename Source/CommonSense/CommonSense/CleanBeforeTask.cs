@@ -134,14 +134,14 @@ namespace CommonSense
                 if (!Settings.clean_before_work)
                     return true;
 
+                if (newJob == null || newJob.playerForced || newJob.def == null || !newJob.def.allowOpportunisticPrefix ||
+                    newJob.targetA == null || newJob.targetA.Cell == null || (newJob.targetA.Thing == null || !newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building))) &&
+                    (newJob.def.joyKind == null))
+                    return true;
+
                 IntVec3 cell = newJob.targetA.Cell;
-                if (!newJob.def.allowOpportunisticPrefix ||
-                    newJob.playerForced ||
-                    !cell.IsValid || cell.IsForbidden(__instance._pawn) ||
-                    newJob.targetA == null ||
-                    __instance._pawn.Downed ||
-                    (newJob.targetA.Thing == null || !newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building))) &&
-                    (newJob.def.joyKind == null || newJob.targetA.Cell == null))
+
+                if (!cell.IsValid || cell.IsForbidden(__instance._pawn) || __instance._pawn.Downed)
                 {
                     return true;
                 }
