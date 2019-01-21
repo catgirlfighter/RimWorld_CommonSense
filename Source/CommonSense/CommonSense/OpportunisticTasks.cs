@@ -10,10 +10,12 @@ using UnityEngine;
 
 namespace CommonSense
 {
-    class CleanBeforeTask
+    class OpportunisticTasks
     {
         static private WorkGiverDef cleanFilth = null;
-        
+        static private WorkGiverDef haulGeneral = null;
+        const byte largeRoomSize = 160;
+
         static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target)
         {
             Room room = null;
@@ -39,7 +41,7 @@ namespace CommonSense
                 return new List<Filth>();
 
             IEnumerable<Filth> enumerable = null;
-            if (room.IsHuge || room.CellCount > 160)
+            if (room.IsHuge || room.CellCount > largeRoomSize)
             {
                 enumerable = new List<Filth>();
                 for (int i = 0; i < 200; i++)
@@ -129,38 +131,22 @@ namespace CommonSense
         [HarmonyPatch(typeof(Pawn_JobTracker), "StartJob", new Type[] { typeof(Job), typeof(JobCondition), typeof(ThinkNode), typeof(bool), typeof(bool), typeof(ThinkTreeDef), typeof(JobTag), typeof(bool) })]
         static class Pawn_JobTracker_StartJob_CommonSensePatch
         {
-            static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, JobCondition lastJobEndCondition, ThinkNode jobGiver, bool resumeCurJobAfterwards, bool cancelBusyStances, ThinkTreeDef thinkTree, JobTag? tag, bool fromQueue)
+            static Job Cleaning_Opportunity(Job currJob, IntVec3 cell, Pawn pawn)
             {
-                if (!Settings.clean_before_work)
-                    return true;
-
-                if (newJob == null || newJob.playerForced || newJob.def == null || !newJob.def.allowOpportunisticPrefix ||
-                    newJob.targetA == null || newJob.targetA.Cell == null || (newJob.targetA.Thing == null || !newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building))) &&
-                    (newJob.def.joyKind == null))
-                    return true;
-
-                IntVec3 cell = newJob.targetA.Cell;
-
-                if (!cell.IsValid || cell.IsForbidden(__instance._pawn) || __instance._pawn.Downed)
-                {
-                    return true;
-                }
-
                 Thing target = null;
-                IntVec3 source = __instance._pawn.Position;
+                IntVec3 source = pawn.Position;
 
-                Thing building = newJob.targetA.Thing;
+                Thing building = currJob.targetA.Thing;
                 if (building != null)
-                { 
-                    if (newJob.targetB != null)
-                        target = newJob.targetB.Thing;
+                {
+                    if (currJob.targetB != null)
+                        target = currJob.targetB.Thing;
 
-                    if (target == null && newJob.targetQueueB != null && newJob.targetQueueB.Count > 0)
-                        target = newJob.targetQueueB[0].Thing;
+                    if (target == null && currJob.targetQueueB != null && currJob.targetQueueB.Count > 0)
+                        target = currJob.targetQueueB[0].Thing;
                 }
                 if (target != null)
                 {
-
                     float stot = 0; //source to target
                     float stob = 0; //source to building
                     float btot = 0; //building to target
@@ -168,19 +154,19 @@ namespace CommonSense
                     if (Settings.calculate_full_path)
                     {
                         PawnPath pawnPath = target.Map.pathFinder.FindPath(source, target, TraverseParms.For(TraverseMode.PassDoors, Danger.Some), PathEndMode.Touch);
-                        if(!pawnPath.Found)
+                        if (!pawnPath.Found)
                         {
                             pawnPath.ReleaseToPool();
-                            return true;
+                            return null;
                         }
-                        stot =  pawnPath.TotalCost;
+                        stot = pawnPath.TotalCost;
                         pawnPath.ReleaseToPool();
 
                         pawnPath = building.Map.pathFinder.FindPath(source, building, TraverseParms.For(TraverseMode.PassDoors, Danger.Some), PathEndMode.Touch);
                         if (!pawnPath.Found)
                         {
                             pawnPath.ReleaseToPool();
-                            return true;
+                            return null;
                         }
                         stob = pawnPath.TotalCost;
                         pawnPath.ReleaseToPool();
@@ -189,7 +175,7 @@ namespace CommonSense
                         if (!pawnPath.Found)
                         {
                             pawnPath.ReleaseToPool();
-                            return true;
+                            return null;
                         }
                         btot = pawnPath.TotalCost;
                         pawnPath.ReleaseToPool();
@@ -204,14 +190,70 @@ namespace CommonSense
                         b = stob > 10 && stot / (stob + btot) < 0.7f;
                     }
                     if (b)
-                        return true;
+                        return null;
                 }
 
-                Job job = MakeCleaningJob(__instance._pawn,newJob.targetA);
+                return MakeCleaningJob(pawn, currJob.targetA);
+            }
+
+            static Job Hauling_Opportunity(Job billJob, Pawn pawn)
+            {
+                if (billJob.targetA != null && billJob.targetA.Thing != null && billJob.targetQueueB != null && billJob.targetQueueB.Count > 0)
+                {
+
+                    Room room = billJob.targetA.Thing.GetRoom();
+                    if (room != null)
+                    {
+                        bool outdoors = room.PsychologicallyOutdoors || room.IsHuge || room.CellCount > largeRoomSize;
+                        if (haulGeneral == null)
+                            haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulGeneral");
+
+                        Job job = null;
+
+                        foreach (var target in (billJob.targetQueueB))
+                            if (target.Thing != null && (outdoors || target.Thing.GetRoom() != room))
+                            {
+                                job = ((WorkGiver_Scanner)haulGeneral.Worker).JobOnThing(pawn, target.Thing);
+                                if (job != null)
+                                    return job;
+                            }
+                    }
+                }
+                return null;
+            }
+
+            static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, JobCondition lastJobEndCondition, ThinkNode jobGiver, bool resumeCurJobAfterwards, bool cancelBusyStances, ThinkTreeDef thinkTree, JobTag? tag, bool fromQueue)
+            {
+                //if (!newJob.def.defName.Contains("Wander") && !newJob.def.defName.Contains("Pos"))
+                //    Log.Message(newJob.def.defName);
+                if (!Settings.clean_before_work && !Settings.hauling_over_bills)
+                    return true;
+
+                if (__instance == null || __instance._pawn == null || newJob == null || newJob.playerForced || newJob.def == null || !newJob.def.allowOpportunisticPrefix ||
+                    newJob.targetA == null || newJob.targetA.Cell == null)
+                    return true;
+
+                IntVec3 cell = newJob.targetA.Cell;
+
+                if (!cell.IsValid || cell.IsForbidden(__instance._pawn) || __instance._pawn.Downed)
+                {
+                    return true;
+                }
+                
+                Job job = null;
+
+                if (Settings.hauling_over_bills && newJob.def == JobDefOf.DoBill)
+                {
+                    job = Hauling_Opportunity(newJob, __instance._pawn);
+                    //Log.Message("can't haul anything");
+                }
+                else if (Settings.clean_before_work && (newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.def.joyKind != null))
+                    job = Cleaning_Opportunity(newJob, cell, __instance._pawn);
 
                 if (job != null)
                 {
-                    __instance.jobQueue.EnqueueFirst(newJob);
+                    if(Settings.add_to_que)
+                        __instance.jobQueue.EnqueueFirst(newJob);
                     __instance.jobQueue.EnqueueFirst(job);
                     __instance.curJob = null;
                     __instance.curDriver = null;
@@ -228,7 +270,7 @@ namespace CommonSense
             static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition, bool startNewJob)
             {
                 if (Settings.clean_after_tanding && condition == JobCondition.Succeeded && __instance != null && __instance.curJob != null &&
-                    __instance.curJob.def.defName == "TendPatient" && __instance.jobQueue != null &&
+                    __instance.curJob.def == JobDefOf.TendPatient && __instance.jobQueue != null &&
                     __instance.jobQueue.Count == 0 && __instance.curJob.targetA != null && __instance.curJob.targetA.Thing != null && 
                     __instance.curJob.targetA.Thing != __instance._pawn)
                 {

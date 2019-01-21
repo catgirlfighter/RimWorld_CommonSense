@@ -1,3 +1,6 @@
+﻿1.0.9
+- added chinese simplified translation. Credits to 脑子疼 (chrisxlite);
+
 1.0.8:
 - added an option to encourage pawns haul things to stockpile if they find ingredients for cooking or crafting outside of a room with crafting station (or if a room is huge or outdoors). It helps to avoid situations, when pawns go to pick up 1-2 ingredients for crafting, instead of hauling a whole stack;
 - did some cleaning to avoid some more potential errors;
