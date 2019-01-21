@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- settings -->
+  <fulfill_outdoors_head>户外需求</fulfill_outdoors_head>
+  <fulfill_outdoors_label>小人会自己到室外去娱乐一会儿来满足户外需求</fulfill_outdoors_label>
+  <fulfill_outdoors_note>注：不要在室内和室外放置相同的娱乐来源，不然小人会纠结</fulfill_outdoors_note>
+  <clean_head>机智地工作</clean_head>
+  <clean_before_working_label>小人会在一个建筑做事（包括研究、烹饪或制作、睡觉等）之前优先清理房间</clean_before_working_label>
+  <clean_before_working_note>注：别指望那些无法从事清洁的小人会去清理房间</clean_before_working_note>
+  <bill_job_pathing_label>更精确地计算小人去完成清单工作的路径</bill_job_pathing_label>
+  <bill_job_pathing_note>这可以让你避免小人在需要拿原材料去工作的情况下不科学地绕远路，但是可能会加大CPU的负荷</bill_job_pathing_note>
+  <clean_after_tending_label>小人会在治疗完病人后清理病房</clean_after_tending_label>
+  <clean_after_tending_note>注：别指望那些无法从事清洁的小人会去清理房间</clean_after_tending_note>
+  <meal_stacking_head>食物堆叠</meal_stacking_head>
+  <meal_stacking_label>小人不会把奇怪的食物和正常的食物堆叠在一起</meal_stacking_label>
+  <meal_stacking_note>这样小人就不会把恶心的食物（比如用人肉或者虫肉做的）和其他食物堆叠在一起了</meal_stacking_note>
+  <dont_count_odd_label>小人可以接受把虫肉做的食物和正常的食物堆叠在一起，但是人肉做的不行</dont_count_odd_label>
+  <dont_count_odd_note>其实虫肉好像没那么恶心...</dont_count_odd_note>
+  <gen_ingredients_head>食物生成</gen_ingredients_head>
+  <gen_ingredients_label>在不是你制作的食物中添加随机的原料</gen_ingredients_label>
+  <gen_ingredients_note>比如：随机事件送你的，商人那买来的，非殖民者的尸体上捡的，等等。不会添加恶心的原料比如虫肉或人肉。开启了这个选项后，这个游戏就再也不一样了哦</gen_ingredients_note>
+  <add_to_que_label>把之前的任务添加到序列</add_to_que_label>
+  <add_to_que_note>这样一来小人在“机智地工作”之后会继续原先要做的工作，不过有时候如果原先要做的工作被别人占用了，小人会懵逼</add_to_que_note>
+  <hauling_over_bills_label>小人制作清单时会把一整堆原材料搬过去</hauling_over_bills_label>
+  <hauling_over_bills_note>当小人制作一个清单的时候, 有可能的话他们会优先搬运一整堆材料, 而不是一次制作的材料</hauling_over_bills_note>
+</LanguageData>
