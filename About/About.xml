@@ -2,7 +2,7 @@
 <ModMetaData>
 	<name>Common Sense</name>
 	<author>avilmask</author>
-	<targetVersion>1.0.0</targetVersion>
+	<supportedVersions><li>1.0</li></supportedVersions>
 	<url>none</url>
 	<description>- (optional) pawns are encouraged to fulfill their need of outdoors by seeking recreation outdoors;
 - (optional) pawns do not stack meals with negative thoughts with normal ones. As a separate option, odd (ex. insect) meat can count as normal one;

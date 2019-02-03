@@ -211,7 +211,7 @@ namespace CommonSense
                         Job job = null;
 
                         foreach (var target in (billJob.targetQueueB))
-                            if (target.Thing != null && (outdoors || target.Thing.GetRoom() != room))
+                            if (target.Thing != null && target.Thing.def.stackLimit > 1 && (outdoors || target.Thing.GetRoom() != room))
                             {
                                 job = ((WorkGiver_Scanner)haulGeneral.Worker).JobOnThing(pawn, target.Thing);
                                 if (job != null)
