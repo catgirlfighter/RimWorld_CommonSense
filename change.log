@@ -1,4 +1,7 @@
-﻿1.0.9
+﻿1.0.10
+- "hauling instead of crafting" now ignores ingredients that do not stack;
+
+1.0.9
 - added chinese simplified translation. Credits to 脑子疼 (chrisxlite);
 
 1.0.8:
