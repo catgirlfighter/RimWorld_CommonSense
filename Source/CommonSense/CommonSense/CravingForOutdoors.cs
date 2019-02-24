@@ -33,21 +33,18 @@ namespace CommonSense
                 }
             }
 
-            //double pass on trying to give a job. At first, we'll try to give a job, that located outside;
+            //double pass on trying to give a joyjob. At first, we'll try to give a job, that located outside;
             static bool Prefix(ref Job __result, ref JobCrutch __instance,  ref Pawn pawn)
             {
-
                 if (!Settings.fulfill_outdoors || !__instance.CanDoDuringMedicalRestCrutch() && pawn.InBed() && HealthAIUtility.ShouldSeekMedicalRest(pawn)
                     || pawn.needs.outdoors == null || pawn.needs.outdoors.CurLevel >= 0.4f)
                 {
                     return true;
                 }
 
-                //Log.Message("needs_outdoors=" + pawn.Name);
                 List<JoyGiverDef> allDefsListForReading = DefDatabase<JoyGiverDef>.AllDefsListForReading;
                 JoyToleranceSet tolerances = pawn.needs.joy.tolerances;
                 DefMap<JoyGiverDef, float> joyGiverChances = new DefMap<JoyGiverDef, float>();
-                //Log.Message("joy_defs_for_reading_count=" + allDefsListForReading.Count.ToString());
                 for (int i = 0; i < allDefsListForReading.Count; i++)
                 {
                     JoyGiverDef joyGiverDef = allDefsListForReading[i];
@@ -80,7 +77,6 @@ namespace CommonSense
                     if (job != null && job.targetA != null)
                             if (job.targetA.Thing != null)
                             {
-                                //Log.Message("joy_source_thing=" + job.targetA.Thing.def.defName);
                                 if (job.targetA.Thing.Position.GetRoom(job.targetA.Thing.Map).PsychologicallyOutdoors)
                                 {
                                     __result = job;
@@ -89,7 +85,6 @@ namespace CommonSense
                             } else if (job.targetA.Cell != null)
                             {
                                 IntVec3 vec3 = (IntVec3)job.targetA;
-                                //Log.Message("joy_source_place");
                                 if (job.targetA.Cell.GetRoom(pawn.Map).PsychologicallyOutdoors)
                                 {
                                     __result = job;
