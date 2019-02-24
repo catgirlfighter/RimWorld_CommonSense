@@ -224,8 +224,6 @@ namespace CommonSense
 
             static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, JobCondition lastJobEndCondition, ThinkNode jobGiver, bool resumeCurJobAfterwards, bool cancelBusyStances, ThinkTreeDef thinkTree, JobTag? tag, bool fromQueue)
             {
-                //if (!newJob.def.defName.Contains("Wander") && !newJob.def.defName.Contains("Pos"))
-                //    Log.Message(newJob.def.defName);
                 if (!Settings.clean_before_work && !Settings.hauling_over_bills)
                     return true;
 
@@ -247,7 +245,7 @@ namespace CommonSense
                     job = Hauling_Opportunity(newJob, __instance._pawn);
                     //Log.Message("can't haul anything");
                 }
-                else if (Settings.clean_before_work && (newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.def.joyKind != null))
+                else if (Settings.clean_before_work && (newJob.targetA.Thing != null && (newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Pawn))) || newJob.def.joyKind != null))
                     job = Cleaning_Opportunity(newJob, cell, __instance._pawn);
 
                 if (job != null)
