@@ -15,13 +15,15 @@ namespace CommonSense
         public static bool add_meal_ingredients = false;
         public static bool add_to_que = false;
         public static bool hauling_over_bills = true;
+        public static bool drugs_use_potential_mood = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
             Listing_Standard listing_Standard = new Listing_Standard();
             listing_Standard.Begin(inRect);
-            listing_Standard.Label("fulfill_outdoors_head".Translate());
+            listing_Standard.Label("fulfill_needs_head".Translate());
             listing_Standard.CheckboxLabeled("fulfill_outdoors_label".Translate(), ref fulfill_outdoors, "fulfill_outdoors_note".Translate());
+            listing_Standard.CheckboxLabeled("drugs_use_potential_mood_label".Translate(), ref drugs_use_potential_mood, "drugs_use_potential_mood_note".Translate());
             listing_Standard.GapLine();
             listing_Standard.Label("clean_head".Translate());
             listing_Standard.CheckboxLabeled("clean_before_working_label".Translate(), ref clean_before_work, "clean_before_working_note".Translate());
@@ -50,6 +52,7 @@ namespace CommonSense
             Scribe_Values.Look<bool>(ref clean_after_tanding, "clean_after_tanding", true, false);
             Scribe_Values.Look<bool>(ref calculate_full_path, "calculate_full_path", true, false);
             Scribe_Values.Look<bool>(ref add_meal_ingredients, "add_meal_ingredients", false, false);
+            Scribe_Values.Look<bool>(ref drugs_use_potential_mood, "drugs_use_potential_mood", true, false);
         }
     }
 }

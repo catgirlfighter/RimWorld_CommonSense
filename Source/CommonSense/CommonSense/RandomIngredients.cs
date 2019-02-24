@@ -9,8 +9,10 @@ using System.Reflection.Emit;
 
 namespace CommonSense
 {
+
     class RandomIngredients
     {
+        
         //public static Thing MakeThing(ThingDef def, ThingDef stuff = null)
         [HarmonyPatch(typeof(ThingMaker), "MakeThing", new Type[] { typeof(ThingDef), typeof(ThingDef) })]
         static class ThingMaker_MakeThing_CommonSensePatch
@@ -45,7 +47,7 @@ namespace CommonSense
                 }
             }
         }
-
+        
         //public static IEnumerable<Thing> MakeRecipeProducts(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
         [HarmonyPatch]
         static class GenRecipe_MakeRecipeProducts_CommonSensePatch

@@ -23,4 +23,7 @@
 	<add_to_que_note>That way pawns will not change their mind after performing an opportunistic task, but sometimes it can cause a confusion if a job was already taken</add_to_que_note>
 	<hauling_over_bills_label>Pawns are encouraged to haul ingredients for a bill to a stockpile</hauling_over_bills_label>
 	<hauling_over_bills_note>When working on a bill, pawns will prefer hauling ingredients to a stockpile, instead of taking a small fraction, required for a recipe</hauling_over_bills_note>
+	<fulfill_needs_head>Fulfillment of needs</fulfill_needs_head>
+	<drugs_use_potential_mood_label>Pawns are encouraged to take account of potential mood in drug policies</drugs_use_potential_mood_label>
+	<drugs_use_potential_mood_note>Pawns will not use drugs if "potential" mood is above a marker, prevents overuse of drugs to get above a set level of mood</drugs_use_potential_mood_note>
 </LanguageData>
