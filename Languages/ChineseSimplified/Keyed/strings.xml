@@ -23,7 +23,7 @@
   <add_to_que_note>这样一来小人在“机智地工作”之后会继续原先要做的工作，不过有时候如果原先要做的工作被别人占用了，小人会懵逼</add_to_que_note>
   <hauling_over_bills_label>小人制作清单时会把一整堆原材料搬过去</hauling_over_bills_label>
   <hauling_over_bills_note>当小人制作一个清单的时候, 有可能的话他们会优先搬运一整堆材料, 而不是一次制作的材料</hauling_over_bills_note>
-  <fulfill_needs_head>Fulfillment of needs</fulfill_needs_head>
-  <drugs_use_potential_mood_label>Pawns are encouraged to take account of potential mood in drug policies</drugs_use_potential_mood_label>
-  <drugs_use_potential_mood_note>Pawns will not use drugs if "potential" mood is above a marker, prevents overuse of drugs to get above a set level of mood</drugs_use_potential_mood_note>
+  <fulfill_needs_head>满足需求</fulfill_needs_head>
+  <drugs_use_potential_mood_label>小人会在遵从有心情阈值设定的成瘾品方案时考虑到潜在心情值</drugs_use_potential_mood_label>
+  <drugs_use_potential_mood_note>如果“潜在心情值”（即正在变化中的心情的目标值）高于成瘾品方案设定的心情指标，小人不会使用成瘾品。可以防止小人在不必要的情况下使用成瘾品</drugs_use_potential_mood_note>
 </LanguageData>
