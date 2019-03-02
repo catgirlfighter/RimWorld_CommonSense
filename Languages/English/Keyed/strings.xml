@@ -26,4 +26,9 @@
 	<fulfill_needs_head>Fulfillment of needs</fulfill_needs_head>
 	<drugs_use_potential_mood_label>Pawns are encouraged to take account of potential mood in drug policies</drugs_use_potential_mood_label>
 	<drugs_use_potential_mood_note>Pawns will not use drugs if "potential" mood is above a marker, prevents overuse of drugs to get above a set level of mood</drugs_use_potential_mood_note>
+	<miscellaneous_head>Miscellaneous</miscellaneous_head>
+	<extended_recipe_label>Recipes display complete list of ingredients</extended_recipe_label>
+	<extended_recipe_note>Instead of just vague "ingredients"</extended_recipe_note>
+	<advanced_inbetween_cleaning_label>Pawns will clean rooms in between hauling ingredients and crafting</advanced_inbetween_cleaning_label>
+	<advanced_inbetween_cleaning_note>Basic behavior would let them clean only before hauling</advanced_inbetween_cleaning_note>
 </LanguageData>

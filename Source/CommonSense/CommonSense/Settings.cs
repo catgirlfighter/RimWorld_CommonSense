@@ -16,6 +16,8 @@ namespace CommonSense
         public static bool add_to_que = false;
         public static bool hauling_over_bills = true;
         public static bool drugs_use_potential_mood = true;
+        public static bool adv_cleaning = true;
+        public static bool extended_recipe = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -24,6 +26,7 @@ namespace CommonSense
             listing_Standard.Label("fulfill_needs_head".Translate());
             listing_Standard.CheckboxLabeled("fulfill_outdoors_label".Translate(), ref fulfill_outdoors, "fulfill_outdoors_note".Translate());
             listing_Standard.CheckboxLabeled("drugs_use_potential_mood_label".Translate(), ref drugs_use_potential_mood, "drugs_use_potential_mood_note".Translate());
+
             listing_Standard.GapLine();
             listing_Standard.Label("clean_head".Translate());
             listing_Standard.CheckboxLabeled("clean_before_working_label".Translate(), ref clean_before_work, "clean_before_working_note".Translate());
@@ -36,9 +39,15 @@ namespace CommonSense
             listing_Standard.Label("meal_stacking_head".Translate());
             listing_Standard.CheckboxLabeled("meal_stacking_label".Translate(), ref separate_meals, "meal_stacking_note".Translate());
             listing_Standard.CheckboxLabeled("dont_count_odd_label".Translate(), ref odd_is_normal, "dont_count_odd_note".Translate());
+
             listing_Standard.GapLine();
-            listing_Standard.Label("gen_ingredients_head".Translate());
+            listing_Standard.Label("advanced_head".Translate());
+            listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_label".Translate(), ref adv_cleaning, "advanced_inbetween_cleaning_note".Translate());
+
+            listing_Standard.GapLine();
+            listing_Standard.Label("miscellaneous_head".Translate());
             listing_Standard.CheckboxLabeled("gen_ingredients_label".Translate(), ref add_meal_ingredients, "gen_ingredients_note".Translate());
+            listing_Standard.CheckboxLabeled("extended_recipe_label".Translate(), ref extended_recipe, "extended_recipe_note".Translate());
             listing_Standard.End();
         }
 
@@ -53,6 +62,8 @@ namespace CommonSense
             Scribe_Values.Look<bool>(ref calculate_full_path, "calculate_full_path", true, false);
             Scribe_Values.Look<bool>(ref add_meal_ingredients, "add_meal_ingredients", false, false);
             Scribe_Values.Look<bool>(ref drugs_use_potential_mood, "drugs_use_potential_mood", true, false);
+            Scribe_Values.Look<bool>(ref adv_cleaning, "adv_cleaning", true, false);
+            Scribe_Values.Look<bool>(ref extended_recipe, "extended_recipe", true, false);
         }
     }
 }

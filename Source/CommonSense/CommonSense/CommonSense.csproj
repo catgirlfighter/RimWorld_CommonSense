@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TextChanges.cs" />
+    <Compile Include="OppCleaningDriver.cs" />
     <Compile Include="DrugPolicy.cs" />
     <Compile Include="RandomIngredients.cs" />
     <Compile Include="OpportunisticTasks.cs" />

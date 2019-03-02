@@ -16,7 +16,7 @@ namespace CommonSense
         static private WorkGiverDef haulGeneral = null;
         const byte largeRoomSize = 160;
 
-        static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target)
+        public static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target)
         {
             Room room = null;
             if (target.Thing == null)
@@ -55,6 +55,7 @@ namespace CommonSense
             else
                 enumerable = room.ContainedAndAdjacentThings.OfType<Filth>().Where(delegate (Filth f)
                 {
+                    //Log.Message(f.ToString() + "," + f.Destroyed.ToString()+","+ f.Position.InAllowedArea(pawn).ToString()+","+ ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f).ToString());
                     if (f == null || f.Destroyed || !f.Position.InAllowedArea(pawn) || !((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)) 
                         return false;
 
@@ -80,6 +81,15 @@ namespace CommonSense
             }
         }
 
+        public static void AddFilthToQueue(Job j, TargetIndex ind, IEnumerable<Filth> l, Pawn pawn)
+        {
+            foreach (Filth f in (l))
+                j.AddQueuedTarget(ind,f);
+
+            if (j.GetTargetQueue(ind).Count >= 5)
+                j.GetTargetQueue(ind).SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
+        }
+
         static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target)
         {
             if (pawn.def.race == null ||
@@ -100,13 +110,7 @@ namespace CommonSense
             if (l.Count() == 0)
                 return null;
 
-            foreach (Filth f in (l))
-                job.AddQueuedTarget(TargetIndex.A, f);
-
-            if (job.targetQueueA != null && job.targetQueueA.Count >= 5)
-            {
-                job.targetQueueA.SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
-            }
+            AddFilthToQueue(job,TargetIndex.A, l, pawn);
 
             return job;
         }
@@ -206,7 +210,12 @@ namespace CommonSense
                     {
                         bool outdoors = room.PsychologicallyOutdoors || room.IsHuge || room.CellCount > largeRoomSize;
                         if (haulGeneral == null)
-                            haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulGeneral");
+                        {
+                            //compatibility with "pick up and houl"
+                            haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulToInventory");
+                            if (haulGeneral == null)
+                                haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulGeneral");
+                        }
 
                         Job job = null;
 
@@ -227,30 +236,41 @@ namespace CommonSense
                 if (!Settings.clean_before_work && !Settings.hauling_over_bills)
                     return true;
 
-                if (__instance == null || __instance._pawn == null || newJob == null || newJob.playerForced || newJob.def == null || !newJob.def.allowOpportunisticPrefix ||
-                    newJob.targetA == null || newJob.targetA.Cell == null)
+                if (__instance == null || __instance._pawn == null || newJob == null || newJob.def == null || !newJob.def.allowOpportunisticPrefix)
                     return true;
 
-                IntVec3 cell = newJob.targetA.Cell;
-
-                if (!cell.IsValid || cell.IsForbidden(__instance._pawn) || __instance._pawn.Downed)
-                {
-                    return true;
-                }
-                
                 Job job = null;
 
-                if (Settings.hauling_over_bills && newJob.def == JobDefOf.DoBill)
-                {
-                    job = Hauling_Opportunity(newJob, __instance._pawn);
-                    //Log.Message("can't haul anything");
+                if (newJob.def == JobDefOf.DoBill)
+                { 
+                    if (Settings.hauling_over_bills)
+                    {
+                        job = Hauling_Opportunity(newJob, __instance._pawn);
+                    }
+                    //else if (Settings.adv_cleaning)
+                    //{
+                    //    LocalTargetInfo A = newJob.targetA;
+                    //    IEnumerable<Filth> l = SelectAllFilth(__instance._pawn, A);
+                    //    AddFilthToQueue(newJob, TargetIndex.A, l, __instance._pawn);
+                    //    newJob.targetQueueA.Add(A);
+                    //}
                 }
-                else if (Settings.clean_before_work && (newJob.targetA.Thing != null && (newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Pawn))) || newJob.def.joyKind != null))
-                    job = Cleaning_Opportunity(newJob, cell, __instance._pawn);
+                else if (!newJob.playerForced && newJob.targetA != null && newJob.targetA.Cell != null)
+                    {
+                        IntVec3 cell = newJob.targetA.Cell;
+
+                        if (!cell.IsValid || cell.IsForbidden(__instance._pawn) || __instance._pawn.Downed)
+                        {
+                            return true;
+                        }
+
+                        if (Settings.clean_before_work && (newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.def.joyKind != null))
+                            job = Cleaning_Opportunity(newJob, cell, __instance._pawn);
+                    }
 
                 if (job != null)
                 {
-                    if(Settings.add_to_que)
+                    if (Settings.add_to_que)
                         __instance.jobQueue.EnqueueFirst(newJob);
                     __instance.jobQueue.EnqueueFirst(job);
                     __instance.curJob = null;

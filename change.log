@@ -1,4 +1,9 @@
-﻿1.0.11
+﻿1.0.12
+- added synergy between a mod "pick up and haul" and a tweak "haul instead of crafting";
+- added a GUI tweak, that allows to display complete list of ingredients on recipe screen, instead of just vague "ingredients";
+- added an advanced option to let pawns clean the room between hauling ingredients and actual crafting (with normal option they would clean before hauling). This tweak is heavy handed and may break mods that tweak bill jobs.
+
+1.0.11
 - add a new feature: pawns now can take into account "potential" mood, what should prevent them from overusing drugs to get above a set level;
 
 1.0.10
