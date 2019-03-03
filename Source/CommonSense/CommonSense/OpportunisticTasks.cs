@@ -83,11 +83,79 @@ namespace CommonSense
 
         public static void AddFilthToQueue(Job j, TargetIndex ind, IEnumerable<Filth> l, Pawn pawn)
         {
+            //l = from d in l
+            //    orderby 
+            //    select d;
+
+            //int n = Math.Abs(l.ElementAt(0).InteractionCell.DistanceToSquared(pawn.Position));
+            //Filth d = l.ElementAt(0);
+            //for (int i=1;i<l.Count(); i++)
+            //{
+                //if 
+                //l.ElementAt(i).InteractionCell.DistanceToSquared(pawn.Position);
+            //}
+
             foreach (Filth f in (l))
                 j.AddQueuedTarget(ind,f);
 
-            if (j.GetTargetQueue(ind).Count >= 5)
-                j.GetTargetQueue(ind).SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
+            var q = j.GetTargetQueue(ind);
+
+            if (q.Count > 0)
+            {
+                int n = q[0].Cell.DistanceToSquared(pawn.Position);
+                int x = 0;
+                int idx = 0;
+                LocalTargetInfo out_of_all_things_they_didnt_add_a_simple_swap = null;
+                for (int i = 1; i < l.Count(); i++)
+                {
+                    x = q[i].Cell.DistanceToSquared(pawn.Position);
+                    if (Math.Abs(x) < Math.Abs(n))
+                    {
+                        n = x;
+                        idx = i;
+                    }
+                }
+
+                if (idx != 0)
+                {
+                    out_of_all_things_they_didnt_add_a_simple_swap = q[idx];
+                    q[idx] = q[0];
+                    q[0] = out_of_all_things_they_didnt_add_a_simple_swap;
+                }
+
+                for (int i = 0; i < q.Count()-1; i++)
+                {
+                    n = q[i].Cell.DistanceToSquared(q[i + 1].Cell);
+                    idx = i + 1;
+                    for (int c = i + 2; c < q.Count(); c++)
+                    {
+                        x = q[i].Cell.DistanceToSquared(q[c].Cell);
+                        if (Math.Abs(x) < Math.Abs(n))
+                        {
+                            n = x;
+                            idx = c;
+                        }
+                    }
+
+                    if (idx != i + 1)
+                    {
+                        out_of_all_things_they_didnt_add_a_simple_swap = q[idx];
+                        q[idx] = q[i + 1];
+                        q[i + 1] = out_of_all_things_they_didnt_add_a_simple_swap;
+                    }
+                }
+            }
+            //q.SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
+
+
+
+            //if (j.GetTargetQueue(ind).Count >= 5)
+            //{
+            //    var q = j.GetTargetQueue(ind);
+            //    q.SortBy((LocalTargetInfo targ) => targ.Cell.DistanceToSquared(pawn.Position));
+            //    LocalTargetInfo t = q[0];
+            //    for(iint)
+            //}
         }
 
         static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target)

@@ -29,6 +29,7 @@
 	<miscellaneous_head>Разное</miscellaneous_head>
 	<extended_recipe_label>Рецепты показывают полный список ингредиентов</extended_recipe_label>
 	<extended_recipe_note>Вместо расплывчатого "ингредиенты"</extended_recipe_note>
+	<advanced_head>Продвинутое поведение</advanced_head>
 	<advanced_inbetween_cleaning_label>Пешки будут чистить комнаты между переносом ингредиентов и крафтом</advanced_inbetween_cleaning_label>
 	<advanced_inbetween_cleaning_note>Базовое поведение позволило бы им убрать комнату только перед переносом</advanced_inbetween_cleaning_note>
 </LanguageData>

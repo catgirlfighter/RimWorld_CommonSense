@@ -123,6 +123,7 @@ namespace CommonSense
                         LocalTargetInfo A = __instance.job.GetTarget(TargetIndex.A);
                         IEnumerable<Filth> l = OpportunisticTasks.SelectAllFilth(CheckFilth.actor, A);
                         OpportunisticTasks.AddFilthToQueue(curJob, TargetIndex.A, l, CheckFilth.actor);
+                        CheckFilth.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(TargetIndex.A), curJob);
                         curJob.targetQueueA.Add(A);
                     }
                 };

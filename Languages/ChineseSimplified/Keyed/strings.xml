@@ -29,6 +29,7 @@
   <miscellaneous_head>Miscellaneous</miscellaneous_head>
   <extended_recipe_label>Recipes display complete list of ingredients</extended_recipe_label>
   <extended_recipe_note>Instead of just vague "ingredients"</extended_recipe_note>
+  <advanced_head>Advanced behaviors</advanced_head>
   <advanced_inbetween_cleaning_label>Pawns will clean rooms in between hauling ingredients and crafting</advanced_inbetween_cleaning_label>
   <advanced_inbetween_cleaning_note>Basic behavior would let them clean only before hauling</advanced_inbetween_cleaning_note>
 </LanguageData>
