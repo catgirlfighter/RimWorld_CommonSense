@@ -26,4 +26,10 @@
   <fulfill_needs_head>满足需求</fulfill_needs_head>
   <drugs_use_potential_mood_label>小人会在遵从有心情阈值设定的成瘾品方案时考虑到潜在心情值</drugs_use_potential_mood_label>
   <drugs_use_potential_mood_note>如果“潜在心情值”（即正在变化中的心情的目标值）高于成瘾品方案设定的心情指标，小人不会使用成瘾品。可以防止小人在不必要的情况下使用成瘾品</drugs_use_potential_mood_note>
+  <miscellaneous_head>Miscellaneous</miscellaneous_head>
+  <extended_recipe_label>Recipes display complete list of ingredients</extended_recipe_label>
+  <extended_recipe_note>Instead of just vague "ingredients"</extended_recipe_note>
+  <advanced_head>Advanced behaviors</advanced_head>
+  <advanced_inbetween_cleaning_label>Pawns will clean rooms in between hauling ingredients and crafting</advanced_inbetween_cleaning_label>
+  <advanced_inbetween_cleaning_note>Basic behavior would let them clean only before hauling</advanced_inbetween_cleaning_note>
 </LanguageData>

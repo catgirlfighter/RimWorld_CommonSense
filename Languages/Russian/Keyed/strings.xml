@@ -26,4 +26,10 @@
 	<fulfill_needs_head>Удовлетворение потребностей</fulfill_needs_head>
 	<drugs_use_potential_mood_label>Поощрать пешек учитывать потенциальное настроение в политике приема препаратов</drugs_use_potential_mood_label>
 	<drugs_use_potential_mood_note>Пешки не будут использовать препараты если "потенциальное" настроение выше отметки, это не даст пешкам использовать больше наркотиков, чем требуется, чтобы поднять настроение выше требуемого уровня</drugs_use_potential_mood_note>	
+	<miscellaneous_head>Разное</miscellaneous_head>
+	<extended_recipe_label>Рецепты показывают полный список ингредиентов</extended_recipe_label>
+	<extended_recipe_note>Вместо расплывчатого "ингредиенты"</extended_recipe_note>
+	<advanced_head>Продвинутое поведение</advanced_head>
+	<advanced_inbetween_cleaning_label>Пешки будут чистить комнаты между переносом ингредиентов и крафтом</advanced_inbetween_cleaning_label>
+	<advanced_inbetween_cleaning_note>Базовое поведение позволило бы им убрать комнату только перед переносом</advanced_inbetween_cleaning_note>
 </LanguageData>
