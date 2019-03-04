@@ -26,10 +26,10 @@
   <fulfill_needs_head>满足需求</fulfill_needs_head>
   <drugs_use_potential_mood_label>小人会在遵从有心情阈值设定的成瘾品方案时考虑到潜在心情值</drugs_use_potential_mood_label>
   <drugs_use_potential_mood_note>如果“潜在心情值”（即正在变化中的心情的目标值）高于成瘾品方案设定的心情指标，小人不会使用成瘾品。可以防止小人在不必要的情况下使用成瘾品</drugs_use_potential_mood_note>
-  <miscellaneous_head>Miscellaneous</miscellaneous_head>
-  <extended_recipe_label>Recipes display complete list of ingredients</extended_recipe_label>
-  <extended_recipe_note>Instead of just vague "ingredients"</extended_recipe_note>
-  <advanced_head>Advanced behaviors</advanced_head>
-  <advanced_inbetween_cleaning_label>Pawns will clean rooms in between hauling ingredients and crafting</advanced_inbetween_cleaning_label>
-  <advanced_inbetween_cleaning_note>Basic behavior would let them clean only before hauling</advanced_inbetween_cleaning_note>
+  <miscellaneous_head>其它</miscellaneous_head>
+  <extended_recipe_label>配方可以显示完整的原料表</extended_recipe_label>
+  <extended_recipe_note>而不是模糊不清的“原料”</extended_recipe_note>
+  <advanced_head>高级智能</advanced_head>
+  <advanced_inbetween_cleaning_label>小人会在搬运之后、制作之前清洁房间</advanced_inbetween_cleaning_label>
+  <advanced_inbetween_cleaning_note>前面的“机智地工作”中的功能只会让他们在搬运前清理房间</advanced_inbetween_cleaning_note>
 </LanguageData>
