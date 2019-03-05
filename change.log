@@ -1,4 +1,11 @@
-﻿1.0.12
+﻿1.0.12b
+- fixed a compatibility issue with "Stockpile Ranking" mod. Probably fixed an issue with Haul Explicitly;
+
+1.0.12a
+- updated chinese language;
+- changed how cleaning path is calculated for cleaning tasks to reduce backtracking;
+
+1.0.12
 - added synergy between a mod "pick up and haul" and a tweak "haul instead of crafting";
 - added a GUI tweak, that allows to display complete list of ingredients on recipe screen, instead of just vague "ingredients";
 - added an advanced option to let pawns clean the room between hauling ingredients and actual crafting (with normal option they would clean before hauling). This tweak is heavy handed and may break mods that tweak bill jobs.
