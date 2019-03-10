@@ -1,10 +1,5 @@
-﻿using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Harmony;
-using RimWorld;
 using Verse;
 
 namespace CommonSense

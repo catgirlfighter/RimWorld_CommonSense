@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Harmony;
 using RimWorld;
 using Verse;
 using Verse.AI;
-using Harmony;
 using UnityEngine;
 
 namespace CommonSense
@@ -280,7 +279,7 @@ namespace CommonSense
                         if (haulGeneral == null)
                         {
                             //compatibility with "pick up and houl"
-                            haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulToInventory");
+                            haulGeneral = DefDatabase<WorkGiverDef>.GetNamedSilentFail("HaulToInventory");
                             if (haulGeneral == null)
                                 haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulGeneral");
                         }

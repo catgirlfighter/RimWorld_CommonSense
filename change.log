@@ -1,4 +1,8 @@
-﻿1.0.12b
+﻿1.0.13
+- added an option to pick up ALL ingredients before hauling them to the crafting place;
+- fixed possible issue with recreational drugs in inventory when "fulfilling outdoors" is triggered;
+
+1.0.12b
 - fixed a compatibility issue with "Stockpile Ranking" mod. Probably fixed an issue with Haul Explicitly;
 
 1.0.12a

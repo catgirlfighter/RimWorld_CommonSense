@@ -1,11 +1,48 @@
-﻿using UnityEngine;
+﻿using System;
+using Harmony;
+using UnityEngine;
 using Verse;
-using System;
 
 namespace CommonSense
 {
     public class Settings : ModSettings
     {
+
+        /*
+        private static bool PUAHLoaded = false;
+        private static ModContentPack fPUAH = null;
+        public static ModContentPack PUAHMod
+        {
+            get
+            {
+                if (PUAHLoaded)
+                    return fPUAH;
+                else
+                {
+                    fPUAH = LoadedModManager.RunningMods.FirstOrDefault(x => x.Name == "Pick Up And Haul");
+                    PUAHLoaded = true;
+                    return fPUAH;
+                }
+            }
+        }
+        */
+        private static bool CHTILoaded = false;
+        private static Type fCHTI = null;
+        public static Type CompHauledToInventory
+        {
+            get
+            {
+                if (CHTILoaded)
+                    return fCHTI;
+                else
+                {
+                    fCHTI = AccessTools.TypeByName("CompHauledToInventory");
+                    CHTILoaded = true;
+                    return fCHTI;
+                }
+            }
+        }
+
         public static bool separate_meals = true;
         public static bool fulfill_outdoors = true;
         public static bool odd_is_normal = false;
@@ -17,6 +54,7 @@ namespace CommonSense
         public static bool hauling_over_bills = true;
         public static bool drugs_use_potential_mood = true;
         public static bool adv_cleaning = true;
+        public static bool adv_haul_all_ings = true;
         public static bool extended_recipe = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
@@ -43,6 +81,7 @@ namespace CommonSense
             listing_Standard.GapLine();
             listing_Standard.Label("advanced_head".Translate());
             listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_label".Translate(), ref adv_cleaning, "advanced_inbetween_cleaning_note".Translate());
+            listing_Standard.CheckboxLabeled("advanced_haul_all_ings".Translate(), ref adv_haul_all_ings, "advanced_haul_all_ings".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("miscellaneous_head".Translate());
@@ -54,16 +93,17 @@ namespace CommonSense
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look<bool>(ref separate_meals, "separate_meals", true, false);
-            Scribe_Values.Look<bool>(ref fulfill_outdoors, "fulfill_outdoors", true, false);
-            Scribe_Values.Look<bool>(ref odd_is_normal, "odd_is_normal", false, false);
-            Scribe_Values.Look<bool>(ref clean_before_work, "clean_before_work", true, false);
-            Scribe_Values.Look<bool>(ref clean_after_tanding, "clean_after_tanding", true, false);
-            Scribe_Values.Look<bool>(ref calculate_full_path, "calculate_full_path", true, false);
-            Scribe_Values.Look<bool>(ref add_meal_ingredients, "add_meal_ingredients", false, false);
-            Scribe_Values.Look<bool>(ref drugs_use_potential_mood, "drugs_use_potential_mood", true, false);
-            Scribe_Values.Look<bool>(ref adv_cleaning, "adv_cleaning", true, false);
-            Scribe_Values.Look<bool>(ref extended_recipe, "extended_recipe", true, false);
+            Scribe_Values.Look(ref separate_meals, "separate_meals", true, false);
+            Scribe_Values.Look(ref fulfill_outdoors, "fulfill_outdoors", true, false);
+            Scribe_Values.Look(ref odd_is_normal, "odd_is_normal", false, false);
+            Scribe_Values.Look(ref clean_before_work, "clean_before_work", true, false);
+            Scribe_Values.Look(ref clean_after_tanding, "clean_after_tanding", true, false);
+            Scribe_Values.Look(ref calculate_full_path, "calculate_full_path", true, false);
+            Scribe_Values.Look(ref add_meal_ingredients, "add_meal_ingredients", false, false);
+            Scribe_Values.Look(ref drugs_use_potential_mood, "drugs_use_potential_mood", true, false);
+            Scribe_Values.Look(ref adv_cleaning, "adv_cleaning", true, false);
+            Scribe_Values.Look(ref adv_haul_all_ings, "adv_haul_all_ings", true, false);
+            Scribe_Values.Look(ref extended_recipe, "extended_recipe", true, false);
         }
     }
 }
