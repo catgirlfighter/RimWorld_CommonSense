@@ -167,25 +167,21 @@ namespace CommonSense
                             
                             if (curJob.countQueue[0] > targetQueue[0].Thing.stackCount)
                             {
-                                Log.Message($"Fail {targetQueue[0].Thing}({targetQueue[0].Thing.stackCount}) ~ {curJob.countQueue[0]}");
                                 actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
                             }
                             else
                             {
-                                Log.Message($"OK {targetQueue[0].Thing}({targetQueue[0].Thing.stackCount}) ~ {curJob.countQueue[0]}");
                                 curJob.SetTarget(TargetIndex.B, targetQueue[0]);
                                 targetQueue.RemoveAt(0);
                                 curJob.count = curJob.countQueue[0];
                                 curJob.countQueue.RemoveAt(0);
                             }
                         }
-                        Log.Message($"out");
                     };                   
 
                     Toil PickUpThing = new Toil();
                     PickUpThing.initAction = delegate ()
                     {
-                        Log.Message($"Pick up {extract.actor.jobs.curJob.GetTarget(TargetIndex.B).Thing}");
                         Pawn actor = extract.actor;
                         Job curJob = actor.jobs.curJob;
                         Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
@@ -195,12 +191,10 @@ namespace CommonSense
                         {
                             if (thing.stackCount < curJob.count)
                             {
-                                Log.Message($"FAIL Pick up {thing}({thing.stackCount} ~ {curJob.count})");
                                 actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
                             }
                             else
                             {
-                                Log.Message($"splitting {thing}");
                                 Thing splitThing = thing.SplitOff(curJob.count);
                                 if (splitThing.ParentHolder != actor.inventory &&!actor.inventory.GetDirectlyHeldThings().TryAdd(splitThing, false))
                                 {
