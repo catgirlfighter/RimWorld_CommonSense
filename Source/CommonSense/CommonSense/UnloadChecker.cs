@@ -42,10 +42,13 @@ namespace CommonSense
     {
         static void Postfix(ThingWithComps __instance)
         {
-            ThingComp thingComp = (ThingComp)Activator.CreateInstance(typeof(CompUnloadChecker));
-            thingComp.parent = __instance;
-            __instance.AllComps.Add(thingComp);
-            thingComp.Initialize(null);
+            if (__instance.def.comps.Count > 0 && __instance.def.stackLimit > 0)
+            {
+                ThingComp thingComp = (ThingComp)Activator.CreateInstance(typeof(CompUnloadChecker));
+                thingComp.parent = __instance;
+                __instance.AllComps.Add(thingComp);
+            }
+            //thingComp.Initialize(null);
         }
     }
 
