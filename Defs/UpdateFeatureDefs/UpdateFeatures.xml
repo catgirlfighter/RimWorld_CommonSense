@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<!-- Use either "\n" or XML whitespace return to make linebreaks; both method works -->
+
+	<HugsLib.UpdateFeatureDef Abstract="true" Name="CommonSense_UpdateFeatureBase">
+		<modNameReadable>Common Sense</modNameReadable>
+		<modIdentifier>net.avilmask.rimworld.mod.CommonSense</modIdentifier>
+		<linkUrl>https://github.com/catgirlfighter/RimWorld_CommonSense</linkUrl>
+	</HugsLib.UpdateFeatureDef>
+	
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_0_0</defName>
+		<assemblyVersion>1.0.0</assemblyVersion>
+		<content>Check, check. *Ahem* Greetings, %username%! Many of you use HugsLib, and it allows to make a change log visible in-game. So here it comes, for yours and slightly mine convenience. If you don't have HugsLib, you'll not even notice any difference, so don't worry about it.</content>
+	</HugsLib.UpdateFeatureDef>
+	
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_0_13</defName>
+		<assemblyVersion>1.0.13</assemblyVersion>
+		<content>- Added an option to pick up ALL ingredients before hauling them to the crafting place. As usual, you can disable it from mod settings;
+- fixed a possible issue with recreational drugs in inventory when "fulfilling outdoors" is triggered;
+If you see pawns acting funny, don't mind to report your observations. "Hauling in between" and "hauling ALL before going to the crafting place" are two options that completely redo, how working on a bill works.</content>
+	</HugsLib.UpdateFeatureDef>
+</Defs>
