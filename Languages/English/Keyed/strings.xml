@@ -34,4 +34,6 @@
 	<advanced_inbetween_cleaning_note>Basic behavior would let them clean only before hauling</advanced_inbetween_cleaning_note>
 	<advanced_haul_all_ings_label>Pawns are encouraged to pick up all ingredients before hauling them to the crafting place</advanced_haul_all_ings_label>
 	<advanced_haul_all_ings_note>Pawns will be taking all necessary ingredients to their hauling inventory before delivering them to the crafting place</advanced_haul_all_ings_note>
+	<prefer_spoiling_ingredients_label>Pawns are encouraged to use ingredients that spoil faster</prefer_spoiling_ingredients_label>
+	<prefer_spoiling_ingredients_note>WARNING: with more items to chose from it may start causing a lag</prefer_spoiling_ingredients_note>
 </LanguageData>

@@ -1,4 +1,7 @@
-﻿1.0.13
+﻿1.0.14
+- added an option to prefer faster spoiling ingredients for cooking;
+
+1.0.13
 - added an option to pick up ALL ingredients before hauling them to the crafting place;
 - fixed possible issue with recreational drugs in inventory when "fulfilling outdoors" is triggered;
 

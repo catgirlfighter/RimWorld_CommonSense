@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IngredientPriority.cs" />
     <Compile Include="TextChanges.cs" />
     <Compile Include="OppCleaningDriver.cs" />
     <Compile Include="DrugPolicy.cs" />
