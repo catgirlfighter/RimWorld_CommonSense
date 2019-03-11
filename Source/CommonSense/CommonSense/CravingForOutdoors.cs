@@ -77,7 +77,7 @@ namespace CommonSense
                     if (job != null && job.targetA != null)
                             if (job.targetA.Thing != null)
                             {
-                                if (job.targetA.Thing.Position.GetRoom(job.targetA.Thing.Map).PsychologicallyOutdoors)
+                            if (job.targetA.Thing.GetRoom() != null && job.targetA.Thing.GetRoom().PsychologicallyOutdoors)
                                 {
                                     __result = job;
                                     return false;

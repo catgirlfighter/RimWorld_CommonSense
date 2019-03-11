@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Harmony;
 using RimWorld;
 using Verse;
 using Verse.AI;
-using Harmony;
 using UnityEngine;
 
 namespace CommonSense
@@ -280,7 +279,7 @@ namespace CommonSense
                         if (haulGeneral == null)
                         {
                             //compatibility with "pick up and houl"
-                            haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulToInventory");
+                            haulGeneral = DefDatabase<WorkGiverDef>.GetNamedSilentFail("HaulToInventory");
                             if (haulGeneral == null)
                                 haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulGeneral");
                         }
@@ -288,7 +287,7 @@ namespace CommonSense
                         Job job = null;
 
                         foreach (var target in (billJob.targetQueueB))
-                            if (target.Thing != null && target.Thing.def.stackLimit > 1 && (outdoors || target.Thing.GetRoom() != room))
+                            if (target.Thing != null && target.Thing.def.stackLimit > 1 && target.Thing.Map != null && (outdoors || target.Thing.GetRoom() != room))
                             {
                                 job = ((WorkGiver_Scanner)haulGeneral.Worker).JobOnThing(pawn, target.Thing);
                                 if (job != null)

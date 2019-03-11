@@ -32,4 +32,8 @@
 	<advanced_head>Продвинутое поведение</advanced_head>
 	<advanced_inbetween_cleaning_label>Пешки будут чистить комнаты между переносом ингредиентов и крафтом</advanced_inbetween_cleaning_label>
 	<advanced_inbetween_cleaning_note>Базовое поведение позволило бы им убрать комнату только перед переносом</advanced_inbetween_cleaning_note>
+	<advanced_haul_all_ings_label>Поощрять пешек подбирать все ингредиенты до их переноски к месту крафта</advanced_haul_all_ings_label>
+	<advanced_haul_all_ings_note>Пешки будут брать все необходимые ингредиенты в их инвентарь перед тем как начать переносить их к месту крафта</advanced_haul_all_ings_note>
+	<prefer_spoiling_ingredients_label>Поощрять пешек использовать ингредиенты, которые портятся быстрее</prefer_spoiling_ingredients_label>
+	<prefer_spoiling_ingredients_note>ВНИМАНИЕ: большом выбор предметов может привести к лагу</prefer_spoiling_ingredients_note>
 </LanguageData>
