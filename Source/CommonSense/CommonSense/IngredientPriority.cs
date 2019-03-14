@@ -1,44 +1,30 @@
-﻿using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Harmony;
 using RimWorld;
 using Verse;
-using UnityEngine;
+using Verse.AI;
 
 namespace CommonSense
 {
     class IngredientPriority
     {
-
-        /*
-        [HarmonyPatch]
-        static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
+        [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredients")]
+        static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
         {
-            internal static MethodBase TargetMethod()
+            static void Postfix(/*WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen*/)
             {
-                *
-                Type nestedTypeResult = null;
-                const string targetMethod = "TryFindBestBillIngredientsInSet_AllowMix";
-                foreach (var nestedType in typeof(WorkGiver_DoBill).GetNestedTypes(AccessTools.all))
-                {
-                    if (!nestedType.Name.Contains(targetMethod)) continue;
-                    if (nestedTypeResult != null) throw new Exception($"Multiple {targetMethod} found");
-                    nestedTypeResult = nestedType;
-                }
-                if (nestedTypeResult == null) throw new Exception($"Could not find {targetMethod} Iterator Class");
-                return nestedTypeResult;
-                *
-                return AccessTools.Method(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix");
+                return;
+                //if (!__result)
+                //    return;
+
+                //Utility.OptimizePath(chosen, pawn);
             }
         }
-        */
+
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
         static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
-            static bool Prefix(List<Thing> availableThings/*, Bill bill, List<ThingCount> chosen*/)
+            static bool Prefix(List<Thing> availableThings)
             {
                 if (!Settings.prefer_spoiling_ingredients)
                     return true;
@@ -62,16 +48,6 @@ namespace CommonSense
                     }
                 );
 
-                /*
-                foreach (var i in (availableThings))
-                {
-                    CompRottable derp = i.TryGetComp<CompRottable>();
-                    if (derp == null)
-                        Log.Message($"{i} = inf");
-                    else
-                        Log.Message($"{i} = {(int)(derp.PropsRot.TicksToRotStart - derp.RotProgress) / 2500} ({derp.PropsRot.TicksToRotStart - derp.RotProgress})");
-                }
-                */
                 return true;
             }
         }

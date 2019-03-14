@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace CommonSense
 {
-    static class OppCleaningDriver
+    static class JobGiver_DoBIll_Reworked
     {
         //protected override IEnumerable<Toil> JobDriver_DoBill.MakeNewToils()
         [HarmonyPatch(typeof(JobDriver_DoBill), "MakeNewToils")]
@@ -78,19 +78,6 @@ namespace CommonSense
                     return toil;
                 }
             }
-
-            /*
-            static HashSet<Thing> GetTakenToInventory(Pawn pawn)
-            {
-                if(Settings.CompHauledToInventory != null)
-                foreach (var c in (pawn.AllComps))
-                    {
-                        if (c.GetType() == Settings.CompHauledToInventory)
-                            return Traverse.Create(c).Field("TakenToInventory").GetValue<HashSet<Thing>>();
-                    }
-                return null;
-            }
-            */
 
             static IEnumerable<Toil> DoMakeToils(JobDriver_DoBill_Access __instance)
             {
@@ -275,8 +262,8 @@ namespace CommonSense
                         if (curJob.GetTargetQueue(TargetIndex.A).NullOrEmpty())
                         {
                             LocalTargetInfo A = curJob.GetTarget(TargetIndex.A);
-                            IEnumerable<Filth> l = OpportunisticTasks.SelectAllFilth(FilthList.actor, A);
-                            OpportunisticTasks.AddFilthToQueue(curJob, TargetIndex.A, l, FilthList.actor);
+                            IEnumerable<Filth> l = Utility.SelectAllFilth(FilthList.actor, A);
+                            Utility.AddFilthToQueue(curJob, TargetIndex.A, l, FilthList.actor);
                             FilthList.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(TargetIndex.A), curJob);
                             curJob.targetQueueA.Add(A);
                         }
