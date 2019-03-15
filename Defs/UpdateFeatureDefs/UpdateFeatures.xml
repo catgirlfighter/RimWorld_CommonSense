@@ -22,9 +22,16 @@
 If you see pawns acting funny, don't mind to report your observations. "Hauling in between" and "hauling ALL before going to the crafting place" are two options that completely redo, how working on a bill works.</content>
 	</HugsLib.UpdateFeatureDef>
 	
-		<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
 		<defName>CS_1_0_14</defName>
 		<assemblyVersion>1.0.14</assemblyVersion>
 		<content>- added an option to prefer faster spoiling ingredients for cooking. I can't really tell, how it impacts performance. If you think it causes a lag, you may disable it.</content>
+	</HugsLib.UpdateFeatureDef>
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_0_15</defName>
+		<assemblyVersion>1.0.15</assemblyVersion>
+		<content>- made "full recipe descriptions" for apparel simpler;
+- added order optimization when a pawn is hauling ingredients for a recipe;
+- optimized some things considering ingredients that was left in inventory if hauling was interrupted, but it's hardly noticeable.</content>
 	</HugsLib.UpdateFeatureDef>
 </Defs>

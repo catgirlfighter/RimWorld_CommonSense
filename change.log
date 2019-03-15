@@ -1,4 +1,9 @@
-﻿1.0.14
+﻿1.0.15
+- made "full recipe descriptions" for apparel simpler;
+- added order optimization when a pawn is hauling ingredients for a recipe;
+- optimized some things considering ingredients that was left in inventory if hauling was interrupted, but it's hardly noticeable.
+
+1.0.14
 - added an option to prefer faster spoiling ingredients for cooking;
 
 1.0.13
