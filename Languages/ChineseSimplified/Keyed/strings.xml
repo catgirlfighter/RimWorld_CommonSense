@@ -34,6 +34,6 @@
   <advanced_inbetween_cleaning_note>前面的“机智地工作”中的功能只会让他们在搬运前清理房间</advanced_inbetween_cleaning_note>
   <advanced_haul_all_ings_label>小人会在制作前把所有的原材料搬运到制作处</advanced_haul_all_ings_label>
   <advanced_haul_all_ings_note>小人会把所有需要的原材料放到自己的身上，然后一起拿到制作的地方进行制作</advanced_haul_all_ings_note>
-  <prefer_spoiling_ingredients_label>小人会优先吃掉那些快要腐烂的食物</prefer_spoiling_ingredients_label>
-  <prefer_spoiling_ingredients_note>警告：如果可以选择的食物数量过多，这个选项有可能导致卡顿</prefer_spoiling_ingredients_note>
+  <prefer_spoiling_ingredients_label>小人会优先使用那些快要腐烂的原料来烹饪</prefer_spoiling_ingredients_label>
+  <prefer_spoiling_ingredients_note>警告：如果可以选择的原料数量过多，这个选项有可能导致卡顿</prefer_spoiling_ingredients_note>
 </LanguageData>
