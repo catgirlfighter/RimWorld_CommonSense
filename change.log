@@ -1,4 +1,8 @@
-﻿1.0.15
+﻿1.0.16
+- fixed an error on trying to cut stone chunks. Sorry about that;
+- added an option to unload an item from an inventory (to the closest stockpile, instead of dropping on the ground).
+
+1.0.15
 - made "full recipe descriptions" for apparel simpler;
 - added order optimization when a pawn is hauling ingredients for a recipe;
 - optimized some things considering ingredients that was left in inventory if hauling was interrupted, but it's hardly noticeable.

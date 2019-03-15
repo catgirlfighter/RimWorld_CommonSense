@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 	<!-- settings -->
 	<fulfill_outdoors_head>Потребность в свежем воздухе</fulfill_outdoors_head>
@@ -36,4 +36,6 @@
 	<advanced_haul_all_ings_note>Пешки будут брать все необходимые ингредиенты в их инвентарь перед тем как начать переносить их к месту крафта</advanced_haul_all_ings_note>
 	<prefer_spoiling_ingredients_label>Поощрять пешек использовать ингредиенты, которые портятся быстрее</prefer_spoiling_ingredients_label>
 	<prefer_spoiling_ingredients_note>ВНИМАНИЕ: большом выбор предметов может привести к лагу</prefer_spoiling_ingredients_note>
+	<UnloadThing>Выгрузить</UnloadThing>
+	<UnloadThingCancel>Отменить выгрузку</UnloadThingCancel>
 </LanguageData>

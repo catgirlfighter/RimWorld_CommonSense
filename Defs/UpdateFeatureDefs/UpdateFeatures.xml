@@ -34,4 +34,10 @@ If you see pawns acting funny, don't mind to report your observations. "Hauling 
 - added order optimization when a pawn is hauling ingredients for a recipe;
 - optimized some things considering ingredients that was left in inventory if hauling was interrupted, but it's hardly noticeable.</content>
 	</HugsLib.UpdateFeatureDef>
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_0_16</defName>
+		<assemblyVersion>1.0.16</assemblyVersion>
+		<content>- fixed an error on trying to cut stone chunks. Sorry about that;
+- added an option to unload an item from an inventory (to the closest stockpile, instead of dropping on the ground). Doesn't work with RPG Style (ATM), so probably most of you not gonna see that option anyway.</content>
+	</HugsLib.UpdateFeatureDef>
 </Defs>

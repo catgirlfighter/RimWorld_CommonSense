@@ -36,4 +36,6 @@
 	<advanced_haul_all_ings_note>Pawns will be taking all necessary ingredients to their hauling inventory before delivering them to the crafting place</advanced_haul_all_ings_note>
 	<prefer_spoiling_ingredients_label>Pawns are encouraged to use ingredients that spoil faster</prefer_spoiling_ingredients_label>
 	<prefer_spoiling_ingredients_note>WARNING: with more items to chose from it may start causing a lag</prefer_spoiling_ingredients_note>
+	<UnloadThing>Unload</UnloadThing>
+	<UnloadThingCancel>Cancel unload</UnloadThingCancel>
 </LanguageData>

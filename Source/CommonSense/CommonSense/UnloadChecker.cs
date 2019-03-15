@@ -5,7 +5,8 @@ using Harmony;
 using RimWorld;
 using Verse;
 using Verse.AI;
-using System.Collections;
+using Verse.Sound;
+using UnityEngine;
 
 namespace CommonSense
 {
@@ -32,7 +33,7 @@ namespace CommonSense
         static public CompUnloadChecker GetChecker(Thing thing, bool InitShouldUnload = false, bool InitWasInInventory = false)
         {
             
-            if (!(thing is ThingWithComps) && !typeof(ThingWithComps).IsSubclassOf(thing.GetType()))
+            if (!(thing is ThingWithComps) && !thing.GetType().IsSubclassOf(typeof(ThingWithComps)))
                 return null;
             ThingWithComps TWC = (ThingWithComps)thing;
             if (TWC.AllComps == null)
@@ -149,8 +150,17 @@ namespace CommonSense
 
         Thing getFirstMarked()
         {
-            return pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            Thing t = /*pawn.equipment.equi FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            if (t == null)
+                t = pawn.GetDirectlyHeldThings().FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            if (t == null)
+                t =*/ pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            return t;
         }
+
+        Apparel Apparel = null;
+        ThingWithComps Equipment = null;
+
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
@@ -159,17 +169,26 @@ namespace CommonSense
             {
                 initAction = delegate ()
                 {
-                    if (getFirstMarked() == null)
+                    Thing MarkedThing = getFirstMarked();
+                    if (MarkedThing == null)
                     {
-                        base.EndJobWith(JobCondition.Succeeded);
+                        EndJobWith(JobCondition.Succeeded);
                     }
                     else
                     {
-                        Thing MarkedThing = getFirstMarked();
+                        if (pawn.equipment.Contains(MarkedThing))
+                        {
+                            Equipment = (ThingWithComps)MarkedThing;
+                            Apparel = null;
+                        }
+                        else
+                        {
+                            Apparel = pawn.apparel.Contains(MarkedThing) ? (Apparel)MarkedThing : null;
+                            Equipment = null;
+                        }
                         ThingCount firstUnloadableThing = MarkedThing == null ? default(ThingCount) : new ThingCount(MarkedThing, MarkedThing.stackCount);
-                        //
                         IntVec3 c;
-                        if (!StoreUtility.TryFindStoreCellNearColonyDesperate(firstUnloadableThing.Thing, this.pawn, out c))
+                        if (!StoreUtility.TryFindStoreCellNearColonyDesperate(firstUnloadableThing.Thing, pawn, out c))
                         {
                             Thing thing;
                             pawn.inventory.innerContainer.TryDrop(firstUnloadableThing.Thing, ThingPlaceMode.Near, firstUnloadableThing.Count, out thing, null, null);
@@ -186,26 +205,59 @@ namespace CommonSense
             };
             yield return Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
             yield return Toils_Goto.GotoCell(TargetIndex.B, PathEndMode.Touch);
+            //if equiped, start unequipping
+            /*
             yield return new Toil
             {
                 initAction = delegate ()
                 {
-                    Thing thing = this.job.GetTarget(TargetIndex.A).Thing;
-                    if (thing == null || !this.pawn.inventory.innerContainer.Contains(thing))
+                    pawn.pather.StopDead();
+                },
+                defaultCompleteMode = Equipment != null || Apparel != null ? ToilCompleteMode.Delay : ToilCompleteMode.Instant,
+                defaultDuration = Apparel!=null ? (int)(Apparel.GetStatValue(StatDefOf.EquipDelay, true)*60f) : 30
+            };
+            //unequip to inventory
+            yield return new Toil
+            {
+                initAction = delegate ()
+                {
+                    if (Equipment != null)
+                        pawn.equipment.TryTransferEquipmentToContainer(Equipment, pawn.inventory.innerContainer);
+                    else if (Apparel != null)
                     {
-                        base.EndJobWith(JobCondition.Incompletable);
+                        ThingOwner<Apparel> a = Traverse.Create(pawn.apparel).Field("wornApparel").GetValue<ThingOwner<Apparel>>();
+                        a.TryTransferToContainer(Apparel, pawn.inventory.innerContainer);
+                    }
+                }
+            };
+            */
+            //hold in hands
+            yield return new Toil
+            {
+                initAction = delegate ()
+                {
+                    Thing thing = job.GetTarget(TargetIndex.A).Thing;
+                    CompUnloadChecker c = thing.TryGetComp<CompUnloadChecker>();
+                    if (c == null || !c.ShouldUnload)
+                    {
+                        EndJobWith(JobCondition.Incompletable);
                         return;
                     }
-                    if (!this.pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation) || !thing.def.EverStorable(false))
+                    if (thing == null || !pawn.inventory.innerContainer.Contains(thing))
                     {
-                        this.pawn.inventory.innerContainer.TryDrop(thing, ThingPlaceMode.Near, this.countToDrop, out thing, null, null);
-                        base.EndJobWith(JobCondition.Succeeded);
+                        EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
+                    if (!pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation) || !thing.def.EverStorable(false))
+                    {
+                        pawn.inventory.innerContainer.TryDrop(thing, ThingPlaceMode.Near, countToDrop, out thing, null, null);
+                        EndJobWith(JobCondition.Succeeded);
                     }
                     else
                     {
-                        this.pawn.inventory.innerContainer.TryTransferToContainer(thing, this.pawn.carryTracker.innerContainer, this.countToDrop, out thing, true);
-                        this.job.count = this.countToDrop;
-                        this.job.SetTarget(TargetIndex.A, thing);
+                        pawn.inventory.innerContainer.TryTransferToContainer(thing, pawn.carryTracker.innerContainer, countToDrop, out thing, true);
+                        job.count = countToDrop;
+                        job.SetTarget(TargetIndex.A, thing);
                     }
                     thing.SetForbidden(false, false);
                 }
@@ -220,5 +272,48 @@ namespace CommonSense
         private const TargetIndex ItemToHaulInd = TargetIndex.A;
         private const TargetIndex StoreCellInd = TargetIndex.B;
         private const int UnloadDuration = 10;
+    }
+
+
+    //private void DrawThingRow(ref float y, float width, Thing thing, bool inventory = false)
+    [HarmonyPatch(typeof(ITab_Pawn_Gear), "DrawThingRow")]
+    static class ITab_Pawn_Gear_DrawThingRow_CommonSensePatch
+    {
+        static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory = false)
+        {
+            if (!inventory)
+                return true;
+                
+            bool CanControlColonist = Traverse.Create(__instance).Property("CanControlColonist").GetValue<bool>(); ;
+            Rect rect = new Rect(0f, y, width, 28f);
+            //rect.width -= 24f * 3;
+            if (CanControlColonist && (thing is ThingWithComps))
+            {
+                Rect rect2 = new Rect(rect.width - 24f, y, 24f, 24f);
+                CompUnloadChecker c = CompUnloadChecker.GetChecker(thing,false,true);
+                if (c.ShouldUnload)
+                {
+                    TooltipHandler.TipRegion(rect2, "UnloadThingCancel".Translate());
+                    if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing_Cancel")))
+                    {
+                        SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+                        c.ShouldUnload = false;
+                        //this.InterfaceDrop(thing);
+                    }
+                }
+                else
+                {
+                    TooltipHandler.TipRegion(rect2, "UnloadThing".Translate());
+                    if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing")))
+                    {
+                        SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+                        c.ShouldUnload = true;
+                        //this.InterfaceDrop(thing);
+                    }
+                }
+            }
+            width -= 24f;
+            return true;
+        }
     }
 }

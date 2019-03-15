@@ -90,13 +90,6 @@ namespace CommonSense
                     for (int i = 1; i < categories.Count; i++)
                         __result += ", " + DefDatabase<ThingCategoryDef>.GetNamed(categories[i]).label;
                 }
-                else if (allowedDefs.Count > 0)
-                {
-                    __result = "";
-                    foreach (var thing in allowedDefs)
-                        __result += __result == "" ? thing.label : ", " + thing.label;
-
-                }
                 else if (!allowAllWhoCanMake.NullOrEmpty())
                 {
                     HashSet<StuffCategoryDef> l = new HashSet<StuffCategoryDef>();
@@ -104,6 +97,13 @@ namespace CommonSense
                     __result = "";
                     foreach (var def in l)
                         __result += __result == "" ? def.label : ", " + def.label;
+                }
+                else if (allowedDefs.Count > 0)
+                {
+                    __result = "";
+                    foreach (var thing in allowedDefs)
+                        __result += __result == "" ? thing.label : ", " + thing.label;
+
                 }
                 else if (!thingDefs.NullOrEmpty())
                 //if (thingDefs != null 
