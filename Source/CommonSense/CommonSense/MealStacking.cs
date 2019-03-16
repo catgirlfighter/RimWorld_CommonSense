@@ -10,12 +10,6 @@ namespace CommonSense
 {
     class MealStacking
     {
-        //did not work CompIngredients 
-        //public bool AllowStackWith(Thing other)
-        //[HarmonyPatch(typeof(CompIngredients), "AllowStackWith", new Type[] { typeof(Thing) })]
-
-        //ThingWithComps
-        //public override bool CanStackWith(Thing other)
         [HarmonyPatch(typeof(Thing), "CanStackWith", new Type[] { typeof(Thing) })]
         static class CompIngredients_CanStackWith_CommonSensePatch
         {

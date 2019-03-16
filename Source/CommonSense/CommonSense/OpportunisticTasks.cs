@@ -170,13 +170,6 @@ namespace CommonSense
                     {
                         job = Hauling_Opportunity(newJob, __instance._pawn);
                     }
-                    //else if (Settings.adv_cleaning)
-                    //{
-                    //    LocalTargetInfo A = newJob.targetA;
-                    //    IEnumerable<Filth> l = SelectAllFilth(__instance._pawn, A);
-                    //    AddFilthToQueue(newJob, TargetIndex.A, l, __instance._pawn);
-                    //    newJob.targetQueueA.Add(A);
-                    //}
                 }
                 else if (!newJob.playerForced && newJob.targetA != null && newJob.targetA.Cell != null)
                     {

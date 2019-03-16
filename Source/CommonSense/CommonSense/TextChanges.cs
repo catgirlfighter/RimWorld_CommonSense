@@ -84,7 +84,6 @@ namespace CommonSense
 
 
                 if (!categories.NullOrEmpty())
-                //else if (thingDefs.NullOrEmpty() && categories != null && categories.Count > 0 && tradeTagsToAllow.NullOrEmpty() && tradeTagsToDisallow.NullOrEmpty() && thingSetMakerTagsToAllow.NullOrEmpty() && thingSetMakerTagsToDisallow.NullOrEmpty() && disallowedCategories.NullOrEmpty() && specialFiltersToAllow.NullOrEmpty() && specialFiltersToDisallow.NullOrEmpty() && stuffCategoriesToAllow.NullOrEmpty() && allowAllWhoCanMake.NullOrEmpty() && disallowWorsePreferability == FoodPreferability.Undefined && !disallowInedibleByHuman && allowWithComp == null && disallowWithComp == null && disallowCheaperThan == -3.40282347E+38f && disallowedThingDefs.NullOrEmpty())
                 {
                     __result = DefDatabase<ThingCategoryDef>.GetNamed(categories[0]).label;
                     for (int i = 1; i < categories.Count; i++)
@@ -106,8 +105,6 @@ namespace CommonSense
 
                 }
                 else if (!thingDefs.NullOrEmpty())
-                //if (thingDefs != null 
-                //    && thingDefs.Count > 0 && categories.NullOrEmpty() && tradeTagsToAllow.NullOrEmpty() && tradeTagsToDisallow.NullOrEmpty() && thingSetMakerTagsToAllow.NullOrEmpty() && thingSetMakerTagsToDisallow.NullOrEmpty() && disallowedCategories.NullOrEmpty() && specialFiltersToAllow.NullOrEmpty() && specialFiltersToDisallow.NullOrEmpty() && stuffCategoriesToAllow.NullOrEmpty() && allowAllWhoCanMake.NullOrEmpty() && disallowWorsePreferability == FoodPreferability.Undefined && !disallowInedibleByHuman && allowWithComp == null && disallowWithComp == null && disallowCheaperThan == -3.40282347E+38f && disallowedThingDefs.NullOrEmpty())
                 {
                     __result = thingDefs[0].label;
                     for (int i = 1; i < thingDefs.Count; i++)

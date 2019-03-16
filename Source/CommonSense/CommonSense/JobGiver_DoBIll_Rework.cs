@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace CommonSense
 {
-    static class JobGiver_DoBIll_Reworked
+    static class JobGiver_DoBIll_Rework
     {
         //protected override IEnumerable<Toil> JobDriver_DoBill.MakeNewToils()
         [HarmonyPatch(typeof(JobDriver_DoBill), "MakeNewToils")]
@@ -133,25 +133,14 @@ namespace CommonSense
                 //hauling patch
                 if (Settings.adv_haul_all_ings && __instance.pawn.Faction == Faction.OfPlayer)
                 {
-                    //HashSet<Thing> TakenToInventory = null;
-                    //TakenToInventory = GetTakenToInventory(__instance.pawn);
-
                     Toil extract = new Toil();
                     extract.initAction = delegate ()
                     {
                         Pawn actor = extract.actor;
                         Job curJob = actor.jobs.curJob;
                         List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
-                        if /*(!targetQueue.NullOrEmpty())*/(!curJob.countQueue.NullOrEmpty())
-                        {
-                            /*
-                            LocalTargetInfo B = targetQueue[0];
-                            if (B.HasThing && targetQueue[0].Thing.ParentHolder == actor.inventory)
-                            {
-                                curJob.SetTarget(TargetIndex.B, B);
-                            }
-                            */
-                            
+                        if (!curJob.countQueue.NullOrEmpty())
+                        {                            
                             if (curJob.countQueue[0] > targetQueue[0].Thing.stackCount)
                             {
                                 actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
@@ -192,7 +181,6 @@ namespace CommonSense
                                 if (!splitThing.Destroyed && splitThing.stackCount != 0)
                                 {
                                     targetQueue.Add(splitThing);
-                                    //if (TakenToInventory != null) TakenToInventory.Add(splitThing);
 
                                     if (!InventorySpawned)
                                     {
@@ -220,7 +208,6 @@ namespace CommonSense
                     };
 
                     yield return extract;
-                    //yield return Toils_Jump.JumpIf(TakeToHands, () => !__instance.job.countQueue.NullOrEmpty());
                     Toil getToHaulTarget = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.B).FailOnSomeonePhysicallyInteracting(TargetIndex.B);
                     yield return Toils_Jump.JumpIf(PickUpThing, () => __instance.job.GetTarget(TargetIndex.B).Thing.ParentHolder == __instance.pawn.inventory);
                     yield return getToHaulTarget;
@@ -231,7 +218,6 @@ namespace CommonSense
                     Toil findPlaceTarget = Toils_JobTransforms.SetTargetToIngredientPlaceCell(TargetIndex.A, TargetIndex.B, TargetIndex.C);
                     yield return findPlaceTarget;
                     yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.C, findPlaceTarget, false);
-                    //yield return Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
                     yield return Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, TakeToHands);
                 }
                 else

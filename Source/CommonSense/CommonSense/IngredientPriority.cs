@@ -11,13 +11,13 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredients")]
         static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
         {
-            static void Postfix(/*WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen*/)
+            static void Postfix(WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen)
             {
-                return;
-                //if (!__result)
-                //    return;
+                //return;
+                if (!__result || !Settings.adv_haul_all_ings)
+                    return;
 
-                //Utility.OptimizePath(chosen, pawn);
+                Utility.OptimizePath(chosen, pawn);
             }
         }
 
