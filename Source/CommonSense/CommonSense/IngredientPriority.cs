@@ -29,11 +29,9 @@ namespace CommonSense
                 if (!Settings.prefer_spoiling_ingredients)
                     return true;
 
-                //Log.Message($"--sorting list of {availableThings.Count()} things--");
                 availableThings.Sort(
                     delegate (Thing a, Thing b)
                     {
-                        //PropsRot.TicksToRotStart - RotProgress
                         CompRottable compa = a.TryGetComp<CompRottable>();
                         CompRottable compb = b.TryGetComp<CompRottable>();
                         if (compa == null)

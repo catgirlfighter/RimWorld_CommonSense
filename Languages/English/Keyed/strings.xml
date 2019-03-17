@@ -38,4 +38,10 @@
 	<prefer_spoiling_ingredients_note>WARNING: with more items to chose from it may start causing a lag</prefer_spoiling_ingredients_note>
 	<UnloadThing>Unload</UnloadThing>
 	<UnloadThingCancel>Cancel unload</UnloadThingCancel>
+	<manual_unload_label>Enable a button in colonist's inventory to mark items for hauling to stockpile</manual_unload_label>
+	<manual_unload_note>If there is no stockpiles to haul to, colonist will drop an item near him</manual_unload_note>
+	<put_back_to_inv_label>Pawns will put items back to inventory when interrupted</put_back_to_inv_label>
+	<put_back_to_inv_note>When pawns carry items taken from inventory, they'll put them back if action was interrupted</put_back_to_inv_note>
+	<pick_proper_amount_label>Pawns will stop taking more sweets than they can eat</pick_proper_amount_label>
+	<pick_proper_amount_note>No more chocolate lying around</pick_proper_amount_note>
 </LanguageData>

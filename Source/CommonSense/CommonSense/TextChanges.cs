@@ -55,7 +55,7 @@ namespace CommonSense
         {
             static bool Prefix(ThingFilter __instance, ref string __result)
             {
-                if (!Settings.extended_recipe)
+                if (!Settings.gui_extended_recipe)
                     return true;
 
                 if (!__instance.customSummary.NullOrEmpty())

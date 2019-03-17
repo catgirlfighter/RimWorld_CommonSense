@@ -38,4 +38,8 @@
 	<prefer_spoiling_ingredients_note>ВНИМАНИЕ: большом выбор предметов может привести к лагу</prefer_spoiling_ingredients_note>
 	<UnloadThing>Выгрузить</UnloadThing>
 	<UnloadThingCancel>Отменить выгрузку</UnloadThingCancel>
+	<put_back_to_inv_label>Пешки будут класть предметы обратно в инвентарь когда прерваны</put_back_to_inv_label>
+	<put_back_to_inv_note>При переносе пешками предметов, взятых из инвентаря, они будут класть их обратно в инвентарь если действие было прервано</put_back_to_inv_note>
+	<pick_proper_amount_label>Пешки перестанут брать больше сладостей, чем они могут съесть</pick_proper_amount_label>
+	<pick_proper_amount_note>Больше никакого валяющегося по всюду шоколада</pick_proper_amount_note>
 </LanguageData>

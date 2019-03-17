@@ -152,7 +152,6 @@ namespace CommonSense
             }
         }
 
-
         static public void OptimizePath(List<ThingCount> q, Thing Starter)
         {
             if (q.Count > 0)

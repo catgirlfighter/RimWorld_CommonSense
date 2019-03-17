@@ -54,6 +54,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FoodCountLimiter.cs" />
+    <Compile Include="PatchRPG.cs" />
+    <Compile Include="PutBackToBackpack.cs" />
     <Compile Include="WorkGiver_Merge_Patch.cs" />
     <Compile Include="IngredientPriority.cs" />
     <Compile Include="TextChanges.cs" />
