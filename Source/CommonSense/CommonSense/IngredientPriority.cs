@@ -11,13 +11,13 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredients")]
         static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
         {
-            static void Postfix(/*WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen*/)
+            static void Postfix(WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen)
             {
-                return;
-                //if (!__result)
-                //    return;
+                //return;
+                if (!__result || !Settings.adv_haul_all_ings)
+                    return;
 
-                //Utility.OptimizePath(chosen, pawn);
+                Utility.OptimizePath(chosen, pawn);
             }
         }
 
@@ -29,11 +29,9 @@ namespace CommonSense
                 if (!Settings.prefer_spoiling_ingredients)
                     return true;
 
-                //Log.Message($"--sorting list of {availableThings.Count()} things--");
                 availableThings.Sort(
                     delegate (Thing a, Thing b)
                     {
-                        //PropsRot.TicksToRotStart - RotProgress
                         CompRottable compa = a.TryGetComp<CompRottable>();
                         CompRottable compb = b.TryGetComp<CompRottable>();
                         if (compa == null)

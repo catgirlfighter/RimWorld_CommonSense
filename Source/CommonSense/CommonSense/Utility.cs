@@ -152,7 +152,6 @@ namespace CommonSense
             }
         }
 
-
         static public void OptimizePath(List<ThingCount> q, Thing Starter)
         {
             if (q.Count > 0)
@@ -160,7 +159,7 @@ namespace CommonSense
                 int x = 0;
                 int idx = 0;
                 int n = 0;
-                ThingCount out_of_all_things_they_didnt_add_a_simple_swap = null;
+                ThingCount out_of_all_things_they_didnt_add_a_simple_swap = default(ThingCount);
 
                 if (Starter != null)
                 {
@@ -180,7 +179,6 @@ namespace CommonSense
                             idx = i;
                         }
                     }
-
                     if (idx != 0)
                     {
                         out_of_all_things_they_didnt_add_a_simple_swap = q[idx];

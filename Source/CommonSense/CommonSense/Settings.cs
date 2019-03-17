@@ -7,44 +7,6 @@ namespace CommonSense
 {
     public class Settings : ModSettings
     {
-
-        /*
-        private static bool PUAHLoaded = false;
-        private static ModContentPack fPUAH = null;
-        public static ModContentPack PUAHMod
-        {
-            get
-            {
-                if (PUAHLoaded)
-                    return fPUAH;
-                else
-                {
-                    fPUAH = LoadedModManager.RunningMods.FirstOrDefault(x => x.Name == "Pick Up And Haul");
-                    PUAHLoaded = true;
-                    return fPUAH;
-                }
-            }
-        }
-        */
-        /*
-        private static bool CHTILoaded = false;
-        private static Type fCHTI = null;
-        public static Type CompHauledToInventory
-        {
-            get
-            {
-                if (CHTILoaded)
-                    return fCHTI;
-                else
-                {
-                    fCHTI = AccessTools.TypeByName("CompHauledToInventory");
-                    CHTILoaded = true;
-                    return fCHTI;
-                }
-            }
-        }
-        */
-
         public static bool separate_meals = true;
         public static bool fulfill_outdoors = true;
         public static bool odd_is_normal = false;
@@ -57,8 +19,11 @@ namespace CommonSense
         public static bool drugs_use_potential_mood = true;
         public static bool adv_cleaning = true;
         public static bool adv_haul_all_ings = true;
-        public static bool extended_recipe = true;
+        public static bool gui_extended_recipe = true;
         public static bool prefer_spoiling_ingredients = true;
+        public static bool gui_manual_unload = true;
+        public static bool put_back_to_inv = true;
+        public static bool pick_proper_amount = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -67,6 +32,7 @@ namespace CommonSense
             listing_Standard.Label("fulfill_needs_head".Translate());
             listing_Standard.CheckboxLabeled("fulfill_outdoors_label".Translate(), ref fulfill_outdoors, "fulfill_outdoors_note".Translate());
             listing_Standard.CheckboxLabeled("drugs_use_potential_mood_label".Translate(), ref drugs_use_potential_mood, "drugs_use_potential_mood_note".Translate());
+            listing_Standard.CheckboxLabeled("pick_proper_amount_label".Translate(), ref pick_proper_amount, "pick_proper_amount_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("clean_head".Translate());
@@ -74,7 +40,8 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("clean_after_tending_label".Translate(), ref clean_after_tanding, "clean_after_tending_note".Translate());
             listing_Standard.CheckboxLabeled("hauling_over_bills_label".Translate(), ref hauling_over_bills, "hauling_over_bills_note".Translate());
             listing_Standard.CheckboxLabeled("prefer_spoiling_ingredients_label".Translate(), ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients_note".Translate());
-            listing_Standard.CheckboxLabeled("bill_job_pathing_label".Translate(), ref calculate_full_path, "bill_job_pathing_note".Translate());
+            listing_Standard.CheckboxLabeled("prefer_spoiling_ingredients_label".Translate(), ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients_note".Translate());
+            listing_Standard.CheckboxLabeled("put_back_to_inv_label".Translate(), ref put_back_to_inv, "put_back_to_inv_note".Translate());
             listing_Standard.CheckboxLabeled("add_to_que_label".Translate(), ref add_to_que, "add_to_que_note".Translate());
 
             listing_Standard.GapLine();
@@ -86,12 +53,13 @@ namespace CommonSense
             listing_Standard.GapLine();
             listing_Standard.Label("advanced_head".Translate());
             listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_label".Translate(), ref adv_cleaning, "advanced_inbetween_cleaning_note".Translate());
-            listing_Standard.CheckboxLabeled("advanced_haul_all_ings_label".Translate(), ref adv_haul_all_ings, "advanced_haul_all_ings".Translate());
+            listing_Standard.CheckboxLabeled("advanced_haul_all_ings_label".Translate(), ref adv_haul_all_ings, "advanced_haul_all_ings_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("miscellaneous_head".Translate());
             listing_Standard.CheckboxLabeled("gen_ingredients_label".Translate(), ref add_meal_ingredients, "gen_ingredients_note".Translate());
-            listing_Standard.CheckboxLabeled("extended_recipe_label".Translate(), ref extended_recipe, "advanced_haul_all_ings_note".Translate());
+            listing_Standard.CheckboxLabeled("extended_recipe_label".Translate(), ref gui_extended_recipe, "extended_recipe_note".Translate());
+            listing_Standard.CheckboxLabeled("manual_unload_label".Translate(), ref gui_manual_unload, "manual_unload_note".Translate());
             listing_Standard.End();
         }
 
@@ -108,9 +76,12 @@ namespace CommonSense
             Scribe_Values.Look(ref drugs_use_potential_mood, "drugs_use_potential_mood", true, false);
             Scribe_Values.Look(ref adv_cleaning, "adv_cleaning", true, false);
             Scribe_Values.Look(ref adv_haul_all_ings, "adv_haul_all_ings", true, false);
-            Scribe_Values.Look(ref extended_recipe, "extended_recipe", true, false);
+            Scribe_Values.Look(ref gui_extended_recipe, "extended_recipe", true, false);
             Scribe_Values.Look(ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients", true, false);
-            
+            Scribe_Values.Look(ref gui_manual_unload, "gui_manual_unload", true, false);
+            Scribe_Values.Look(ref put_back_to_inv, "put_back_to_inv", true, false);
+            Scribe_Values.Look(ref pick_proper_amount, "pick_proper_amount", true, false);
+
         }
     }
 }

@@ -36,4 +36,10 @@
   <advanced_haul_all_ings_note>小人会把所有需要的原材料放到自己的身上，然后一起拿到制作的地方进行制作</advanced_haul_all_ings_note>
   <prefer_spoiling_ingredients_label>小人会优先使用那些快要腐烂的原料来烹饪</prefer_spoiling_ingredients_label>
   <prefer_spoiling_ingredients_note>警告：如果可以选择的原料数量过多，这个选项有可能导致卡顿</prefer_spoiling_ingredients_note>
+  <UnloadThing>Unload</UnloadThing>
+  <UnloadThingCancel>Cancel unload</UnloadThingCancel>
+  <put_back_to_inv_label>Pawns will put items back to inventory when interrupted</put_back_to_inv_label>
+  <put_back_to_inv_note>When pawns carry items taken from inventory, they'll put them back if action was interrupted</put_back_to_inv_note>
+  <pick_proper_amount_label>Pawns will stop taking more sweets than they can eat</pick_proper_amount_label>
+  <pick_proper_amount_note>No more chocolate lying around</pick_proper_amount_note>
 </LanguageData>

@@ -1,4 +1,21 @@
-﻿1.0.15
+﻿1.1.0
+- added an option to unload equipped items;
+- made an option for manual unloading optional;
+- added compatibility patch for RPG Style Inventory;
+- added an option for pawns to put items back in inventory when they get interrupted (ex. when you draft them during consumption of a meal in the middle of nowhere);
+- added an option do prevent pawns from taking more sweets than they can eat;
+
+This is probably the final changes to the mod. For now I've fulfilled all I wanted. I'll make some refactoring and optimization, but I'm out of further ideas for new features :)
+
+1.0.16a
+- NOW actually added order optimization when a pawn is hauling ingredients for a recipe;
+- added some little changes to merging rules for better compatibility (credits to lilwhitemouse).
+
+1.0.16
+- fixed an error on trying to cut stone chunks. Sorry about that;
+- added an option to unload an item from an inventory (to the closest stockpile, instead of dropping on the ground).
+
+1.0.15
 - made "full recipe descriptions" for apparel simpler;
 - added order optimization when a pawn is hauling ingredients for a recipe;
 - optimized some things considering ingredients that was left in inventory if hauling was interrupted, but it's hardly noticeable.

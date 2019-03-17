@@ -55,7 +55,7 @@ namespace CommonSense
         {
             static bool Prefix(ThingFilter __instance, ref string __result)
             {
-                if (!Settings.extended_recipe)
+                if (!Settings.gui_extended_recipe)
                     return true;
 
                 if (!__instance.customSummary.NullOrEmpty())
@@ -84,18 +84,10 @@ namespace CommonSense
 
 
                 if (!categories.NullOrEmpty())
-                //else if (thingDefs.NullOrEmpty() && categories != null && categories.Count > 0 && tradeTagsToAllow.NullOrEmpty() && tradeTagsToDisallow.NullOrEmpty() && thingSetMakerTagsToAllow.NullOrEmpty() && thingSetMakerTagsToDisallow.NullOrEmpty() && disallowedCategories.NullOrEmpty() && specialFiltersToAllow.NullOrEmpty() && specialFiltersToDisallow.NullOrEmpty() && stuffCategoriesToAllow.NullOrEmpty() && allowAllWhoCanMake.NullOrEmpty() && disallowWorsePreferability == FoodPreferability.Undefined && !disallowInedibleByHuman && allowWithComp == null && disallowWithComp == null && disallowCheaperThan == -3.40282347E+38f && disallowedThingDefs.NullOrEmpty())
                 {
                     __result = DefDatabase<ThingCategoryDef>.GetNamed(categories[0]).label;
                     for (int i = 1; i < categories.Count; i++)
                         __result += ", " + DefDatabase<ThingCategoryDef>.GetNamed(categories[i]).label;
-                }
-                else if (allowedDefs.Count > 0)
-                {
-                    __result = "";
-                    foreach (var thing in allowedDefs)
-                        __result += __result == "" ? thing.label : ", " + thing.label;
-
                 }
                 else if (!allowAllWhoCanMake.NullOrEmpty())
                 {
@@ -105,9 +97,14 @@ namespace CommonSense
                     foreach (var def in l)
                         __result += __result == "" ? def.label : ", " + def.label;
                 }
+                else if (allowedDefs.Count > 0)
+                {
+                    __result = "";
+                    foreach (var thing in allowedDefs)
+                        __result += __result == "" ? thing.label : ", " + thing.label;
+
+                }
                 else if (!thingDefs.NullOrEmpty())
-                //if (thingDefs != null 
-                //    && thingDefs.Count > 0 && categories.NullOrEmpty() && tradeTagsToAllow.NullOrEmpty() && tradeTagsToDisallow.NullOrEmpty() && thingSetMakerTagsToAllow.NullOrEmpty() && thingSetMakerTagsToDisallow.NullOrEmpty() && disallowedCategories.NullOrEmpty() && specialFiltersToAllow.NullOrEmpty() && specialFiltersToDisallow.NullOrEmpty() && stuffCategoriesToAllow.NullOrEmpty() && allowAllWhoCanMake.NullOrEmpty() && disallowWorsePreferability == FoodPreferability.Undefined && !disallowInedibleByHuman && allowWithComp == null && disallowWithComp == null && disallowCheaperThan == -3.40282347E+38f && disallowedThingDefs.NullOrEmpty())
                 {
                     __result = thingDefs[0].label;
                     for (int i = 1; i < thingDefs.Count; i++)
