@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using Harmony;
 using Verse;
 using RimWorld;
+using UnityEngine;
 
 namespace CommonSense
 {
@@ -21,32 +25,72 @@ namespace CommonSense
                     return false;
                 }
                 return true;
-                
-                /*
-                List<StuffCategoryDef> stuffCategoriesToAllow = Traverse.Create(__instance).Field("stuffCategoriesToAllow").GetValue<List<StuffCategoryDef>>();
-                if (stuffCategoriesToAllow == null)
-                {
-                    stuffCategoriesToAllow = new List<StuffCategoryDef>();
-                    Traverse.Create(__instance).Field("stuffCategoriesToAllow").SetValue(stuffCategoriesToAllow);
-                }
-                foreach(var c in (thing.stuffCategories))
-                {
-                    stuffCategoriesToAllow.Add(c);
-                }
-                */
-                /*
-                List<string> categories = Traverse.Create(__instance).Field("categories").GetValue<List<string>>();
-                if (categories == null)
-                {
-                    categories = new List<string>();
-                    Traverse.Create(__instance).Field("categories").SetValue(categories);
-                }
-                foreach(var t in (thing.stuffCategories))
-                {
-                    categories.Add(t.label);
-                }
-                */
+            }
+        }
 
+        static string ShortCategory(ThingCategoryDef tcDef)
+        {
+            if (tcDef.parent == null)
+                return "NoCategory".Translate().CapitalizeFirst();
+            else
+                return tcDef.label.CapitalizeFirst();
+        }
+
+        static string GetCategoryPath(ThingCategoryDef tcDef)
+        {
+            if (tcDef.parent == null)
+                return "NoCategory".Translate().CapitalizeFirst();
+            else
+            {
+                string s = tcDef.label.CapitalizeFirst();
+                ThingCategoryDef def = tcDef.parent;
+
+                while (def.parent != null)
+                {
+                    s += " \\ " + def.label.CapitalizeFirst();
+                    def = def.parent;
+                }
+                return s;
+            }
+        }
+
+        public static StatDrawEntry CategoryEntry(ThingCategoryDef tcDef)
+        {
+
+            return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), ShortCategory(tcDef), 1000, GetCategoryPath(tcDef));
+        }
+
+        static IEnumerable<StatDrawEntry> CategoryEntryRow(Thing thing)
+        {
+            ThingCategoryDef d;
+            if (thing == null || thing.def == null || (d = thing.def.FirstThingCategory) == null)
+                yield break;
+            
+            yield return CategoryEntry(d);
+        }
+
+        //public static void DrawStatsReport(Rect rect, Thing thing)
+        [HarmonyPatch(typeof(StatsReportUtility), "DrawStatsReport", new Type[] { typeof(Rect), typeof(Thing) })]
+        static class StatsReportUtility_DrawStatsReport_CommonSensePatch
+        {
+            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase mb)
+            {
+                FieldInfo LcachedDrawEntries = AccessTools.Field(typeof(StatsReportUtility), "cachedDrawEntries");
+                MethodInfo LAddRange = AccessTools.Method(typeof(List<StatDrawEntry>), "AddRange");
+
+                bool b = false;
+                foreach (var i in (instructions))
+                {
+                    yield return i;
+                    if (!b && i.opcode == OpCodes.Brfalse)
+                    {
+                        b = true;
+                        yield return new CodeInstruction(OpCodes.Ldsfld, LcachedDrawEntries);
+                        yield return new CodeInstruction(OpCodes.Ldarg_1);
+                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(TextChanges), "CategoryEntryRow"));
+                        yield return new CodeInstruction(OpCodes.Callvirt, LAddRange);
+                    }
+                }
             }
         }
 
@@ -95,7 +139,7 @@ namespace CommonSense
                     foreach (var c in (allowAllWhoCanMake)) l.AddRange(c.stuffCategories);
                     __result = "";
                     foreach (var def in l)
-                        __result += __result == "" ? def.label : ", " + def.label;
+                        __result += __result == "" ? def.label.CapitalizeFirst() : ", " + def.label.CapitalizeFirst();
                 }
                 else if (allowedDefs.Count > 0)
                 {
@@ -116,6 +160,5 @@ namespace CommonSense
                 
             }
         }
-
     }
 }

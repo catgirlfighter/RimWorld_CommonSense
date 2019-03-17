@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-	<UnloadMarkedItems.reportString>выгрузка неиспользованных ингредиентов.</HaulToInventory.UnloadMarkedItems>
+	<UnloadMarkedItems.reportString>выгружает инвентарь.</HaulToInventory.UnloadMarkedItems>
 </LanguageData>

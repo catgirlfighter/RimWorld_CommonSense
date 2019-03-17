@@ -31,7 +31,7 @@ namespace CommonSense
                 RecipeDef d = hTable.TryGetValue(def);
                 if (d == null)
                 {
-                    d = DefDatabase<RecipeDef>.AllDefsListForReading.Where(x => x.products.Any(y => y.thingDef == def)).RandomElement();
+                    d = DefDatabase<RecipeDef>.AllDefsListForReading.Where(x => !x.ingredients.NullOrEmpty() && x.products.Any(y => y.thingDef == def)).RandomElement();
                     if (d == null)
                         return;
                     hTable.Add(def, d);

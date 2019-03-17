@@ -30,21 +30,6 @@ namespace CommonSense
         }
     }
 
-    /*
-            public bool TryDropCarriedThing(IntVec3 dropLoc, ThingPlaceMode mode, out Thing resultingThing, Action<Thing, int> placedAction = null)
-            {
-                if (this.innerContainer.TryDrop(this.CarriedThing, dropLoc, this.pawn.MapHeld, mode, out resultingThing, placedAction, null))
-                {
-                    if (resultingThing != null && this.pawn.Faction.HostileTo(Faction.OfPlayer))
-                    {
-                        resultingThing.SetForbidden(true, false);
-                    }
-                    return true;
-                }
-                return false;
-            }
-    */
-
     class PutBackToBackpack
     {
         //private void CleanupCurrentJob(JobCondition condition, bool releaseReservations, bool cancelBusyStancesSoft = true)
@@ -53,8 +38,6 @@ namespace CommonSense
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase mb)
             {
-                //public bool TryDropCarriedThing(IntVec3 dropLoc, ThingPlaceMode mode, out Thing resultingThing, Action<Thing, int> placedAction = null)
-
                 //couldn't figure out, why I can't get a method using AccessTools.Method()
                 MethodInfo m = null;
                 bool b;
