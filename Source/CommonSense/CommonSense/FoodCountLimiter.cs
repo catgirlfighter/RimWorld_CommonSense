@@ -14,16 +14,13 @@ namespace CommonSense
         [HarmonyPatch(typeof(JoyGiver_Ingest), "CreateIngestJob")]
         static class JobGiver_GetJoy_TryGiveJob_CommonSensePatch
         {
-            static bool Prefix(Job __result,Thing ingestible, Pawn pawn)
+            static void Postfix(Job __result,Thing ingestible, Pawn pawn)
             {
+                //used to be a prefix, but something prevented new job from being taken
                 if (!Settings.pick_proper_amount)
-                    return true;
+                    return;
 
-                __result = new Job(JobDefOf.Ingest, ingestible)
-                {
-                    count = Mathf.Min(ingestible.stackCount, FoodUtility.WillIngestStackCountOf(pawn, ingestible.def, ingestible.GetStatValue(StatDefOf.Nutrition, true)))
-                };
-                return false;
+                __result.count = Mathf.Min(__result.count, FoodUtility.WillIngestStackCountOf(pawn, ingestible.def, FoodUtility.GetNutrition(ingestible, ingestible.def)));
             }
         }
     }
