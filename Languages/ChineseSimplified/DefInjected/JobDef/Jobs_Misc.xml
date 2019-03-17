@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-	<UnloadMarkedItems.reportString>正在放下未使用的原材料。</HaulToInventory.UnloadMarkedItems>
+	<UnloadMarkedItems.reportString>正在放下物品。</HaulToInventory.UnloadMarkedItems>
 </LanguageData>
