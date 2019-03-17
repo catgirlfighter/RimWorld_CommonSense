@@ -1,4 +1,7 @@
-﻿1.1.0
+﻿1.1.1
+- added category to item's info;
+
+1.1.0
 - added an option to unload equipped items;
 - made an option for manual unloading optional;
 - added compatibility patch for RPG Style Inventory;
