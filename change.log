@@ -1,5 +1,8 @@
 ﻿1.1.1
 - added category to item's info;
+- added prioritization of spoiling herbal medicine and corpses;
+- added prioritization of spoiling food (to eat before it turns bad);
+- removed unintentional duplicate in settings;
 
 1.1.0
 - added an option to unload equipped items;

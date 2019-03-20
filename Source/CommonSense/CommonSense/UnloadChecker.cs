@@ -290,7 +290,7 @@ namespace CommonSense
     [HarmonyPatch(typeof(ITab_Pawn_Gear), "DrawThingRow")]
     public static class ITab_Pawn_Gear_DrawThingRow_CommonSensePatch
     {
-        static readonly Color hColor = new Color(0.9f, 1f, 1f, 1f);
+        static readonly Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
         public static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory = false)
         {
             if (!Settings.gui_manual_unload)

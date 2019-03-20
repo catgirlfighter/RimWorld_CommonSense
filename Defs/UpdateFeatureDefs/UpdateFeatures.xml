@@ -52,4 +52,14 @@ If you see pawns acting funny, don't mind to report your observations. "Hauling 
 
 This is probably the final changes to the mod. For now I've fulfilled all I wanted. I'll make some refactoring and optimization, but I'm out of further ideas for new features :)</content>
 	</HugsLib.UpdateFeatureDef>
+	
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_1_1</defName>
+		<assemblyVersion>1.1.1</assemblyVersion>
+		<content>- added category to item's info;
+- added prioritization of spoiling herbal medicine and corpses;
+- added prioritization of spoiling food (to eat before it turns bad);
+- removed unintentional duplicate in settings;</content>
+	</HugsLib.UpdateFeatureDef>
+
 </Defs>

@@ -1,9 +1,8 @@
 ﻿using Harmony;
-using System;
-using System.Linq;
 using System.Reflection;
 using Verse;
 using UnityEngine;
+using RimWorld;
 
 namespace CommonSense
 {
@@ -18,6 +17,9 @@ namespace CommonSense
         {
             var harmony = HarmonyInstance.Create("net.avilmask.rimworld.mod.CommonSense");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+            HarmonyMethod hm = new HarmonyMethod(typeof(IngredientPriority.WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch), nameof(IngredientPriority.WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch.Prefix), null);
+            var mi = AccessTools.Method(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_NoMix", null, null);
+            harmony.Patch(mi, hm);
             base.GetSettings<Settings>();
         }
         
