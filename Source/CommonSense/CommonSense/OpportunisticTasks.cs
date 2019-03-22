@@ -13,7 +13,7 @@ namespace CommonSense
     {
         static private WorkGiverDef haulGeneral = null;
 
-        static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target)
+        static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target, int Limit)
         {
             if (pawn.def.race == null ||
                 (int)pawn.def.race.intelligence < 2 ||
@@ -26,7 +26,7 @@ namespace CommonSense
                 return null;
 
 
-            IEnumerable<Filth> l = Utility.SelectAllFilth(pawn, target);
+            IEnumerable<Filth> l = Utility.SelectAllFilth(pawn, target, Limit);
 
             Job job = new Job(JobDefOf.Clean);
 
@@ -58,7 +58,7 @@ namespace CommonSense
         [HarmonyPatch(typeof(Pawn_JobTracker), "StartJob", new Type[] { typeof(Job), typeof(JobCondition), typeof(ThinkNode), typeof(bool), typeof(bool), typeof(ThinkTreeDef), typeof(JobTag), typeof(bool) })]
         static class Pawn_JobTracker_StartJob_CommonSensePatch
         {
-            static Job Cleaning_Opportunity(Job currJob, IntVec3 cell, Pawn pawn)
+            static Job Cleaning_Opportunity(Job currJob, IntVec3 cell, Pawn pawn, int Limit)
             {
                 Thing target = null;
                 IntVec3 source = pawn.Position;
@@ -120,7 +120,7 @@ namespace CommonSense
                         return null;
                 }
 
-                return MakeCleaningJob(pawn, currJob.targetA);
+                return MakeCleaningJob(pawn, currJob.targetA, Limit);
             }
 
             static Job Hauling_Opportunity(Job billJob, Pawn pawn)
@@ -191,7 +191,7 @@ namespace CommonSense
                         }
 
                         if (Settings.clean_before_work && (newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.def.joyKind != null))
-                            job = Cleaning_Opportunity(newJob, cell, __instance._pawn);
+                            job = Cleaning_Opportunity(newJob, cell, __instance._pawn, 20);
                     }
 
                 if (job != null)
@@ -228,7 +228,7 @@ namespace CommonSense
                     __instance.jobQueue.Count == 0 && __instance.curJob.targetA != null && __instance.curJob.targetA.Thing != null && 
                     __instance.curJob.targetA.Thing != __instance._pawn)
                 {
-                    Job job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA);
+                    Job job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, int.MaxValue);
                     if (job != null)
                         __instance.jobQueue.EnqueueFirst(job);
                 }

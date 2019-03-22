@@ -26,7 +26,7 @@ namespace CommonSense
             }
         }
 
-        public static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target)
+        public static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target, int Limit = int.MaxValue)
         {
             Room room = null;
             if (target.Thing == null)
@@ -60,6 +60,8 @@ namespace CommonSense
                     if (intVec.InBounds(pawn.Map) && intVec.InAllowedArea(pawn) && intVec.GetRoom(pawn.Map) == room)
                         ((List<Filth>)enumerable).AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>().Where(f => !f.Destroyed
                             && ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)));
+                    if (enumerable.Count() >= Limit)
+                        break;
                 }
             }
             else
