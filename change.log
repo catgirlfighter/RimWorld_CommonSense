@@ -1,4 +1,8 @@
-﻿1.1.1
+﻿1.1.2
+- changed pawn priorities for sleeping schedule. Now they'll prioritize topping off joy need if they happen to wake up early;
+- added an option to prevent colonists from taking joy activities if they're already topped of(after reaching 95%, they'll not start it again until it's down to 80%);
+
+1.1.1
 - added category to item's info;
 - added prioritization of spoiling herbal medicine and corpses;
 - added prioritization of spoiling food (to eat before it turns bad);

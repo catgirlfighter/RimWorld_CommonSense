@@ -24,6 +24,7 @@ namespace CommonSense
         public static bool gui_manual_unload = true;
         public static bool put_back_to_inv = true;
         public static bool pick_proper_amount = true;
+        public static bool fun_police = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -33,15 +34,16 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("fulfill_outdoors_label".Translate(), ref fulfill_outdoors, "fulfill_outdoors_note".Translate());
             listing_Standard.CheckboxLabeled("drugs_use_potential_mood_label".Translate(), ref drugs_use_potential_mood, "drugs_use_potential_mood_note".Translate());
             listing_Standard.CheckboxLabeled("pick_proper_amount_label".Translate(), ref pick_proper_amount, "pick_proper_amount_note".Translate());
+            listing_Standard.CheckboxLabeled("fun_police_label".Translate(), ref fun_police, "fun_police_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("clean_head".Translate());
             listing_Standard.CheckboxLabeled("clean_before_working_label".Translate(), ref clean_before_work, "clean_before_working_note".Translate());
+            listing_Standard.CheckboxLabeled("add_to_que_label".Translate(), ref add_to_que, "add_to_que_note".Translate());
             listing_Standard.CheckboxLabeled("clean_after_tending_label".Translate(), ref clean_after_tanding, "clean_after_tending_note".Translate());
             listing_Standard.CheckboxLabeled("hauling_over_bills_label".Translate(), ref hauling_over_bills, "hauling_over_bills_note".Translate());
             listing_Standard.CheckboxLabeled("prefer_spoiling_ingredients_label".Translate(), ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients_note".Translate());
             listing_Standard.CheckboxLabeled("put_back_to_inv_label".Translate(), ref put_back_to_inv, "put_back_to_inv_note".Translate());
-            listing_Standard.CheckboxLabeled("add_to_que_label".Translate(), ref add_to_que, "add_to_que_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("meal_stacking_head".Translate());
@@ -80,7 +82,7 @@ namespace CommonSense
             Scribe_Values.Look(ref gui_manual_unload, "gui_manual_unload", true, false);
             Scribe_Values.Look(ref put_back_to_inv, "put_back_to_inv", true, false);
             Scribe_Values.Look(ref pick_proper_amount, "pick_proper_amount", true, false);
-
+            Scribe_Values.Look(ref fun_police, "fun_police", true, false);
         }
     }
 }
