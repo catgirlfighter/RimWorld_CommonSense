@@ -61,5 +61,12 @@ This is probably the final changes to the mod. For now I've fulfilled all I want
 - added prioritization of spoiling food (to eat before it turns bad);
 - removed unintentional duplicate in settings;</content>
 	</HugsLib.UpdateFeatureDef>
+	
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_1_2</defName>
+		<assemblyVersion>1.1.2</assemblyVersion>
+		<content>- changed pawn priorities for sleeping schedule. Now they'll prioritize topping off joy need if they happen to wake up early;
+- added an option to prevent colonists from taking joy activities if they're already topped of(after reaching 95%, they'll not start it again until it's down to 80%);</content>
+	</HugsLib.UpdateFeatureDef>
 
 </Defs>
