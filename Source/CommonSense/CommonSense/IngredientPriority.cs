@@ -18,7 +18,7 @@ namespace CommonSense
                 if (!__result || !Settings.adv_haul_all_ings)
                     return;
 
-                Utility.OptimizePath(chosen, pawn);
+                Utility.OptimizePath(chosen);
             }
         }
 

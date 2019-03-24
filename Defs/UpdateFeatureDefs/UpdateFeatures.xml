@@ -69,4 +69,10 @@ This is probably the final changes to the mod. For now I've fulfilled all I want
 - added an option to prevent colonists from taking joy activities if they're already topped of(after reaching 95%, they'll not start it again until it's down to 80%);</content>
 	</HugsLib.UpdateFeatureDef>
 
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_1_3</defName>
+		<assemblyVersion>1.1.3</assemblyVersion>
+		<content>- fixed a problem, when material of an item could change with "all components hauled together" on, because order of picking up could change due to path optimization (basically, whatever was closer to the pawn, it automatically become a main ingredient);</content>
+	</HugsLib.UpdateFeatureDef>
+
 </Defs>
