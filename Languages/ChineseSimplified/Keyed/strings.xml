@@ -42,4 +42,7 @@
   <put_back_to_inv_note>当小人把身上的物品拿在手上去做什么而中途被打断时，他们会把物品放回身上</put_back_to_inv_note>
   <pick_proper_amount_label>小人不会再拿多到吃不完的甜品去吃了</pick_proper_amount_label>
   <pick_proper_amount_note>不会再有到处乱丢的巧克力了</pick_proper_amount_note>
+  <Category>Category</Category>
+  <fun_police_label>Pawns are encouraged to fill their joy need if they happen to wake up early during sleeping assignment</fun_police_label>
+  <fun_police_note>On top of that, pawns will try to top off their joy need only after it goes below 80% (instead of trying to keep it above 95% for the whole period of recreational assignment)</fun_police_note>
 </LanguageData>

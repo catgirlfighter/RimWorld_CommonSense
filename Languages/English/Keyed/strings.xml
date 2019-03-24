@@ -44,4 +44,7 @@
 	<put_back_to_inv_note>When pawns are holding their inventory items on their hands, they'll put them back if action was interrupted</put_back_to_inv_note>
 	<pick_proper_amount_label>Pawns will stop taking more sweets than they can eat</pick_proper_amount_label>
 	<pick_proper_amount_note>No more chocolate lying around</pick_proper_amount_note>
+	<Category>Category</Category>
+	<fun_police_label>Pawns are encouraged to fill their joy need if they happen to wake up early during sleeping assignment</fun_police_label>
+	<fun_police_note>On top of that, pawns will try to top off their joy need only after it goes below 80% (instead of trying to keep it above 95% for the whole period of recreational assignment)</fun_police_note>
 </LanguageData>

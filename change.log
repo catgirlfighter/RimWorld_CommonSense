@@ -1,4 +1,17 @@
-﻿1.1.0
+﻿1.1.2a
+- limited filth cleaning opportunity to 20 (except tending);
+
+1.1.2
+- changed pawn priorities for sleeping schedule. Now they'll prioritize topping off joy need if they happen to wake up early;
+- added an option to prevent colonists from taking joy activities if they're already topped off (after reaching 95%, they'll not start it again until it's down to 80%);
+
+1.1.1
+- added category to item's info;
+- added prioritization of spoiling herbal medicine and corpses;
+- added prioritization of spoiling food (to eat before it turns bad);
+- removed unintentional duplicate in settings;
+
+1.1.0
 - added an option to unload equipped items;
 - made an option for manual unloading optional;
 - added compatibility patch for RPG Style Inventory;
