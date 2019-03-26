@@ -1,4 +1,4 @@
-﻿- 1.1.4
+﻿1.1.4
 - when recreating, colonists will prefer taking spare meals if they don't have one;
 - fixed a problem, due to which colonists would prefer herbal medicine over any other when doing surgery;
 - added a special patch for "dubs bad hygiene" that tweaks assignment priorities (pawns now will prefer to top off all needs during recreation and when not sleeping during sleeping assignment);

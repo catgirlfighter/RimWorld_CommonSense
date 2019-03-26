@@ -64,7 +64,7 @@ namespace CommonSense
         [HarmonyPatch(typeof(FoodUtility), "FoodOptimality")]
         static class FoodUtility_FoodOptimality
         {
-            static void Postfix(float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
+            static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
             {
                 if (!Settings.prefer_spoiling_ingredients)
                     return;
