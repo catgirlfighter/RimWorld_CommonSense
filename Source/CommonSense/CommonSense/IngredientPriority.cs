@@ -25,7 +25,7 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
         public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
-            public static bool Prefix(List<Thing> availableThings)
+            public static bool Prefix(/*Thing billGiver, */List<Thing> availableThings)
             {
                 if (!Settings.prefer_spoiling_ingredients)
                     return true;
@@ -33,8 +33,16 @@ namespace CommonSense
                 availableThings.Sort(
                     delegate (Thing a, Thing b)
                     {
+                        float p = a.GetStatValue(StatDefOf.MedicalPotency) - b.GetStatValue(StatDefOf.MedicalPotency);
+                        if (p > 0)
+                            return -1;
+                        else if (p < 0)
+                            return 1;
+                        
                         CompRottable compa = a.TryGetComp<CompRottable>();
                         CompRottable compb = b.TryGetComp<CompRottable>();
+
+                        //int r = a.Position.DistanceToSquared(billGiver.Position) - b.Position.DistanceToSquared(billGiver.Position);
                         if (compa == null)
                             if (compb == null)
                                 return 0;
@@ -43,14 +51,11 @@ namespace CommonSense
                         else if (compb == null)
                             return -1;
                         else
+                        {
                             return (int)(compa.PropsRot.TicksToRotStart - compa.RotProgress) / 2500 - (int)(compb.PropsRot.TicksToRotStart - compb.RotProgress) / 2500;
+                        }
                     }
                 );
-                //Log.Message("things");
-                //foreach (var i in (availableThings))
-                //{
-                //    Log.Message($"thing={i}, counter={(i.TryGetComp<CompRottable>() == null ? -1 : i.TryGetComp<CompRottable>().PropsRot.TicksToRotStart - i.TryGetComp<CompRottable>().RotProgress) / 2500}");
-                //}
 
                 return true;
             }
@@ -64,15 +69,16 @@ namespace CommonSense
                 if (!Settings.prefer_spoiling_ingredients)
                     return;
 
-                const float halfday = 2500f * 12f;
-                const float ahour = 2500f;
+                const float qday = 2500f * 6f;
+                const float aday = qday * 4f;
+                //const float ahour = 2500f;
                 CompRottable compRottable = foodSource.TryGetComp<CompRottable>();
                 if (compRottable != null)
                 {
                     float t = compRottable.PropsRot.TicksToRotStart - compRottable.RotProgress;
-                    if (t > 0 && t < halfday * 4f)
+                    if (t > 0 && t < qday * 8f)
                     {
-                        __result += (float)Math.Truncate((1f + (halfday * 4f - t) / ahour) * 0.5f);
+                        __result += (float)Math.Truncate((1f + (aday * 2f - t) / qday) * 1.5f);
                         //Log.Message($"{foodSource},left={t},weight={(halfhour * 4f - t) / halfhour * 3f}");
                     }
                     

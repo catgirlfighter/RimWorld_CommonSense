@@ -34,7 +34,7 @@
 	<advanced_inbetween_cleaning_note>Basic behavior would let them clean only before hauling</advanced_inbetween_cleaning_note>
 	<advanced_haul_all_ings_label>Pawns are encouraged to pick up all ingredients before hauling them to the crafting place</advanced_haul_all_ings_label>
 	<advanced_haul_all_ings_note>Pawns will be taking all necessary ingredients to their hauling inventory before delivering them to the crafting place</advanced_haul_all_ings_note>
-	<prefer_spoiling_ingredients_label>Pawns are encouraged to use ingredients that spoil faster</prefer_spoiling_ingredients_label>
+	<prefer_spoiling_ingredients_label>Pawns are encouraged to use meals, ingredients and materials that spoil faster</prefer_spoiling_ingredients_label>
 	<prefer_spoiling_ingredients_note>WARNING: with more items to chose from it may start causing a lag</prefer_spoiling_ingredients_note>
 	<UnloadThing>Unload</UnloadThing>
 	<UnloadThingCancel>Cancel unload</UnloadThingCancel>
@@ -45,6 +45,6 @@
 	<pick_proper_amount_label>Pawns will stop taking more sweets than they can eat</pick_proper_amount_label>
 	<pick_proper_amount_note>No more chocolate lying around</pick_proper_amount_note>
 	<Category>Category</Category>
-	<fun_police_label>Pawns are encouraged to fill their joy need if they happen to wake up early during sleeping assignment</fun_police_label>
-	<fun_police_note>On top of that, pawns will try to top off their joy need only after it goes below 80% (instead of trying to keep it above 95% for the whole period of recreational assignment)</fun_police_note>
+	<fun_police_label>Pawns are encouraged to fill all their secondary needs during their joy assignment or if they woke up early during their sleeping assignment</fun_police_label>
+	<fun_police_note>Pawns will try to top off their joy need only after it goes below 80%, they'll prefer to pick up a spare meal to their inventory, and fulfill all their hygiene needs (if dubs mod is present)</fun_police_note>
 </LanguageData>

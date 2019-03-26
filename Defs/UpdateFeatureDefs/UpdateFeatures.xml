@@ -74,5 +74,13 @@ This is probably the final changes to the mod. For now I've fulfilled all I want
 		<assemblyVersion>1.1.3</assemblyVersion>
 		<content>- fixed a problem, when material of an item could change with "all components hauled together" on, because order of picking up could change due to path optimization (basically, whatever was closer to the pawn, it automatically become a main ingredient);</content>
 	</HugsLib.UpdateFeatureDef>
+	
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_1_4</defName>
+		<assemblyVersion>1.1.4</assemblyVersion>
+		<content>- when recreating, colonists will prefer taking spare meals if they don't have one;
+- fixed a problem, due to which colonists would prefer herbal medicine over any other when doing surgery;
+- added a special patch for "dubs bad hygiene" that tweaks assignment priorities (pawns now will prefer to top off all needs during recreation and when not sleeping during sleeping assignment).</content>
+	</HugsLib.UpdateFeatureDef>
 
 </Defs>

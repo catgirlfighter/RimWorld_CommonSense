@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+<!-- original
+
+            <li Class="ThinkNode_ConditionalNeedPercentageAbove">
+              <need>Food</need>
+              <threshold>0.6</threshold>
+              <subNodes>
+                <li Class="JobGiver_PackFood">
+                  <leaveJoinableLordIfIssuesJob>true</leaveJoinableLordIfIssuesJob>
+                </li>
+              </subNodes>
+            </li>
+
+-->
+
+	<Operation Class="PatchOperationReplace">
+		<xpath>Defs/ThinkTreeDef[defName="Humanlike"]/thinkRoot[@Class="ThinkNode_Priority"]/subNodes/li[@Class="ThinkNode_ConditionalColonist"]/subNodes/li[@Class="ThinkNode_ConditionalNeedPercentageAbove"]/subNodes/li[@Class="JobGiver_PackFood"]/../../threshold</xpath>
+		<value>
+            <threshold>0.3</threshold>
+		</value>
+	</Operation>
+
+</Patch>
