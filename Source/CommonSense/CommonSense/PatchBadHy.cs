@@ -39,7 +39,7 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_UseToilet")) != null)
                 {
-                    Log.Message($"patching {type}");
+                    //Log.Message($"patching {type}");
                     if ((target = AccessTools.Method(type, "GetPriority"))==null)
                     {
                         Log.Error($"Couldn't get {type}.GetPriority");
@@ -117,7 +117,7 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_HaveWash")) != null)
                 {
-                    Log.Message($"patching {type}");
+                    //Log.Message($"patching {type}");
                     if ((target = AccessTools.Method(type, "GetPriority")) == null)
                     {
                         Log.Error($"Couldn't get {type}.GetPriority");
@@ -194,7 +194,7 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_DrinkWater")) != null)
                 {
-                    Log.Message($"patching {type}");
+                    //Log.Message($"patching {type}");
                     if ((target = AccessTools.Method(type, "GetPriority")) == null)
                     {
                         Log.Error($"Couldn't get {type}.GetPriority");
