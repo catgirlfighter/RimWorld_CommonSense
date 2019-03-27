@@ -81,7 +81,7 @@ namespace CommonSense
                         __result += (float)Math.Truncate((1f + (aday * 2f - t) / qday) * 3f);
                         //Log.Message($"{foodSource},left={t},weight={__result}");
                     }
-                    Log.Message($"{foodSource},left={t},weight={__result}({(float)Math.Truncate((1f + (aday * 2f - t) / qday) * 1.5f)})");
+                    //Log.Message($"{foodSource},left={t},weight={__result}({(float)Math.Truncate((1f + (aday * 2f - t) / qday) * 1.5f)})");
                 }
             }
         }
