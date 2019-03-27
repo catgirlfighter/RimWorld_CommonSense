@@ -76,12 +76,12 @@ namespace CommonSense
                 if (compRottable != null)
                 {
                     float t = compRottable.PropsRot.TicksToRotStart - compRottable.RotProgress;
-                    if (t > 0 && t < qday * 8f)
+                    if (t > 0 && t < aday * 2f)
                     {
-                        __result += (float)Math.Truncate((1f + (aday * 2f - t) / qday) * 1.5f);
-                        //Log.Message($"{foodSource},left={t},weight={(halfhour * 4f - t) / halfhour * 3f}");
+                        __result += (float)Math.Truncate((1f + (aday * 2f - t) / qday) * 3f);
+                        //Log.Message($"{foodSource},left={t},weight={__result}");
                     }
-                    
+                    Log.Message($"{foodSource},left={t},weight={__result}({(float)Math.Truncate((1f + (aday * 2f - t) / qday) * 1.5f)})");
                 }
             }
         }
