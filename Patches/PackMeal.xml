@@ -14,12 +14,19 @@
             </li>
 
 -->
-
-	<Operation Class="PatchOperationReplace">
-		<xpath>Defs/ThinkTreeDef[defName="Humanlike"]/thinkRoot[@Class="ThinkNode_Priority"]/subNodes/li[@Class="ThinkNode_ConditionalColonist"]/subNodes/li[@Class="ThinkNode_ConditionalNeedPercentageAbove"]/subNodes/li[@Class="JobGiver_PackFood"]/../../threshold</xpath>
-		<value>
-            <threshold>0.3</threshold>
-		</value>
+	<Operation Class="PatchOperationSequence">
+		<success>Always</success>
+		<operations>
+			<li Class="PatchOperationTest">
+				<xpath>Defs/ThinkTreeDef[defName="Humanlike"]/thinkRoot[@Class="ThinkNode_Priority"]/subNodes/li[@Class="ThinkNode_ConditionalColonist"]/subNodes/li[@Class="ThinkNode_ConditionalNeedPercentageAbove"]/subNodes/li[@Class="JobGiver_PackFood"]</xpath>
+			</li>
+				
+			<li Class="PatchOperationReplace">
+				<xpath>Defs/ThinkTreeDef[defName="Humanlike"]/thinkRoot[@Class="ThinkNode_Priority"]/subNodes/li[@Class="ThinkNode_ConditionalColonist"]/subNodes/li[@Class="ThinkNode_ConditionalNeedPercentageAbove"]/subNodes/li[@Class="JobGiver_PackFood"]/../../threshold</xpath>
+				<value>
+					<threshold>0.3</threshold>
+				</value>
+			</li>
+		</operations>
 	</Operation>
-
 </Patch>
