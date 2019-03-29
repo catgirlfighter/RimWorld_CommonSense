@@ -169,13 +169,13 @@ namespace CommonSense
                     return false;
                 }
 
-                if (pawn.timetable.CurrentAssignment == TimeAssignmentDefOf.Joy && need_hygiene.CurLevel < 0.8f)
+                if (pawn.timetable.CurrentAssignment == TimeAssignmentDefOf.Joy && need_hygiene.CurLevel < 0.55f)
                 {
                     __result = 6.25f;
                     return false;
                 }
 
-                if (pawn.timetable.CurrentAssignment == TimeAssignmentDefOf.Sleep && need_hygiene.CurLevel < 0.8f)
+                if (pawn.timetable.CurrentAssignment == TimeAssignmentDefOf.Sleep && need_hygiene.CurLevel < 0.55f)
                 {
                     __result = 3.25f;
                     return false;

@@ -1,4 +1,7 @@
-﻿1.1.4a
+﻿1.1.4b
+- fixed "WashAtCell" issues on maps with no dedicated cleaning place (i.e. only wells or open water);
+
+1.1.4a
 - added an ignore of an error doring ThinkNode patch. 
 
 1.1.4
