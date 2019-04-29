@@ -83,6 +83,8 @@ namespace CommonSense
             Scribe_Values.Look(ref put_back_to_inv, "put_back_to_inv", true, false);
             Scribe_Values.Look(ref pick_proper_amount, "pick_proper_amount", true, false);
             Scribe_Values.Look(ref fun_police, "fun_police", true, false);
+            Scribe_Values.Look(ref add_to_que, "add_to_que", false, false);
+            Scribe_Values.Look(ref hauling_over_bills, "hauling_over_bills", true, false);
         }
     }
 }
