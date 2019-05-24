@@ -45,6 +45,6 @@
 	<pick_proper_amount_label>Pawns will stop taking more sweets than they can eat</pick_proper_amount_label>
 	<pick_proper_amount_note>No more chocolate lying around</pick_proper_amount_note>
 	<Category>Category</Category>
-	<fun_police_label>Pawns are encouraged to fill all their secondary needs during their joy assignment or if they woke up early during their sleeping assignment</fun_police_label>
+	<fun_police_label>Pawns are encouraged to fulfill secondary needs during joy assignment or if woke early</fun_police_label>
 	<fun_police_note>Pawns will try to top off their joy need only after it goes below 80%, they'll prefer to pick up a spare meal to their inventory, and fulfill all their hygiene needs (if dubs mod is present)</fun_police_note>
 </LanguageData>
