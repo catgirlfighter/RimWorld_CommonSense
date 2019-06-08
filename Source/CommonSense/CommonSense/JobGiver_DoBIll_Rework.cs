@@ -238,7 +238,7 @@ namespace CommonSense
                 yield return gotoBillGiver; //one line from normal scenario
                 
                 //cleaning patch
-                if (Settings.adv_cleaning)
+                if (Settings.adv_cleaning && !Utility.IncapableOfCleaning(__instance.pawn))
                 {
                     Toil returnToBillGiver = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
                     Toil FilthList = new Toil();

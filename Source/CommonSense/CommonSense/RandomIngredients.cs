@@ -31,17 +31,35 @@ namespace CommonSense
                 RecipeDef d = hTable.TryGetValue(def);
                 if (d == null)
                 {
-                    d = DefDatabase<RecipeDef>.AllDefsListForReading.Where(x => !x.ingredients.NullOrEmpty() && x.products.Any(y => y.thingDef == def)).RandomElement();
+                    List<RecipeDef> l = DefDatabase<RecipeDef>.AllDefsListForReading;
+                    if (l == null)
+                        return;
+
+                    d = l.Where(x => !x.ingredients.NullOrEmpty() && x.products.Any(y => y.thingDef == def)).RandomElement();
+                    
                     if (d == null)
                         return;
+
                     hTable.Add(def, d);
                 }
                 foreach (IngredientCount c in d.ingredients)
                 {
-                    ThingDef td = c.filter.AllowedThingDefs.Where(
-                        x => x.IsIngestible && !x.comps.Any(y => y.compClass == typeof(CompIngredients)) &&
-                        !FoodUtility.IsHumanlikeMeat(x) && (x.ingestible.specialThoughtAsIngredient == null || x.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect >= 0)
+                    ThingFilter ic = c.filter;
+
+                    if (ic == null)
+                        return;
+
+                    IEnumerable<ThingDef> l = ic.AllowedThingDefs;
+
+                    if (l == null)
+                        return;
+
+                    ThingDef td = l.Where(
+                        x => x.IsIngestible && x.comps != null && !x.comps.Any(y => y.compClass == typeof(CompIngredients)) &&
+                        !FoodUtility.IsHumanlikeMeat(x) && (x.ingestible.specialThoughtAsIngredient == null || x.ingestible.specialThoughtAsIngredient.stages == null
+                        || x.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect >= 0)
                     ).RandomElement();
+
                     if (td != null)
                         ings.RegisterIngredient(td);
                 }

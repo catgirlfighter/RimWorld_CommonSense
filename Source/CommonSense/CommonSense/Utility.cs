@@ -26,6 +26,18 @@ namespace CommonSense
             }
         }
 
+        public static bool IncapableOfCleaning(Pawn pawn)
+        {
+            return pawn.def.race == null ||
+                (int)pawn.def.race.intelligence < 2 ||
+                pawn.Faction != Faction.OfPlayer ||
+                //pawn.Drafted || 
+                (int)pawn.RaceProps.intelligence < 2 ||
+                pawn.story.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
+                pawn.InMentalState || pawn.IsBurning() ||
+                pawn.workSettings == null || !pawn.workSettings.WorkIsActive(CleaningDef);
+        }
+
         public static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target, int Limit = int.MaxValue)
         {
             Room room = null;

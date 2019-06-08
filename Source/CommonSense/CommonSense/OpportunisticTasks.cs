@@ -15,16 +15,8 @@ namespace CommonSense
 
         static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target, int Limit)
         {
-            if (pawn.def.race == null ||
-                (int)pawn.def.race.intelligence < 2 ||
-                pawn.Faction != Faction.OfPlayer ||
-                //pawn.Drafted || 
-                (int)pawn.RaceProps.intelligence < 2 ||
-                //pawn.story.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
-                pawn.InMentalState || pawn.IsBurning() ||
-                pawn.workSettings == null || !pawn.workSettings.WorkIsActive(Utility.CleaningDef))
+            if (Utility.IncapableOfCleaning(pawn))
                 return null;
-
 
             IEnumerable<Filth> l = Utility.SelectAllFilth(pawn, target, Limit);
 
@@ -60,6 +52,9 @@ namespace CommonSense
         {
             static Job Cleaning_Opportunity(Job currJob, IntVec3 cell, Pawn pawn, int Limit)
             {
+                if (Utility.IncapableOfCleaning(pawn))
+                    return null;
+
                 Thing target = null;
                 IntVec3 source = pawn.Position;
 

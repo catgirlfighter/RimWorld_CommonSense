@@ -1,4 +1,8 @@
-﻿1.1.4c
+﻿1.1.5
+- added some more checks for "random ingredients", to possibly remove any issues with unusual recipes;
+- rearranged checks for opportunistic cleaning jobs to remove possibilities of pawns ignoring assignments in incapability;
+
+1.1.4c
 - a small fix for options that didn't save their state;
 
 1.1.4b
