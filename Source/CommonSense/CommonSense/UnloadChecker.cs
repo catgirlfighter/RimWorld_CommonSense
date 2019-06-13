@@ -166,6 +166,12 @@ namespace CommonSense
         float duration = 0;
 
 
+        static bool stillUnloadable(Thing thing)
+        {
+            CompUnloadChecker c = thing.TryGetComp<CompUnloadChecker>();
+            return c != null && c.ShouldUnload;
+        }
+
         protected override IEnumerable<Toil> MakeNewToils()
         {
             yield return Toils_General.Wait(10, TargetIndex.None);
@@ -207,7 +213,7 @@ namespace CommonSense
                 }
             };
             yield return Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
-            yield return Toils_Goto.GotoCell(TargetIndex.B, PathEndMode.Touch);
+            yield return Toils_Goto.GotoCell(TargetIndex.B, PathEndMode.Touch).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate () { return !stillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing); });
 
             //preintiating unequip-delay
             Toil unequip = new Toil
@@ -273,7 +279,18 @@ namespace CommonSense
                     thing.SetForbidden(false, false);
                 }
             };
-            Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B);
+            Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate() { return !stillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing);  } );
+            /*
+            carryToCell.AddEndCondition(delegate
+                {
+                    Thing thing = carryToCell.GetActor().jobs.curJob.GetTarget(TargetIndex.B).Thing;
+                    if (thing.DestroyedOrNull() || !stillUnloadable(thing))
+                    {
+                        return JobCondition.Incompletable;
+                    }
+                    return JobCondition.Ongoing;
+                });
+            */
             yield return carryToCell;
             yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.B, carryToCell, true);
             yield break;
@@ -313,6 +330,14 @@ namespace CommonSense
                     {
                         SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                         c.ShouldUnload = false;
+                        Pawn SelPawnForGear = Traverse.Create(__instance).Property("SelPawnForGear").GetValue<Pawn>();
+                        if (MassUtility.Capacity(SelPawnForGear, null) < MassUtility.GearAndInventoryMass(SelPawnForGear) 
+                            && thing.stackCount * thing.GetStatValue(StatDefOf.Mass, true) > 0 
+                            && !thing.def.destroyOnDrop)
+                        {
+                            Thing t;
+                            SelPawnForGear.inventory.innerContainer.TryDrop(thing, SelPawnForGear.Position, SelPawnForGear.Map, ThingPlaceMode.Near, out t, null, null);
+                        }
                     }
                     GUI.color = cl;
                 }

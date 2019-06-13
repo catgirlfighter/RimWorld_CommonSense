@@ -88,5 +88,10 @@ This is probably the final changes to the mod. For now I've fulfilled all I want
 		<content>- added some more checks for "random ingredients", to possibly remove any issues with unusual recipes;
 - rearranged checks for opportunistic cleaning jobs to remove possibilities of pawns ignoring assignments in incapability;</content>
 	</HugsLib.UpdateFeatureDef>
-
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_1_6</defName>
+		<assemblyVersion>1.1.6</assemblyVersion>
+		<content>- when pawns unload inventory, their task actually get canceled midway if you unmark items or drop them;
+- if you unmark items to unload, and pawn doesn't have enough space in inventory, that item is dropped on the ground;</content>
+	</HugsLib.UpdateFeatureDef>
 </Defs>
