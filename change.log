@@ -1,5 +1,5 @@
 ﻿1.1.6
-- when pawns unlaod inventory, their task actually get canceled midway if you unmark items or drop them;
+- when pawns unload inventory, their task actually gets canceled midway if you unmark items or drop them;
 - if you unmark items to unload, and pawn doesn't have enough space in inventory, that item is dropped on the ground;
 
 1.1.5
