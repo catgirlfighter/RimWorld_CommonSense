@@ -248,7 +248,7 @@ namespace CommonSense
                         if (curJob.GetTargetQueue(TargetIndex.A).NullOrEmpty())
                         {
                             LocalTargetInfo A = curJob.GetTarget(TargetIndex.A);
-                            IEnumerable<Filth> l = Utility.SelectAllFilth(FilthList.actor, A);
+                            IEnumerable<Filth> l = Utility.SelectAllFilth(FilthList.actor, A, Settings.adv_clean_num);
                             Utility.AddFilthToQueue(curJob, TargetIndex.A, l, FilthList.actor);
                             FilthList.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(TargetIndex.A), curJob);
                             curJob.targetQueueA.Add(A);

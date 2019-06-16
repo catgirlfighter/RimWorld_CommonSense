@@ -9,7 +9,7 @@
 	<clean_before_working_note>NOTE: don't expect cleaning from those guys, that don't like to clean</clean_before_working_note>
 	<bill_job_pathing_label>Calculate accurate path to the building for bill jobs</bill_job_pathing_label>
 	<bill_job_pathing_note>It'll help to avoid making unreasonable hooks around when your pawns need to bring resources first, but it may be costly on CPU</bill_job_pathing_note>
-	<clean_after_tending_label>Pawns are encouraged clean the room after tending to a patient</clean_after_tending_label>
+	<clean_after_tending_label>Pawns are encouraged to clean the room after tending to a patient</clean_after_tending_label>
 	<clean_after_tending_note>NOTE: don't expect cleaning from those guys, that don't like to clean</clean_after_tending_note>
 	<meal_stacking_head>Meal stacking</meal_stacking_head>
 	<meal_stacking_label>Pawns avoid mixing negative thoughts when stacking meals</meal_stacking_label>
@@ -47,4 +47,8 @@
 	<Category>Category</Category>
 	<fun_police_label>Pawns are encouraged to fulfill secondary needs during joy assignment or if woke early</fun_police_label>
 	<fun_police_note>Pawns will try to top off their joy need only after it goes below 80%, they'll prefer to pick up a spare meal to their inventory, and fulfill all their hygiene needs (if dubs mod is present)</fun_police_note>
+	<numbers_head>Tweakable numbers (0 = Unlimited)</numbers_head>
+	<op_clean_number_label>Filth limit for pre-task cleaning</op_clean_number_label>
+	<adv_clean_number_label>Filth limit for pre-bill cleaning</adv_clean_number_label>
+	<doc_clean_number_label>Filth limit for post-tending cleaning</doc_clean_number_label>
 </LanguageData>

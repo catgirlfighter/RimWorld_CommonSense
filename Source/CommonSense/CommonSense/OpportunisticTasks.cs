@@ -186,7 +186,7 @@ namespace CommonSense
                         }
 
                         if (Settings.clean_before_work && (newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.def.joyKind != null))
-                            job = Cleaning_Opportunity(newJob, cell, __instance._pawn, 20);
+                            job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
                     }
 
                 if (job != null)
@@ -223,7 +223,7 @@ namespace CommonSense
                     __instance.jobQueue.Count == 0 && __instance.curJob.targetA != null && __instance.curJob.targetA.Thing != null && 
                     __instance.curJob.targetA.Thing != __instance._pawn)
                 {
-                    Job job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, int.MaxValue);
+                    Job job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, Settings.doc_clean_num);
                     if (job != null)
                         __instance.jobQueue.EnqueueFirst(job);
                 }

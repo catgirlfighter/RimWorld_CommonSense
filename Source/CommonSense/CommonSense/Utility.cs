@@ -72,7 +72,7 @@ namespace CommonSense
                     if (intVec.InBounds(pawn.Map) && intVec.InAllowedArea(pawn) && intVec.GetRoom(pawn.Map) == room)
                         ((List<Filth>)enumerable).AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>().Where(f => !f.Destroyed
                             && ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)));
-                    if (enumerable.Count() >= Limit)
+                    if (Limit > 0 && enumerable.Count() >= Limit)
                         break;
                 }
             }
@@ -88,7 +88,7 @@ namespace CommonSense
                         return false;
 
                     return true;
-                });
+                }).Take(Limit == 0 ? int.MaxValue : Limit);
             return enumerable;
         }
 

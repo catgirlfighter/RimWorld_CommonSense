@@ -25,11 +25,18 @@ namespace CommonSense
         public static bool put_back_to_inv = true;
         public static bool pick_proper_amount = true;
         public static bool fun_police = true;
+        public static int op_clean_num = 5;
+        public static int adv_clean_num = 5;
+        public static int doc_clean_num = 0;
+        private static Vector2 ScrollPos = Vector2.zero;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
             Listing_Standard listing_Standard = new Listing_Standard();
-            listing_Standard.Begin(inRect);
+            Rect viewRect = new Rect(0f, 0f, inRect.width, 36f*26f);
+            viewRect.xMax *= 0.9f;
+            listing_Standard.BeginScrollView(inRect, ref ScrollPos, ref viewRect);
+            //listing_Standard.Begin(inRect);
             listing_Standard.Label("fulfill_needs_head".Translate());
             listing_Standard.CheckboxLabeled("fulfill_outdoors_label".Translate(), ref fulfill_outdoors, "fulfill_outdoors_note".Translate());
             listing_Standard.CheckboxLabeled("drugs_use_potential_mood_label".Translate(), ref drugs_use_potential_mood, "drugs_use_potential_mood_note".Translate());
@@ -61,7 +68,15 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("gen_ingredients_label".Translate(), ref add_meal_ingredients, "gen_ingredients_note".Translate());
             listing_Standard.CheckboxLabeled("extended_recipe_label".Translate(), ref gui_extended_recipe, "extended_recipe_note".Translate());
             listing_Standard.CheckboxLabeled("manual_unload_label".Translate(), ref gui_manual_unload, "manual_unload_note".Translate());
-            listing_Standard.End();
+            listing_Standard.GapLine();
+            listing_Standard.Label("numbers_head".Translate());
+            string op_clean_num_str = op_clean_num.ToString();
+            listing_Standard.TextFieldNumericLabeled("op_clean_number_label".Translate(), ref op_clean_num, ref op_clean_num_str);
+            string adv_clean_num_str = adv_clean_num.ToString();
+            listing_Standard.TextFieldNumericLabeled("adv_clean_number_label".Translate(), ref adv_clean_num, ref adv_clean_num_str);
+            string doc_clean_num_str = doc_clean_num.ToString();
+            listing_Standard.TextFieldNumericLabeled("doc_clean_number_label".Translate(), ref doc_clean_num, ref doc_clean_num_str);
+            listing_Standard.EndScrollView(ref viewRect);
         }
 
         public override void ExposeData()
@@ -85,6 +100,9 @@ namespace CommonSense
             Scribe_Values.Look(ref fun_police, "fun_police", true, false);
             Scribe_Values.Look(ref add_to_que, "add_to_que", false, false);
             Scribe_Values.Look(ref hauling_over_bills, "hauling_over_bills", true, false);
+            Scribe_Values.Look(ref op_clean_num, "op_clean_num", 5, false);
+            Scribe_Values.Look(ref adv_clean_num, "adv_clean_num", 5, false);
+            Scribe_Values.Look(ref doc_clean_num, "doc_clean_num", 0, false);
         }
     }
 }
