@@ -189,7 +189,7 @@ namespace CommonSense
                             job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
                     }
 
-                Log.Message($"pawn={__instance._pawn},job={newJob},enque={job}, limit = {Settings.op_clean_num}");
+                //Log.Message($"pawn={__instance._pawn},job={newJob},enque={job}, limit = {Settings.op_clean_num}");
                 if (job != null)
                 {
                     if (Settings.add_to_que)

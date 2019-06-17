@@ -1,5 +1,6 @@
 ﻿1.1.8
 - found a reason, why pawns ignored filth limit. They actually did, but since before starting a job they started cleaning again, they just got into restarting loop until room is cleaned. Added forced "add to queue" and marked queued job to be "forced", so pawns wouldn't try to clean after. Hope it doesn't lead to weird interactions;
+- also made better checks to ignore non-player pawns earlier;
 
 1.1.7
 - changed numbers for opportunistic cleaning (again). Now it's 5 filth patches for everything, except tending (it's unlimited still);
