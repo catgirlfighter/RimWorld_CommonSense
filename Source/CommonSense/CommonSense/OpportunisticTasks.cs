@@ -151,7 +151,7 @@ namespace CommonSense
 
             static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, JobCondition lastJobEndCondition, ThinkNode jobGiver, bool resumeCurJobAfterwards, bool cancelBusyStances, ThinkTreeDef thinkTree, JobTag? tag, bool fromQueue)
             {
-                if (__instance == null || __instance._pawn == null || newJob == null || newJob.def == null)
+                if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || newJob == null  || newJob.def == null)
                     return true;
 
                 if (Settings.fun_police && __instance._pawn.needs.joy != null && __instance._pawn.needs.joy.CurLevel < 0.8f)
@@ -189,13 +189,17 @@ namespace CommonSense
                             job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
                     }
 
+                Log.Message($"pawn={__instance._pawn},job={newJob},enque={job}, limit = {Settings.op_clean_num}");
                 if (job != null)
                 {
                     if (Settings.add_to_que)
+                    {
+                        newJob.playerForced = true;
                         __instance.jobQueue.EnqueueFirst(newJob);
+                    }
                     __instance.jobQueue.EnqueueFirst(job);
-                    __instance.curJob = null;
-                    __instance.curDriver = null;
+                    //__instance.curJob = null;
+                    //__instance.curDriver = null;
                     return false;
                 }
                 return true;
@@ -208,7 +212,7 @@ namespace CommonSense
         {
             static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition, bool startNewJob)
             {
-                if (__instance == null || __instance.curJob == null)
+                if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || __instance.curJob == null)
                     return true;
 
                 if (Settings.fun_police && __instance._pawn.needs.joy != null && __instance._pawn.needs.joy.CurLevel > 0.95f)

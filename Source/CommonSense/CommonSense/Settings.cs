@@ -14,7 +14,7 @@ namespace CommonSense
         public static bool clean_after_tanding = true;
         public static bool calculate_full_path = true;
         public static bool add_meal_ingredients = false;
-        public static bool add_to_que = false;
+        public static bool add_to_que = true;
         public static bool hauling_over_bills = true;
         public static bool drugs_use_potential_mood = true;
         public static bool adv_cleaning = true;
@@ -46,7 +46,7 @@ namespace CommonSense
             listing_Standard.GapLine();
             listing_Standard.Label("clean_head".Translate());
             listing_Standard.CheckboxLabeled("clean_before_working_label".Translate(), ref clean_before_work, "clean_before_working_note".Translate());
-            listing_Standard.CheckboxLabeled("add_to_que_label".Translate(), ref add_to_que, "add_to_que_note".Translate());
+            //listing_Standard.CheckboxLabeled("add_to_que_label".Translate(), ref add_to_que, "add_to_que_note".Translate());
             listing_Standard.CheckboxLabeled("clean_after_tending_label".Translate(), ref clean_after_tanding, "clean_after_tending_note".Translate());
             listing_Standard.CheckboxLabeled("hauling_over_bills_label".Translate(), ref hauling_over_bills, "hauling_over_bills_note".Translate());
             listing_Standard.CheckboxLabeled("prefer_spoiling_ingredients_label".Translate(), ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients_note".Translate());
@@ -98,7 +98,7 @@ namespace CommonSense
             Scribe_Values.Look(ref put_back_to_inv, "put_back_to_inv", true, false);
             Scribe_Values.Look(ref pick_proper_amount, "pick_proper_amount", true, false);
             Scribe_Values.Look(ref fun_police, "fun_police", true, false);
-            Scribe_Values.Look(ref add_to_que, "add_to_que", false, false);
+            //Scribe_Values.Look(ref add_to_que, "add_to_que", false, false);
             Scribe_Values.Look(ref hauling_over_bills, "hauling_over_bills", true, false);
             Scribe_Values.Look(ref op_clean_num, "op_clean_num", 5, false);
             Scribe_Values.Look(ref adv_clean_num, "adv_clean_num", 5, false);

@@ -71,7 +71,7 @@ namespace CommonSense
                     IntVec3 intVec = target.Cell + GenRadial.RadialPattern[i];
                     if (intVec.InBounds(pawn.Map) && intVec.InAllowedArea(pawn) && intVec.GetRoom(pawn.Map) == room)
                         ((List<Filth>)enumerable).AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>().Where(f => !f.Destroyed
-                            && ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)));
+                            && ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)).Take(Limit == 0 ? int.MaxValue : Limit));
                     if (Limit > 0 && enumerable.Count() >= Limit)
                         break;
                 }
