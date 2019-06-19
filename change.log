@@ -1,4 +1,7 @@
-﻿1.1.8
+﻿1.1.9
+- fixed an issue, due to which pawns would reserve a stack of materials even if they already took a portion required from it;
+
+1.1.8
 - found a reason, why pawns ignored filth limit. They actually did, but since before starting a job they started cleaning again, they just got into restarting loop until room is cleaned. Added forced "add to queue" and marked queued job to be "forced", so pawns wouldn't try to clean after. Hope it doesn't lead to weird interactions;
 - also made better checks to ignore non-player pawns earlier;
 

@@ -172,7 +172,7 @@ namespace CommonSense
                             else
                             {
                                 Thing splitThing = thing.SplitOff(curJob.count);
-                                if (splitThing.ParentHolder != actor.inventory &&!actor.inventory.GetDirectlyHeldThings().TryAdd(splitThing, false))
+                                if (splitThing.ParentHolder != actor.inventory && !actor.inventory.GetDirectlyHeldThings().TryAdd(splitThing, false))
                                 {
                                     actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
                                 }
@@ -188,6 +188,12 @@ namespace CommonSense
                                         if (CUC != null) CUC.ShouldUnload = true;
                                     }
                                 }
+
+                                if (splitThing != thing && actor.Map.reservationManager.ReservedBy(thing, actor, curJob))
+                                {
+                                    actor.Map.reservationManager.Release(thing, actor, curJob);
+                                }
+
                             }
                         }
                     };
