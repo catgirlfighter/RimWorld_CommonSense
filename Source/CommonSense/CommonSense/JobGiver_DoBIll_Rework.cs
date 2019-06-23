@@ -153,50 +153,57 @@ namespace CommonSense
                                 curJob.countQueue.RemoveAt(0);
                             }
                         }
-                    };                   
+                    };
 
-                    Toil PickUpThing = new Toil();
-                    PickUpThing.initAction = delegate ()
+                    Toil PickUpThing;
+                    List<LocalTargetInfo> L = __instance.job.GetTargetQueue(TargetIndex.B);
+                    if (L.Count < 2 && L[0].Thing.def.stackLimit < 2)
+                        PickUpThing = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true);
+                    else
                     {
-                        Pawn actor = extract.actor;
-                        Job curJob = actor.jobs.curJob;
-                        Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
-                        List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
-                        bool InventorySpawned = thing.ParentHolder == actor.inventory;
-                        if (InventorySpawned || !Toils_Haul.ErrorCheckForCarry(actor, thing))
+                        PickUpThing = new Toil();
+                        PickUpThing.initAction = delegate ()
                         {
-                            if (thing.stackCount < curJob.count)
+                            Pawn actor = extract.actor;
+                            Job curJob = actor.jobs.curJob;
+                            Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
+                            List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
+                            bool InventorySpawned = thing.ParentHolder == actor.inventory;
+                            if (InventorySpawned || !Toils_Haul.ErrorCheckForCarry(actor, thing))
                             {
-                                actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
-                            }
-                            else
-                            {
-                                Thing splitThing = thing.SplitOff(curJob.count);
-                                if (splitThing.ParentHolder != actor.inventory && !actor.inventory.GetDirectlyHeldThings().TryAdd(splitThing, false))
+                                if (thing.stackCount < curJob.count)
                                 {
                                     actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
                                 }
-
-
-                                if (!splitThing.Destroyed && splitThing.stackCount != 0)
+                                else
                                 {
-                                    targetQueue.Add(splitThing);
-
-                                    if (!InventorySpawned)
+                                    Thing splitThing = thing.SplitOff(curJob.count);
+                                    if (splitThing.ParentHolder != actor.inventory && !actor.inventory.GetDirectlyHeldThings().TryAdd(splitThing, false))
                                     {
-                                        CompUnloadChecker CUC = splitThing.TryGetComp<CompUnloadChecker>();
-                                        if (CUC != null) CUC.ShouldUnload = true;
+                                        actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
                                     }
-                                }
 
-                                if (splitThing != thing && actor.Map.reservationManager.ReservedBy(thing, actor, curJob))
-                                {
-                                    actor.Map.reservationManager.Release(thing, actor, curJob);
-                                }
 
+                                    if (!splitThing.Destroyed && splitThing.stackCount != 0)
+                                    {
+                                        targetQueue.Add(splitThing);
+
+                                        if (!InventorySpawned)
+                                        {
+                                            CompUnloadChecker CUC = splitThing.TryGetComp<CompUnloadChecker>();
+                                            if (CUC != null) CUC.ShouldUnload = true;
+                                        }
+                                    }
+
+                                    if (splitThing != thing && actor.Map.reservationManager.ReservedBy(thing, actor, curJob))
+                                    {
+                                        actor.Map.reservationManager.Release(thing, actor, curJob);
+                                    }
+
+                                }
                             }
-                        }
-                    };
+                        };
+                    }
 
                     Toil TakeToHands = new Toil();
                     TakeToHands.initAction = delegate ()
@@ -204,7 +211,7 @@ namespace CommonSense
                         Pawn actor = TakeToHands.actor;
                         Job curJob = actor.jobs.curJob;
                         List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
-                        if (!targetQueue.NullOrEmpty())
+                        if (!targetQueue.NullOrEmpty() && targetQueue[0].Thing.ParentHolder != actor.carryTracker)
                         {
                             actor.inventory.innerContainer.TryTransferToContainer(targetQueue[0].Thing, actor.carryTracker.innerContainer);
                             actor.Reserve(targetQueue[0], curJob);

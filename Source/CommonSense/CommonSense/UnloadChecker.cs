@@ -52,13 +52,11 @@ namespace CommonSense
 
         public static Thing getFirstMarked(Pawn pawn)
         {
-            Thing t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
-            if (!Settings.gui_manual_unload)
-                return t;
-            if (t == null)
-                t = pawn.equipment.AllEquipmentListForReading.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
-            if (t == null)
-                t = pawn.apparel.WornApparel.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            Thing t = null;
+            if(pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            if (!Settings.gui_manual_unload) return t;
+            if (t == null && pawn.equipment != null) t = pawn.equipment.AllEquipmentListForReading.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            if (t == null && pawn.apparel != null) t = pawn.apparel.WornApparel.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
             return t;
         }
     }
@@ -110,7 +108,8 @@ namespace CommonSense
             }
         }
     }
-
+    
+    /*
     [HarmonyPatch(typeof(ThingOwner), "ExposeData")]
     static class ThingOwnerThing_ExposeData_CommonSensePatch
     {
@@ -124,6 +123,7 @@ namespace CommonSense
             }
         }
     }
+    */
 
     [HarmonyPatch(typeof(JobGiver_UnloadYourInventory), "TryGiveJob", new Type[] { typeof(Pawn) })]
     static class JobGiver_UnloadYourInventory_TryGiveJob_CommonSensePatch
@@ -312,7 +312,7 @@ namespace CommonSense
         {
             if (!Settings.gui_manual_unload)
                 return true;
-                
+
             bool CanControlColonist = Traverse.Create(__instance).Property("CanControlColonist").GetValue<bool>(); 
             Rect rect = new Rect(0f, y, width, 28f);
 
@@ -350,8 +350,8 @@ namespace CommonSense
                         c.ShouldUnload = true;
                     }
                 }
+                width -= 24f;
             }
-            width -= 24f;
             return true;
         }
     }
