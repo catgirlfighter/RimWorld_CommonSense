@@ -157,7 +157,7 @@ namespace CommonSense
 
                     Toil PickUpThing;
                     List<LocalTargetInfo> L = __instance.job.GetTargetQueue(TargetIndex.B);
-                    if (L.Count < 2 && L[0].Thing.def.stackLimit < 2)
+                    if (L.Count < 2 && (L.Count == 0 || L[0].Thing.def.stackLimit < 2))
                         PickUpThing = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true);
                     else
                     {
