@@ -1,4 +1,8 @@
-﻿1.1.9
+﻿1.1.10
+- removed empty space at place of a button in inventories for items that can't be marked to unload;
+- made so that unstackable "single" items aren't placed in inventory when carried to a crafting place. That way designations on an item aren't canceled, and pawns will not try to "return" corpses and chucks into inventory when an action is canceled;
+
+1.1.9
 - fixed an issue, due to which pawns would reserve a stack of materials even if they already took a portion required from it;
 
 1.1.8
