@@ -22,7 +22,6 @@ namespace CommonSense
                     allowAllWhoCanMake = new List<ThingDef>();
                     Traverse.Create(__instance).Field("allowAllWhoCanMake").SetValue(allowAllWhoCanMake);
                     allowAllWhoCanMake.Add(thing);
-                    return false;
                 }
                 return true;
             }

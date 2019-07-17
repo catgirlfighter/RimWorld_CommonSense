@@ -1,4 +1,7 @@
-﻿1.1.10
+﻿1.1.11
+- fixed that one thing that broke carpenter's table mod.
+
+1.1.10
 - removed empty space at place of a button in inventories for items that can't be marked to unload;
 - made so that unstackable "single" items aren't placed in inventory when carried to a crafting place. That way designations on an item aren't canceled, and pawns will not try to "return" corpses and chucks into inventory when an action is canceled;
 
