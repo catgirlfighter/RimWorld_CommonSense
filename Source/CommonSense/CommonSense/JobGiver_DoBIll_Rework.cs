@@ -133,6 +133,27 @@ namespace CommonSense
                 //hauling patch
                 if (Settings.adv_haul_all_ings && __instance.pawn.Faction == Faction.OfPlayer)
                 {
+                    Toil checklist = new Toil();
+                    checklist.initAction = delegate ()
+                    {
+                        Pawn actor = checklist.actor;
+                        Job curJob = actor.jobs.curJob;
+                        List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
+                        if (targetQueue.NullOrEmpty())
+                            actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
+                        else
+                            foreach (var target in (targetQueue))
+                            {
+                                if (target == null || target.Thing.DestroyedOrNull())
+                                {
+                                    actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
+                                    break;
+                                }
+                            }
+                    };
+
+                    yield return checklist;
+
                     Toil extract = new Toil();
                     extract.initAction = delegate ()
                     {
@@ -164,7 +185,7 @@ namespace CommonSense
                         PickUpThing = new Toil();
                         PickUpThing.initAction = delegate ()
                         {
-                            Pawn actor = extract.actor;
+                            Pawn actor = PickUpThing.actor;
                             Job curJob = actor.jobs.curJob;
                             Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
                             List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);

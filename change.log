@@ -1,4 +1,12 @@
-﻿1.1.11
+﻿1.1.13
+- added a fix for an issue, that caused problems with opportunistic hauling before collecting items to a working place;
+
+1.1.12
+- made so doctors don't prioritize faster spoiling medicine for surgeries anymore;
+- made so pawns, that require medical attention, don't do opportunistic cleaning errands;
+- made so doctors don't clean after tending if their next job is also tending on a pawn that's in the same room or if it's an emergency (bleeding time < 6 hours). Keep in mind that it DOESN'T change, how doctors chose their patients.
+
+1.1.11
 - fixed that one thing that broke carpenter's table mod.
 
 1.1.10

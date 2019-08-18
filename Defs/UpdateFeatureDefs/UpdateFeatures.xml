@@ -94,4 +94,13 @@ This is probably the final changes to the mod. For now I've fulfilled all I want
 		<content>- when pawns unload inventory, their task actually get canceled midway if you unmark items or drop them;
 - if you unmark items to unload, and pawn doesn't have enough space in inventory, that item is dropped on the ground;</content>
 	</HugsLib.UpdateFeatureDef>
+	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
+		<defName>CS_1_1_12</defName>
+		<assemblyVersion>1.1.12</assemblyVersion>
+		<content>I'm sorry that fixes are kinda slow, but ATM I'm out of rimworld loop.
+- made so doctors don't prioritize faster spoiling medicine for surgeries anymore;
+- made so pawns, that require medical attention, don't do opportunistic cleaning errands;
+- made so doctors don't clean after tending if their next job is also tending on a pawn that's in the same room or if it's an emergency (bleeding time &lt; 6 hours). Keep in mind that it DOESN'T change, how doctors chose their patients.
+</content>
+	</HugsLib.UpdateFeatureDef>
 </Defs>

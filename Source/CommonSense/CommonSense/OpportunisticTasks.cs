@@ -6,6 +6,7 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 using UnityEngine;
+using System.Reflection;
 
 namespace CommonSense
 {
@@ -185,7 +186,8 @@ namespace CommonSense
                             return true;
                         }
 
-                        if (Settings.clean_before_work && (newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.def.joyKind != null))
+                    if (Settings.clean_before_work && (newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.def.joyKind != null)
+                        && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
                             job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
                     }
 
@@ -210,6 +212,12 @@ namespace CommonSense
         [HarmonyPatch(typeof(Pawn_JobTracker), "EndCurrentJob", new Type[] { typeof(JobCondition), typeof(bool) })]
         static class Pawn_JobTracker_EndCurrentJob_CommonSensePatch
         {
+            static bool ProperJob(Job job, Pawn pawn)
+            {
+                return job != null && job.def == JobDefOf.TendPatient && job.targetA != null && job.targetA.Thing != null &&
+                    job.targetA.Thing != pawn;
+            }
+
             static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition, bool startNewJob)
             {
                 if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || __instance.curJob == null)
@@ -222,11 +230,20 @@ namespace CommonSense
                         c.JoyToppedOff = true;
                 }
 
-                if (Settings.clean_after_tanding && condition == JobCondition.Succeeded &&
-                    __instance.curJob.def == JobDefOf.TendPatient && __instance.jobQueue != null &&
-                    __instance.jobQueue.Count == 0 && __instance.curJob.targetA != null && __instance.curJob.targetA.Thing != null && 
-                    __instance.curJob.targetA.Thing != __instance._pawn)
+                if (Settings.clean_after_tanding && condition == JobCondition.Succeeded && __instance.jobQueue != null &&
+                    __instance.jobQueue.Count == 0 && ProperJob(__instance.curJob, __instance._pawn))
                 {
+                    ThinkTreeDef thinkTree = null;
+                    MethodInfo mi = AccessTools.Method(typeof(Pawn_JobTracker), "DetermineNextJob");
+                    ThinkResult thinkResult = (ThinkResult)mi.Invoke(__instance, new object[] { thinkTree });
+                    if (ProperJob(thinkResult.Job, __instance._pawn))
+                    {
+                        Pawn pawn = (Pawn)thinkResult.Job.targetA.Thing;
+                        if (pawn.GetRoom() == __instance.curJob.targetA.Thing.GetRoom() || ((float)HealthUtility.TicksUntilDeathDueToBloodLoss(pawn) / 2500f) < 6)
+                            return true;
+                    }
+
+
                     Job job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, Settings.doc_clean_num);
                     if (job != null)
                         __instance.jobQueue.EnqueueFirst(job);

@@ -25,9 +25,9 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
         public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
-            public static bool Prefix(/*Thing billGiver, */List<Thing> availableThings)
+            public static bool Prefix(List<Thing> availableThings,  Bill bill)
             {
-                if (!Settings.prefer_spoiling_ingredients)
+                if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff == null)
                     return true;
 
                 availableThings.Sort(
