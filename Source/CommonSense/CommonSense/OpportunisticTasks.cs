@@ -186,7 +186,9 @@ namespace CommonSense
                             return true;
                         }
 
-                    if (Settings.clean_before_work && (newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) || newJob.def.joyKind != null)
+                    if (Settings.clean_before_work && (newJob.targetA.Thing != null 
+                        && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) && newJob.def != JobDefOf.PlaceNoCostFrame && newJob.def != JobDefOf.FinishFrame
+                        || newJob.def.joyKind != null)
                         && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
                             job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
                     }

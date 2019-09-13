@@ -27,18 +27,20 @@ namespace CommonSense
         {
             public static bool Prefix(List<Thing> availableThings,  Bill bill)
             {
-                if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff == null)
+
+                if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
                     return true;
 
                 availableThings.Sort(
                     delegate (Thing a, Thing b)
                     {
+
                         float p = a.GetStatValue(StatDefOf.MedicalPotency) - b.GetStatValue(StatDefOf.MedicalPotency);
                         if (p > 0)
                             return -1;
                         else if (p < 0)
                             return 1;
-                        
+
                         CompRottable compa = a.TryGetComp<CompRottable>();
                         CompRottable compb = b.TryGetComp<CompRottable>();
 
@@ -52,6 +54,7 @@ namespace CommonSense
                             return -1;
                         else
                         {
+
                             return (int)(compa.PropsRot.TicksToRotStart - compa.RotProgress) / 2500 - (int)(compb.PropsRot.TicksToRotStart - compb.RotProgress) / 2500;
                         }
                     }

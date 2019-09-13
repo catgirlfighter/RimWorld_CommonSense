@@ -1,4 +1,11 @@
-﻿1.1.13
+﻿1.1.15
+- fixed a minor incompatibility issue with Simple Food Priorities. SFP makes so pawns think that eating unprepared food isn't weird (conditionally), but counting nutrients in inventory still worked the old way. Added additional check to prevent pawns from taking food that is excluded from counting when pawn attempt to pick up meal "in advance".
+
+1.1.14
+- fixed the broken fix that supposed to make so prioritization of spoiling medicine didn't count for surgeries. It ended up another way around;
+- cleaning opportunities now ignored if it's an errand to build something;
+
+1.1.13
 - added a fix for an issue, that caused problems with opportunistic hauling before collecting items to a working place;
 
 1.1.12

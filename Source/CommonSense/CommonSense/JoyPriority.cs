@@ -78,6 +78,7 @@ namespace CommonSense
         static class JobGiver_PackFood_TryGiveJob_CommonSensePatch
         {
             static MethodInfo LGetInventoryPackableFoodNutrition = null;
+            static MethodInfo LIsGoodPackableFoodFor = null;
             static bool Prepare()
             {
 
@@ -85,6 +86,9 @@ namespace CommonSense
                 if (LGetInventoryPackableFoodNutrition == null)
                     throw new Exception("Can't get method JobGiver_PackFood.GetInventoryPackableFoodNutrition");
 
+                LIsGoodPackableFoodFor = AccessTools.Method(typeof(JobGiver_PackFood), "IsGoodPackableFoodFor");
+                if (LIsGoodPackableFoodFor == null)
+                    throw new Exception("Can't get method JobGiver_PackFood.IsGoodPackableFoodFor");
 
                 return true;
             }
@@ -132,10 +136,17 @@ namespace CommonSense
                     return false;
                 }
 
+                if(!(bool)LIsGoodPackableFoodFor.Invoke(__instance, new object[] { thing, pawn }))
+                {
+                    __result = null;
+                    return false;
+                }
+
                 float num = pawn.needs.food.MaxLevel - invNutrition;
                 int num2 = Mathf.FloorToInt(num / thing.GetStatValue(StatDefOf.Nutrition, true));
                 num2 = Mathf.Min(num2, thing.stackCount);
                 num2 = Mathf.Max(num2, 1);
+
                 __result = new Job(JobDefOf.TakeInventory, thing)
                 {
                     count = num2
