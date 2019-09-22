@@ -1,4 +1,7 @@
-﻿1.1.15
+﻿1.1.16
+- changed a thing about pathfinding to be wary of any kind of danger (not just "some") when looking for dirt;
+
+1.1.15
 - fixed a minor incompatibility issue with Simple Food Priorities. SFP makes so pawns think that eating unprepared food isn't weird (conditionally), but counting nutrients in inventory still worked the old way. Added additional check to prevent pawns from taking food that is excluded from counting when pawn attempt to pick up meal "in advance".
 
 1.1.14

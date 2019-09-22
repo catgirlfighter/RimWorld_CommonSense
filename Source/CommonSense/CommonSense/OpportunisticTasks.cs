@@ -76,7 +76,7 @@ namespace CommonSense
                     bool b = false;
                     if (Settings.calculate_full_path)
                     {
-                        PawnPath pawnPath = target.Map.pathFinder.FindPath(source, target, TraverseParms.For(TraverseMode.PassDoors, Danger.Some), PathEndMode.Touch);
+                        PawnPath pawnPath = target.Map.pathFinder.FindPath(source, target, TraverseParms.For(TraverseMode.PassDoors, Danger.None), PathEndMode.Touch);
                         if (!pawnPath.Found)
                         {
                             pawnPath.ReleaseToPool();
@@ -85,7 +85,7 @@ namespace CommonSense
                         stot = pawnPath.TotalCost;
                         pawnPath.ReleaseToPool();
 
-                        pawnPath = building.Map.pathFinder.FindPath(source, building, TraverseParms.For(TraverseMode.PassDoors, Danger.Some), PathEndMode.Touch);
+                        pawnPath = building.Map.pathFinder.FindPath(source, building, TraverseParms.For(TraverseMode.PassDoors, Danger.None), PathEndMode.Touch);
                         if (!pawnPath.Found)
                         {
                             pawnPath.ReleaseToPool();
@@ -94,7 +94,7 @@ namespace CommonSense
                         stob = pawnPath.TotalCost;
                         pawnPath.ReleaseToPool();
 
-                        pawnPath = target.Map.pathFinder.FindPath(building.Position, target, TraverseParms.For(TraverseMode.PassDoors, Danger.Some), PathEndMode.Touch);
+                        pawnPath = target.Map.pathFinder.FindPath(building.Position, target, TraverseParms.For(TraverseMode.PassDoors, Danger.None), PathEndMode.Touch);
                         if (!pawnPath.Found)
                         {
                             pawnPath.ReleaseToPool();

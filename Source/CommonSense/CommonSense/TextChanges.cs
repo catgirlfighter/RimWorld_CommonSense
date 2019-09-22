@@ -140,7 +140,7 @@ namespace CommonSense
                     foreach (var def in l)
                         __result += __result == "" ? def.label.CapitalizeFirst() : ", " + def.label.CapitalizeFirst();
                 }
-                else if (allowedDefs.Count > 0)
+                else if (allowedDefs != null && allowedDefs.Count > 0)
                 {
                     __result = "";
                     foreach (var thing in allowedDefs)
