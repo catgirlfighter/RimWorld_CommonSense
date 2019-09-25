@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ScribeMetaHeaderUtility_Patch.cs" />
-    <Compile Include="WorkGiver_CleanSnow.cs" />
+    <Compile Include="WorkGiver_ClearSnow.cs" />
     <Compile Include="FoodCountLimiter.cs" />
     <Compile Include="JoyPriority.cs" />
     <Compile Include="PatchBadHy.cs" />
