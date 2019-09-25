@@ -28,6 +28,7 @@ namespace CommonSense
         public static int op_clean_num = 5;
         public static int adv_clean_num = 5;
         public static int doc_clean_num = 0;
+        public static bool skip_snow_clean = true;
         private static Vector2 ScrollPos = Vector2.zero;
 
         public static void DoSettingsWindowContents(Rect inRect)
@@ -51,6 +52,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("hauling_over_bills_label".Translate(), ref hauling_over_bills, "hauling_over_bills_note".Translate());
             listing_Standard.CheckboxLabeled("prefer_spoiling_ingredients_label".Translate(), ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients_note".Translate());
             listing_Standard.CheckboxLabeled("put_back_to_inv_label".Translate(), ref put_back_to_inv, "put_back_to_inv_note".Translate());
+            listing_Standard.CheckboxLabeled("skip_snow_clean_label".Translate(), ref skip_snow_clean, "skip_snow_clean_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("meal_stacking_head".Translate());
@@ -103,6 +105,7 @@ namespace CommonSense
             Scribe_Values.Look(ref op_clean_num, "op_clean_num", 5, false);
             Scribe_Values.Look(ref adv_clean_num, "adv_clean_num", 5, false);
             Scribe_Values.Look(ref doc_clean_num, "doc_clean_num", 0, false);
+            Scribe_Values.Look(ref skip_snow_clean, "skip_snow_clean", true, false);
         }
     }
 }

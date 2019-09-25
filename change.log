@@ -1,4 +1,7 @@
-﻿1.1.16
+﻿1.1.17
+- added an option to prevent pawns from cleaning snow when it's... snowing. Or raining. In case if it's an uncertain weather.
+
+1.1.16
 - changed a thing about pathfinding to be wary of any kind of danger (not just "some") when looking for dirt;
 
 1.1.15

@@ -51,4 +51,6 @@
 	<op_clean_number_label>Filth limit for pre-task cleaning</op_clean_number_label>
 	<adv_clean_number_label>Filth limit for pre-bill cleaning</adv_clean_number_label>
 	<doc_clean_number_label>Filth limit for post-tending cleaning</doc_clean_number_label>
+	<skip_snow_clean_label>Pawns are discouraged to clear area from snow when it's snowing or raining</skip_snow_clean_label>
+	<skip_snow_clean_note>When raining just in case if it's a tricky weather</skip_snow_clean_note>
 </LanguageData>
