@@ -16,10 +16,11 @@ namespace CommonSense
         {
             static bool Prefix(ref bool __result, Pawn pawn)
             {
+                //Log.Message($"skip={Settings.skip_snow_clean},SnowRate={pawn.Map.weatherManager.SnowRate},RainRate={pawn.Map.weatherManager.RainRate}");
                 if (!Settings.skip_snow_clean || pawn.Map.weatherManager.SnowRate == 0 && pawn.Map.weatherManager.RainRate == 0)
                     return true;
 
-                __result = false;
+                __result = true;
                 return false;
             }
         }

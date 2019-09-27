@@ -232,7 +232,7 @@ namespace CommonSense
                         c.JoyToppedOff = true;
                 }
 
-                if (Settings.clean_after_tanding && condition == JobCondition.Succeeded && __instance.jobQueue != null &&
+                if (Settings.clean_after_tending && condition == JobCondition.Succeeded && __instance.jobQueue != null &&
                     __instance.jobQueue.Count == 0 && ProperJob(__instance.curJob, __instance._pawn))
                 {
                     ThinkTreeDef thinkTree = null;

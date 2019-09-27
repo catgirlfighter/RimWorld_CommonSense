@@ -11,7 +11,7 @@ namespace CommonSense
         public static bool fulfill_outdoors = true;
         public static bool odd_is_normal = false;
         public static bool clean_before_work = true;
-        public static bool clean_after_tanding = true;
+        public static bool clean_after_tending = true;
         public static bool calculate_full_path = true;
         public static bool add_meal_ingredients = false;
         public static bool add_to_que = true;
@@ -48,7 +48,7 @@ namespace CommonSense
             listing_Standard.Label("clean_head".Translate());
             listing_Standard.CheckboxLabeled("clean_before_working_label".Translate(), ref clean_before_work, "clean_before_working_note".Translate());
             //listing_Standard.CheckboxLabeled("add_to_que_label".Translate(), ref add_to_que, "add_to_que_note".Translate());
-            listing_Standard.CheckboxLabeled("clean_after_tending_label".Translate(), ref clean_after_tanding, "clean_after_tending_note".Translate());
+            listing_Standard.CheckboxLabeled("clean_after_tending_label".Translate(), ref clean_after_tending, "clean_after_tending_note".Translate());
             listing_Standard.CheckboxLabeled("hauling_over_bills_label".Translate(), ref hauling_over_bills, "hauling_over_bills_note".Translate());
             listing_Standard.CheckboxLabeled("prefer_spoiling_ingredients_label".Translate(), ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients_note".Translate());
             listing_Standard.CheckboxLabeled("put_back_to_inv_label".Translate(), ref put_back_to_inv, "put_back_to_inv_note".Translate());
@@ -88,7 +88,7 @@ namespace CommonSense
             Scribe_Values.Look(ref fulfill_outdoors, "fulfill_outdoors", true, false);
             Scribe_Values.Look(ref odd_is_normal, "odd_is_normal", false, false);
             Scribe_Values.Look(ref clean_before_work, "clean_before_work", true, false);
-            Scribe_Values.Look(ref clean_after_tanding, "clean_after_tanding", true, false);
+            Scribe_Values.Look(ref clean_after_tending, "clean_after_tending", true, false);
             Scribe_Values.Look(ref calculate_full_path, "calculate_full_path", true, false);
             Scribe_Values.Look(ref add_meal_ingredients, "add_meal_ingredients", false, false);
             Scribe_Values.Look(ref drugs_use_potential_mood, "drugs_use_potential_mood", true, false);
