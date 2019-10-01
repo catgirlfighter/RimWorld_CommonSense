@@ -51,8 +51,8 @@
 	<doc_clean_number_label>Лимит грязи для после-операционной чистки</doc_clean_number_label>
 	<skip_snow_clean_label>Пешки будут избегать чистку снега во время снегопада или дождя</skip_snow_clean_label>
 	<skip_snow_clean_note>Во время дожда на случай неопределенной погоды</skip_snow_clean_note>
-	<prefer_spoiling_meals_label>Пешки будут предпочитать еду, которая в скоре испортится</prefer_spoiling_ingredients_label>
-	<prefer_spoiling_meals_note>ПРЕДУПРЕЖДЕНИЕ: чем больше предметов на корте, тем выше риск лага</prefer_spoiling_ingredients_note>
+	<prefer_spoiling_meals_label>Пешки будут предпочитать еду, которая в скоре испортится</prefer_spoiling_meals_label>
+	<prefer_spoiling_meals_note>ПРЕДУПРЕЖДЕНИЕ: чем больше предметов на корте, тем выше риск лага</prefer_spoiling_meals_note>
 	<allow_feeding_with_plants_label>Разрешить пешка кормить зверей сеном, и они будут предпочитать сено.</allow_feeding_with_plants_label>
 	<allow_feeding_with_plants_note>Также животные будут предпочитать еду, которая мало пригодна для людей.</allow_feeding_with_plants_note>
 </LanguageData>
