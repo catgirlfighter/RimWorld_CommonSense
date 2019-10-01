@@ -44,7 +44,6 @@ namespace CommonSense
                         CompRottable compa = a.TryGetComp<CompRottable>();
                         CompRottable compb = b.TryGetComp<CompRottable>();
 
-                        //int r = a.Position.DistanceToSquared(billGiver.Position) - b.Position.DistanceToSquared(billGiver.Position);
                         if (compa == null)
                             if (compb == null)
                                 return 0;
@@ -69,12 +68,44 @@ namespace CommonSense
         {
             static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
             {
-                if (!Settings.prefer_spoiling_ingredients)
+                if(Settings.allow_feeding_with_plants && (eater.needs == null || eater.needs.mood == null))
+                {
+                    float modifier = 0f;
+                    FoodPreferability pref = foodDef.ingestible.preferability;
+                    if (eater.RaceProps.Eats(FoodTypeFlags.Plant) && foodDef.ingestible.foodType == FoodTypeFlags.Plant)
+                        modifier += 5f;
+                    switch (pref)
+                    {
+                        case FoodPreferability.DesperateOnlyForHumanlikes:
+                            modifier += 5f;
+                            break;
+                        case FoodPreferability.RawBad:
+                            modifier += 5f;
+                            break;
+                        case FoodPreferability.RawTasty:
+                            modifier -= 5f;
+                            break;
+                        case FoodPreferability.MealAwful:
+                            modifier += 5f;
+                            break;
+                        case FoodPreferability.MealFine:
+                            modifier -= 10f;
+                            break;
+                        case FoodPreferability.MealLavish:
+                            modifier -= 15f;
+                            break;
+                        default:
+                            modifier -= 5f;
+                            break;
+                    }
+                    __result += modifier;
+                }
+
+                if (!Settings.prefer_spoiling_meals)
                     return;
 
                 const float qday = 2500f * 6f;
                 const float aday = qday * 4f;
-                //const float ahour = 2500f;
                 CompRottable compRottable = foodSource.TryGetComp<CompRottable>();
                 if (compRottable != null)
                 {
@@ -82,10 +113,21 @@ namespace CommonSense
                     if (t > 0 && t < aday * 2f)
                     {
                         __result += (float)Math.Truncate((1f + (aday * 2f - t) / qday) * 3f);
-                        //Log.Message($"{foodSource},left={t},weight={__result}");
                     }
-                    //Log.Message($"{foodSource},left={t},weight={__result}({(float)Math.Truncate((1f + (aday * 2f - t) / qday) * 1.5f)})");
                 }
+            }
+        }
+
+        [HarmonyPatch(typeof(ThingListGroupHelper), nameof(ThingListGroupHelper.Includes))]
+        public static class ThingListGroupHelper_Includes_CommonSensePatch
+        {
+            static bool Prefix(ref bool __result, ThingRequestGroup group, ThingDef def)
+            {
+                if (!Settings.allow_feeding_with_plants || group != ThingRequestGroup.FoodSourceNotPlantOrTree)
+                    return true;
+
+                __result = (def.IsNutritionGivingIngestible && def.thingClass != typeof(Plant)) || def.thingClass == typeof(Building_NutrientPasteDispenser);
+                return false;
             }
         }
     }

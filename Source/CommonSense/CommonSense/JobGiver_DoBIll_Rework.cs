@@ -84,6 +84,7 @@ namespace CommonSense
                 //normal scenario
                 __instance.AddEndCondition(delegate
                 {
+                    //Log.Message("eCondition0");
                     Thing thing = __instance.GetActor().jobs.curJob.GetTarget(TargetIndex.A).Thing;
                     if (thing is Building && !thing.Spawned)
                     {
@@ -94,16 +95,19 @@ namespace CommonSense
                 __instance.FailOnBurningImmobile(TargetIndex.A);
                 __instance.FailOn(delegate ()
                 {
+                    //Log.Message("FailOn00");
                     if (__instance.job.GetTarget(TargetIndex.A).Thing is Filth)
                         return false;
                     
                     IBillGiver billGiver = __instance.job.GetTarget(TargetIndex.A).Thing as IBillGiver;
                     if (billGiver != null)
                     {
+                        //Log.Message("FailOn01");
                         if (__instance.job.bill.DeletedOrDereferenced)
                         {
                             return true;
                         }
+                        //Log.Message("FailOn02");
                         if (!billGiver.CurrentlyUsableForBills())
                         {
                             return true;

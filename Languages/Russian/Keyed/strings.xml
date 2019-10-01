@@ -45,4 +45,14 @@
 	<Category>Категория</Category>
 	<fun_police_label>Поощрять пешек восполнять необходимость в развлечениях если им пришлось проснуться во время сна по расписанию</fun_police_label>
 	<fun_police_note>Кроме того, пешки будут пытаться заполнить свою потребность только если она падает ниже 80% (вместо того, чтобы пытаться держать ее выше 95% в течении всего отдыха по расписанию)</fun_police_note>
+	<numbers_head>Изменяемые значения (0 = без лимита)</numbers_head>
+	<op_clean_number_label>Лимит грязи для пред-задачной уборки</op_clean_number_label>
+	<adv_clean_number_label>Лимит грязи для пред-крафтовой уборки</adv_clean_number_label>
+	<doc_clean_number_label>Лимит грязи для после-операционной чистки</doc_clean_number_label>
+	<skip_snow_clean_label>Пешки будут избегать чистку снега во время снегопада или дождя</skip_snow_clean_label>
+	<skip_snow_clean_note>Во время дожда на случай неопределенной погоды</skip_snow_clean_note>
+	<prefer_spoiling_meals_label>Пешки будут предпочитать еду, которая в скоре испортится</prefer_spoiling_ingredients_label>
+	<prefer_spoiling_meals_note>ПРЕДУПРЕЖДЕНИЕ: чем больше предметов на корте, тем выше риск лага</prefer_spoiling_ingredients_note>
+	<allow_feeding_with_plants_label>Разрешить пешка кормить зверей сеном, и они будут предпочитать сено.</allow_feeding_with_plants_label>
+	<allow_feeding_with_plants_note>Также животные будут предпочитать еду, которая мало пригодна для людей.</allow_feeding_with_plants_note>
 </LanguageData>

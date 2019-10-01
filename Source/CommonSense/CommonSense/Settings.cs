@@ -21,6 +21,8 @@ namespace CommonSense
         public static bool adv_haul_all_ings = true;
         public static bool gui_extended_recipe = true;
         public static bool prefer_spoiling_ingredients = true;
+        public static bool prefer_spoiling_meals = true;
+        public static bool allow_feeding_with_plants = true;
         public static bool gui_manual_unload = true;
         public static bool put_back_to_inv = true;
         public static bool pick_proper_amount = true;
@@ -51,6 +53,8 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("clean_after_tending_label".Translate(), ref clean_after_tending, "clean_after_tending_note".Translate());
             listing_Standard.CheckboxLabeled("hauling_over_bills_label".Translate(), ref hauling_over_bills, "hauling_over_bills_note".Translate());
             listing_Standard.CheckboxLabeled("prefer_spoiling_ingredients_label".Translate(), ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients_note".Translate());
+            listing_Standard.CheckboxLabeled("prefer_spoiling_meals_label".Translate(), ref prefer_spoiling_meals, "prefer_spoiling_meals_note".Translate());
+            listing_Standard.CheckboxLabeled("allow_feeding_with_plants_label".Translate(), ref allow_feeding_with_plants, "allow_feeding_with_plants_note".Translate());
             listing_Standard.CheckboxLabeled("put_back_to_inv_label".Translate(), ref put_back_to_inv, "put_back_to_inv_note".Translate());
             listing_Standard.CheckboxLabeled("skip_snow_clean_label".Translate(), ref skip_snow_clean, "skip_snow_clean_note".Translate());
 
@@ -96,11 +100,12 @@ namespace CommonSense
             Scribe_Values.Look(ref adv_haul_all_ings, "adv_haul_all_ings", true, false);
             Scribe_Values.Look(ref gui_extended_recipe, "extended_recipe", true, false);
             Scribe_Values.Look(ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients", true, false);
+            Scribe_Values.Look(ref prefer_spoiling_ingredients, "prefer_spoiling_meals", true, false);
+            Scribe_Values.Look(ref allow_feeding_with_plants, "allow_feeding_with_plants", true, false);
             Scribe_Values.Look(ref gui_manual_unload, "gui_manual_unload", true, false);
             Scribe_Values.Look(ref put_back_to_inv, "put_back_to_inv", true, false);
             Scribe_Values.Look(ref pick_proper_amount, "pick_proper_amount", true, false);
             Scribe_Values.Look(ref fun_police, "fun_police", true, false);
-            //Scribe_Values.Look(ref add_to_que, "add_to_que", false, false);
             Scribe_Values.Look(ref hauling_over_bills, "hauling_over_bills", true, false);
             Scribe_Values.Look(ref op_clean_num, "op_clean_num", 5, false);
             Scribe_Values.Look(ref adv_clean_num, "adv_clean_num", 5, false);

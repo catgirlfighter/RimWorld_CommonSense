@@ -34,7 +34,7 @@
 	<advanced_inbetween_cleaning_note>Basic behavior would let them clean only before hauling</advanced_inbetween_cleaning_note>
 	<advanced_haul_all_ings_label>Pawns are encouraged to pick up all ingredients before hauling them to the crafting place</advanced_haul_all_ings_label>
 	<advanced_haul_all_ings_note>Pawns will be taking all necessary ingredients to their hauling inventory before delivering them to the crafting place</advanced_haul_all_ings_note>
-	<prefer_spoiling_ingredients_label>Pawns are encouraged to use meals, ingredients and materials that spoil faster</prefer_spoiling_ingredients_label>
+	<prefer_spoiling_ingredients_label>Pawns are encouraged to ingredients and materials that spoil faster</prefer_spoiling_ingredients_label>
 	<prefer_spoiling_ingredients_note>WARNING: with more items to chose from it may start causing a lag</prefer_spoiling_ingredients_note>
 	<UnloadThing>Unload</UnloadThing>
 	<UnloadThingCancel>Cancel unload</UnloadThingCancel>
@@ -53,4 +53,8 @@
 	<doc_clean_number_label>Filth limit for post-tending cleaning</doc_clean_number_label>
 	<skip_snow_clean_label>Pawns are discouraged to clear area from snow when it's snowing or raining</skip_snow_clean_label>
 	<skip_snow_clean_note>When raining just in case if it's a tricky weather</skip_snow_clean_note>
+	<prefer_spoiling_meals_label>Pawns are encouraged to eat meals that spoil faster</prefer_spoiling_ingredients_label>
+	<prefer_spoiling_meals_note>WARNING: with more items to chose from it may start causing a lag</prefer_spoiling_ingredients_note>
+	<allow_feeding_with_plants_label>Allow pawns to feed animals with hay and encourage it.</allow_feeding_with_plants_label>
+	<allow_feeding_with_plants_note> Animals also encouraged to prefer non-human food more.</allow_feeding_with_plants_note>
 </LanguageData>

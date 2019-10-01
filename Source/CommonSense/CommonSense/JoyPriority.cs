@@ -136,12 +136,6 @@ namespace CommonSense
                     return false;
                 }
 
-                //if(pawn.inventory.Contains(thing))
-                //{
-                //    __result = null;
-                //    return false;
-                //}
-
                 if (!(bool)LIsGoodPackableFoodFor.Invoke(__instance, new object[] { thing, pawn }))
                 {
                     __result = null;
