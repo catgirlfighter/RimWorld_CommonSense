@@ -72,8 +72,13 @@ namespace CommonSense
                 {
                     float modifier = 0f;
                     FoodPreferability pref = foodDef.ingestible.preferability;
-                    if (eater.RaceProps.Eats(FoodTypeFlags.Plant) && foodDef.ingestible.foodType == FoodTypeFlags.Plant)
-                        modifier += 5f;
+                    if (eater.RaceProps.Eats(FoodTypeFlags.Plant))
+                    {
+                        if (foodDef.ingestible.foodType == FoodTypeFlags.Plant)
+                            modifier += 5f;
+                        if (foodSource is Plant)
+                            modifier += 25f;
+                    }
                     switch (pref)
                     {
                         case FoodPreferability.DesperateOnlyForHumanlikes:

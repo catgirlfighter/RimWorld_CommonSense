@@ -152,32 +152,34 @@ namespace CommonSense
 
             static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, JobCondition lastJobEndCondition, ThinkNode jobGiver, bool resumeCurJobAfterwards, bool cancelBusyStances, ThinkTreeDef thinkTree, JobTag? tag, bool fromQueue)
             {
-                if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || newJob == null  || newJob.def == null)
-                    return true;
-
-                if (Settings.fun_police && __instance._pawn.needs.joy != null && __instance._pawn.needs.joy.CurLevel < 0.8f)
+                try
                 {
-                    CompJoyToppedOff c = __instance._pawn.TryGetComp<CompJoyToppedOff>();
-                    if (c != null)
-                        c.JoyToppedOff = false;
-                }
+                    if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || newJob == null || newJob.def == null)
+                        return true;
 
-                if (!Settings.clean_before_work && !Settings.hauling_over_bills)
-                    return true;
-
-                if (!newJob.def.allowOpportunisticPrefix)
-                    return true;
-
-                Job job = null;
-
-                if (newJob.def == JobDefOf.DoBill)
-                { 
-                    if (Settings.hauling_over_bills)
+                    if (Settings.fun_police && __instance._pawn.needs.joy != null && __instance._pawn.needs.joy.CurLevel < 0.8f)
                     {
-                        job = Hauling_Opportunity(newJob, __instance._pawn);
+                        CompJoyToppedOff c = __instance._pawn.TryGetComp<CompJoyToppedOff>();
+                        if (c != null)
+                            c.JoyToppedOff = false;
                     }
-                }
-                else if (!newJob.playerForced && newJob.targetA != null && newJob.targetA.Cell != null)
+
+                    if (!Settings.clean_before_work && !Settings.hauling_over_bills)
+                        return true;
+
+                    if (!newJob.def.allowOpportunisticPrefix)
+                        return true;
+
+                    Job job = null;
+
+                    if (newJob.def == JobDefOf.DoBill)
+                    {
+                        if (Settings.hauling_over_bills)
+                        {
+                            job = Hauling_Opportunity(newJob, __instance._pawn);
+                        }
+                    }
+                    else if (!newJob.playerForced && newJob.targetA != null && newJob.targetA.Cell != null)
                     {
                         IntVec3 cell = newJob.targetA.Cell;
 
@@ -186,25 +188,30 @@ namespace CommonSense
                             return true;
                         }
 
-                    if (Settings.clean_before_work && (newJob.targetA.Thing != null 
-                        && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) && newJob.def != JobDefOf.PlaceNoCostFrame && newJob.def != JobDefOf.FinishFrame
-                        || newJob.def.joyKind != null)
-                        && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
+                        if (Settings.clean_before_work && (newJob.targetA.Thing != null
+                            && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) && newJob.def != JobDefOf.PlaceNoCostFrame && newJob.def != JobDefOf.FinishFrame
+                            || newJob.def.joyKind != null)
+                            && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
                             job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
                     }
 
-                //Log.Message($"pawn={__instance._pawn},job={newJob},enque={job}, limit = {Settings.op_clean_num}");
-                if (job != null)
-                {
-                    if (Settings.add_to_que)
+                    //Log.Message($"pawn={__instance._pawn},job={newJob},enque={job}, limit = {Settings.op_clean_num}");
+                    if (job != null)
                     {
-                        newJob.playerForced = true;
-                        __instance.jobQueue.EnqueueFirst(newJob);
+                        if (Settings.add_to_que)
+                        {
+                            newJob.playerForced = true;
+                            __instance.jobQueue.EnqueueFirst(newJob);
+                        }
+                        __instance.jobQueue.EnqueueFirst(job);
+                        //__instance.curJob = null;
+                        //__instance.curDriver = null;
+                        return false;
                     }
-                    __instance.jobQueue.EnqueueFirst(job);
-                    //__instance.curJob = null;
-                    //__instance.curDriver = null;
-                    return false;
+                }
+                catch(Exception e)
+                {
+                    Log.Error($"CommonSense: opportunistic task skipped due to error ({e.Message})");
                 }
                 return true;
             }

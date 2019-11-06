@@ -1,4 +1,10 @@
-﻿1.1.18
+﻿1.1.20
+- opportunistic task checker now reverts to default activity if error is occurred (i. e. instead of getting stuck in one error, it'll at least try to avoid it by leaving the rest to default behavior);
+
+1.1.19
+- increased interest of animals towards growing plants (over hay);
+
+1.1.18
 - separated options to prefer spoiling ingredients and meals;
 - added an option that allows pawns to feed animals with hay (and other plants that animals NORMALLY eat). Pawns also gonna PREFER feeding animals with hay (and animals gonna prefer plants over other sources of food). Kind of goes against my understanding, how taming should work (or how normal animal logic should happen), but that balance issue is too minor for me to take immediate action (maybe later).
 
