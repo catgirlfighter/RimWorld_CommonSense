@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <!-- settings -->
   <fulfill_outdoors_head>户外需求</fulfill_outdoors_head>
@@ -38,6 +38,8 @@
   <prefer_spoiling_ingredients_note>包括选择烹饪原料、食物、草药时。警告：如果选择范围内的东西数量过多，此选项有可能导致卡顿</prefer_spoiling_ingredients_note>
   <UnloadThing>放下物品</UnloadThing>
   <UnloadThingCancel>取消放下物品</UnloadThingCancel>
+  <manual_unload_label>在殖民者的货物中添加一个标记按钮以将其搬运到库存中。</manual_unload_label>
+  <manual_unload_note>如果储存区没有标记物的库存，殖民者会将物品丢在身边。</manual_unload_note>
   <put_back_to_inv_label>被打断时把手中的物品放回身上</put_back_to_inv_label>
   <put_back_to_inv_note>当小人把身上的物品拿在手上去做什么而中途被打断时，他们会把物品放回身上</put_back_to_inv_note>
   <pick_proper_amount_label>小人不会再拿多到吃不完的甜品去吃了</pick_proper_amount_label>
@@ -45,4 +47,15 @@
   <Category>分类</Category>
   <fun_police_label>如果小人在原本管制的睡眠时段中提早起床，会去满足自己的娱乐需求</fun_police_label>
   <fun_police_note>在此基础上，小人只会在娱乐度低于80%时才会去满足自己的娱乐需求，而不是永远试图将娱乐度保持在95%以上</fun_police_note>
+  <numbers_head>污秽容忍度(0=不控制)</numbers_head>
+  <op_clean_number_label>工作前打扫</op_clean_number_label>
+  <adv_clean_number_label>清单制作前打扫</adv_clean_number_label>
+  <doc_clean_number_label>护理后打扫</doc_clean_number_label>
+  <skip_snow_clean_label>当处于雪天和雨天时，小人将被禁止清理区域内的雪。</skip_snow_clean_label>
+  <skip_snow_clean_note>该选项是为了防止大雨或大雪这种糟糕的天气</skip_snow_clean_note>
+  <prefer_spoiling_meals_label>小人优先吃快要腐烂的食物</prefer_spoiling_meals_label>
+  <prefer_spoiling_meals_note>警告：如果选择范围内的东西数量过多，此选项有可能导致卡顿</prefer_spoiling_meals_note>
+  <allow_feeding_with_plants_label>小人优先使用干草喂养和训练动物。</allow_feeding_with_plants_label>
+  <allow_feeding_with_plants_note>动物优先更倾向于非小人食物。</allow_feeding_with_plants_note>
+
 </LanguageData>
