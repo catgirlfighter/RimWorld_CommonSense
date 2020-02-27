@@ -100,7 +100,7 @@ namespace CommonSense
             Scribe_Values.Look(ref adv_haul_all_ings, "adv_haul_all_ings", true, false);
             Scribe_Values.Look(ref gui_extended_recipe, "extended_recipe", true, false);
             Scribe_Values.Look(ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients", true, false);
-            Scribe_Values.Look(ref prefer_spoiling_ingredients, "prefer_spoiling_meals", true, false);
+            Scribe_Values.Look(ref prefer_spoiling_meals, "prefer_spoiling_meals", true, false);
             Scribe_Values.Look(ref allow_feeding_with_plants, "allow_feeding_with_plants", true, false);
             Scribe_Values.Look(ref gui_manual_unload, "gui_manual_unload", true, false);
             Scribe_Values.Look(ref put_back_to_inv, "put_back_to_inv", true, false);
