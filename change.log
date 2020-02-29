@@ -1,4 +1,10 @@
-﻿1.1.20
+﻿1.1.22
+- Updated for RimWorld 1.1! Now, that doesn't mean it works at least as good as before, because some things may be broken silently, without me knowing about it, so it may take a bit more time to fine tune everything.
+
+1.1.21
+- updated simplified chinese translation. Thanks, HawnHan.
+
+1.1.20
 - opportunistic task checker now reverts to default activity if error is occurred (i. e. instead of getting stuck in one error, it'll at least try to avoid it by leaving the rest to default behavior);
 
 1.1.19
