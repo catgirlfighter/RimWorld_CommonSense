@@ -1,4 +1,14 @@
-﻿1.1.22
+﻿1.1.24
+- fixed random ingredients appearing for cooked meals (caused by changes in 1.1);
+- fixed pawns not prioritizing faster spoiling ingredients (caused by changes in 1.1);
+
+1.1.23
+- officially added Harmony dependency. Now this mod requires a Harmony mod to work properly. Nothing really changed, because this mod've used Harmony assemblies since the beginning anyway;
+- changed, how actions are added to queue to be active after cleaning. Before they was added FORCED, so pawn could understand if he should try to take an opportunistic task again (opportunistic tasks are not taken for FORCED tasks). Now tasks are added to queue normally, and pawns also don't take opportunistic actions that was triggered from queue. It was changed so animals that set to follow pawns when they're on the job wouldn't "follow" the pawn WHILE he's asleep.
+- fixed an unintended ability to unload locked out items (from quest characters and etc). New feature that wasn't taken into account after adaptation to a new version;
+- fixed a bug that caused pawns to drop and pick up an item indefinitely when unloading. Item drop now triggered by different means than it used to be in 1.0.
+
+1.1.22
 - Updated for RimWorld 1.1! Now, that doesn't mean it works at least as good as before, because some things may be broken silently, without me knowing about it, so it may take a bit more time to fine tune everything.
 
 1.1.21

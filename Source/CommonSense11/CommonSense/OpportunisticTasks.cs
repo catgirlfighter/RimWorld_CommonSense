@@ -157,7 +157,7 @@ namespace CommonSense
         [HarmonyPatch(typeof(Pawn_JobTracker), "StartJob")]
         static class Pawn_JobTracker_StartJob_CommonSensePatch
         {
-            static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob)
+            static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, bool fromQueue)
             {
                 try
                 {
@@ -186,7 +186,7 @@ namespace CommonSense
                             job = Hauling_Opportunity(newJob, __instance._pawn);
                         }
                     }
-                    else if (!newJob.playerForced && newJob.targetA != null && newJob.targetA.Cell != null)
+                    else if (!fromQueue && !newJob.playerForced && newJob.targetA != null && newJob.targetA.Cell != null)
                     {
                         IntVec3 cell = newJob.targetA.Cell;
 
@@ -207,7 +207,7 @@ namespace CommonSense
                     {
                         if (Settings.add_to_que)
                         {
-                            newJob.playerForced = true;
+                            //newJob.playerForced = true;
                             __instance.jobQueue.EnqueueFirst(newJob);
                         }
                         __instance.jobQueue.EnqueueFirst(job);

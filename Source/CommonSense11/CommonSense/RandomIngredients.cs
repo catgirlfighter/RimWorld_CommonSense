@@ -54,11 +54,15 @@ namespace CommonSense
                     if (l == null)
                         return;
 
-                    ThingDef td = l.Where(
+                    l = l.Where(
                         x => x.IsIngestible && x.comps != null && !x.comps.Any(y => y.compClass == typeof(CompIngredients)) &&
                         !FoodUtility.IsHumanlikeMeat(x) && (x.ingestible.specialThoughtAsIngredient == null || x.ingestible.specialThoughtAsIngredient.stages == null
                         || x.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect >= 0)
-                    ).RandomElement();
+                    );
+
+                    ThingDef td = null;
+                    if (l.Count() > 0)
+                        td = l.RandomElement();
 
                     if (td != null)
                         ings.RegisterIngredient(td);
@@ -74,7 +78,8 @@ namespace CommonSense
 
             internal static void ClearIngs(CompIngredients ings)
             {
-                ings.ingredients.Clear();
+                if(ings != null)
+                    ings.ingredients.Clear();
             }
 
             internal static MethodBase TargetMethod()
@@ -89,23 +94,6 @@ namespace CommonSense
 
                 if (nestedTypeResult == null) throw new Exception($"Could not find {targetMethod} Iterator Class");
 
-                /*
-                if (ingredientsCompField == null)
-                {
-                    var fields = AccessTools.GetDeclaredFields(nestedTypeResult);
-                    foreach (var i in fields)
-                    {
-                        if (i.FieldType == typeof(CompIngredients))
-                            if (ingredientsCompField == null)
-                                ingredientsCompField = i;
-                            else
-                                throw new Exception("Multiple CompIngredients fields found");
-                    }
-                }
-
-                if (ingredientsCompField == null) throw new Exception($"Could not find (CompIngredients) in {nestedTypeResult.FullName}.DeclaredFields");
-                */
-
                 var result = AccessTools.Method(nestedTypeResult, "MoveNext");
 
                 if (result == null) throw new Exception($"Could not find MoveNext in {nestedTypeResult.FullName}");
@@ -117,18 +105,15 @@ namespace CommonSense
             internal static IEnumerable<CodeInstruction> CleanIngList(IEnumerable<CodeInstruction> instrs)
             {
 
-                CodeInstruction prei = null;
                 foreach (var i in (instrs))
                 {
                     yield return i;
 
-                    if (i.opcode == OpCodes.Brfalse && prei.opcode == OpCodes.Ldloc_S && (byte)prei.operand == 6)
+                    if (i.opcode == OpCodes.Stloc_S && i.operand is LocalBuilder && ((LocalBuilder)i.operand).LocalType == typeof(CompIngredients))
                     {
-                        yield return new CodeInstruction(OpCodes.Ldarg_0);
-                        yield return new CodeInstruction(OpCodes.Ldloc_S, (byte)6);
+                        yield return new CodeInstruction(OpCodes.Ldloc_S, i.operand);
                         yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GenRecipe_MakeRecipeProducts_CommonSensePatch), nameof(GenRecipe_TryDispenseFood_CommonSensePatch.ClearIngs), new Type[] { typeof(CompIngredients) }));
                     }
-                    prei = i;
                 }
             }
         }
@@ -145,12 +130,12 @@ namespace CommonSense
             [HarmonyTranspiler]
             public static IEnumerable<CodeInstruction> CleanIngList(IEnumerable<CodeInstruction> instrs)
             {
-                foreach (CodeInstruction instr in instrs)
+                foreach (CodeInstruction i in instrs)
                 {
-                    yield return instr;
-                    if (instr.opcode == OpCodes.Stloc_S && instr.operand is LocalBuilder && ((LocalBuilder)instr.operand).LocalType == typeof(CompIngredients))
+                    yield return i;
+                    if (i.opcode == OpCodes.Stloc_S && i.operand is LocalBuilder && ((LocalBuilder)i.operand).LocalType == typeof(CompIngredients))
                     {
-                        yield return new CodeInstruction(OpCodes.Ldloc_S, instr.operand);
+                        yield return new CodeInstruction(OpCodes.Ldloc_S, i.operand);
                         yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GenRecipe_MakeRecipeProducts_CommonSensePatch), nameof(GenRecipe_TryDispenseFood_CommonSensePatch.ClearIngs), new Type[] { typeof(CompIngredients) }));
                     }
                 }

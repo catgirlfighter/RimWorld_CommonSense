@@ -61,8 +61,25 @@ namespace CommonSense
         }
     }
 
+    //obsolete now, but left in case
     [HarmonyPatch(typeof(GenDrop), nameof(GenDrop.TryDropSpawn))]
-    static class GenPlace_TryPlaceThing_CommonSensePatch
+    static class GenPlace_TryDropSpawn_CommonSensePatch
+    {
+
+        static void Postfix(Thing thing, IntVec3 dropCell, Map map, ThingPlaceMode mode, Thing resultingThing, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator)
+        {
+            CompUnloadChecker UChecker = resultingThing.TryGetComp<CompUnloadChecker>();
+            if (UChecker != null)
+            {
+                UChecker.WasInInventory = false;
+                UChecker.ShouldUnload = false;
+            }
+
+        }
+    }
+
+    [HarmonyPatch(typeof(GenDrop), nameof(GenDrop.TryDropSpawn_NewTmp))]
+    static class GenPlace_TryDropSpawn_NewTmp_CommonSensePatch
     {
 
         static void Postfix(Thing thing, IntVec3 dropCell, Map map, ThingPlaceMode mode, Thing resultingThing, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator)
@@ -108,22 +125,6 @@ namespace CommonSense
             }
         }
     }
-    
-    /*
-    [HarmonyPatch(typeof(ThingOwner), "ExposeData")]
-    static class ThingOwnerThing_ExposeData_CommonSensePatch
-    {
-        static void Postfix(ThingOwner __instance)
-        {
-            if (__instance.Owner is Pawn_InventoryTracker && Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                for (int i = 0; i < __instance.Count; i++)
-                    if (__instance[i] != null)
-                        CompUnloadChecker.GetChecker(__instance[i], false, true);
-            }
-        }
-    }
-    */
 
     [HarmonyPatch(typeof(JobGiver_UnloadYourInventory), "TryGiveJob", new Type[] { typeof(Pawn) })]
     static class JobGiver_UnloadYourInventory_TryGiveJob_CommonSensePatch
@@ -243,7 +244,6 @@ namespace CommonSense
                 ticker++;
             };
             wait.defaultCompleteMode = ToilCompleteMode.Never;
-            //wait.JumpIf(() => ticker > duration, unequip);
             wait.WithProgressBar(TargetIndex.A, () => ticker / duration);
             //unequip to inventory
             yield return wait;
@@ -280,17 +280,6 @@ namespace CommonSense
                 }
             };
             Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate() { return !stillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing);  } );
-            /*
-            carryToCell.AddEndCondition(delegate
-                {
-                    Thing thing = carryToCell.GetActor().jobs.curJob.GetTarget(TargetIndex.B).Thing;
-                    if (thing.DestroyedOrNull() || !stillUnloadable(thing))
-                    {
-                        return JobCondition.Incompletable;
-                    }
-                    return JobCondition.Ongoing;
-                });
-            */
             yield return carryToCell;
             yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.B, carryToCell, true);
             yield break;
@@ -308,15 +297,55 @@ namespace CommonSense
     public static class ITab_Pawn_Gear_DrawThingRow_CommonSensePatch
     {
         static readonly Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
-        public static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory = false)
+
+        static bool IsBiocodedOrLinked(Pawn pawn, Thing thing, bool inventory)
+        {
+            if (pawn.IsQuestLodger())
+            {
+                if (inventory)
+                {
+                    return true;
+                }
+                else
+                {
+                    CompBiocodable compBiocodable = thing.TryGetComp<CompBiocodable>();
+                    if (compBiocodable != null && compBiocodable.Biocoded)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        CompBladelinkWeapon compBladelinkWeapon = thing.TryGetComp<CompBladelinkWeapon>();
+                        return (compBladelinkWeapon != null && compBladelinkWeapon.bondedPawn == pawn);
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        static bool IsLocked(Pawn pawn, Thing thing)
+        {
+            Apparel apparel;
+            return (apparel = (thing as Apparel)) != null && pawn.apparel != null && pawn.apparel.IsLocked(apparel);
+        }
+
+        public static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory)
         {
             if (!Settings.gui_manual_unload)
                 return true;
 
-            bool CanControlColonist = Traverse.Create(__instance).Property("CanControlColonist").GetValue<bool>(); 
+            bool CanControl = Traverse.Create(__instance).Property("CanControl").GetValue<bool>();
+            Pawn SelPawnForGear = Traverse.Create(__instance).Property("SelPawnForGear").GetValue<Pawn>();
             Rect rect = new Rect(0f, y, width, 28f);
 
-            if (CanControlColonist && (thing is ThingWithComps))
+            if (CanControl 
+                && (SelPawnForGear.IsColonistPlayerControlled ||  SelPawnForGear.Spawned && !SelPawnForGear.Map.IsPlayerHome) 
+                && (thing is ThingWithComps)
+                && !IsBiocodedOrLinked(SelPawnForGear, thing, inventory)
+                && !IsLocked(SelPawnForGear, thing))
             {
                 Rect rect2 = new Rect(rect.width - 24f, y, 24f, 24f);
                 CompUnloadChecker c = CompUnloadChecker.GetChecker(thing,false,true);
@@ -330,7 +359,7 @@ namespace CommonSense
                     {
                         SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                         c.ShouldUnload = false;
-                        Pawn SelPawnForGear = Traverse.Create(__instance).Property("SelPawnForGear").GetValue<Pawn>();
+
                         if (MassUtility.Capacity(SelPawnForGear, null) < MassUtility.GearAndInventoryMass(SelPawnForGear) 
                             && thing.stackCount * thing.GetStatValue(StatDefOf.Mass, true) > 0 
                             && !thing.def.destroyOnDrop)

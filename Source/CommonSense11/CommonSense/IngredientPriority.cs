@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -25,11 +27,11 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
         public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
-            public static bool Prefix(List<Thing> availableThings,  Bill bill)
-            {
 
+            static void doSort(List<Thing> availableThings, Bill bill)
+            {
                 if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
-                    return true;
+                    return;
 
                 availableThings.Sort(
                     delegate (Thing a, Thing b)
@@ -58,8 +60,22 @@ namespace CommonSense
                         }
                     }
                 );
+            }
 
-                return true;
+            [HarmonyTranspiler]
+            internal static IEnumerable<CodeInstruction> AddSort(IEnumerable<CodeInstruction> instrs)
+            {
+                foreach (var i in (instrs))
+                {
+                    yield return i;
+
+                    if (i.opcode == OpCodes.Callvirt && (MethodInfo)i.operand == typeof(List<Thing>).GetMethod(nameof(List<Thing>.Sort), new Type[] { typeof(Comparison<Thing>) } ))
+                    {
+                        yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        yield return new CodeInstruction(OpCodes.Ldarg_1);
+                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch), nameof(WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch.doSort)));
+                    }
+                }
             }
         }
 
