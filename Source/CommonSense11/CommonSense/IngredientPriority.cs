@@ -147,7 +147,8 @@ namespace CommonSense
                 if (!Settings.allow_feeding_with_plants || group != ThingRequestGroup.FoodSourceNotPlantOrTree)
                     return true;
 
-                __result = (def.IsNutritionGivingIngestible && def.thingClass != typeof(Plant)) || def.thingClass == typeof(Building_NutrientPasteDispenser);
+                Type TPlant = typeof(Plant);
+                __result = (def.IsNutritionGivingIngestible && def.thingClass != TPlant && !def.thingClass.IsSubclassOf(TPlant)) || def.thingClass == typeof(Building_NutrientPasteDispenser);
                 return false;
             }
         }

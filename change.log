@@ -1,4 +1,7 @@
-﻿1.1.24
+﻿1.1.25
+- made a minor tweak that might or might not help people with their "pawns feed trees to animals" issue;
+
+1.1.24
 - fixed random ingredients appearing for cooked meals (caused by changes in 1.1);
 - fixed pawns not prioritizing faster spoiling ingredients (caused by changes in 1.1);
 
