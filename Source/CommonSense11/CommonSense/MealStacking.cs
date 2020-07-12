@@ -15,6 +15,8 @@ namespace CommonSense
         {
             static int getflags(CompIngredients compIngredients)
             {
+                if (compIngredients?.ingredients == null)
+                    return 0;
                 int b = 0;
                 //0 - clean;
                 //1 - positive
@@ -22,17 +24,18 @@ namespace CommonSense
                 //4 - humanlike
 
                 foreach (var ing in compIngredients.ingredients)
-                    if (!ing.IsIngestible)
+                    if (ing == null)
+                        continue;
+                    else if (!ing.IsIngestible)
                         continue;
                     else if (FoodUtility.IsHumanlikeMeat(ing))
                         b = b | 4;
-                    else if (ing.ingestible.specialThoughtAsIngredient != null)
-                        if (ing.ingestible.specialThoughtAsIngredient.stages.Count > 0)
-                            //if(ing.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect > 0)
-                            //    b = b | 1;
-                            //else 
-                            if (!Settings.odd_is_normal && ing.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect < 0)
-                                b = b | 2;
+                    else if (ing.ingestible?.specialThoughtAsIngredient?.stages?.Count > 0)
+                        //if(ing.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect > 0)
+                        //    b = b | 1;
+                        //else 
+                        if (!Settings.odd_is_normal && ing.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect < 0)
+                            b = b | 2;
 
                 return b;
             }
