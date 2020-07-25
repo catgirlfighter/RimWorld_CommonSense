@@ -1,4 +1,7 @@
-﻿1.1.25
+﻿1.1.26
+- added a fix suggested by @BryanAldrich that supposed to fix some issue with forming a caravan;
+
+1.1.25
 - made a minor tweak that might or might not help people with their "pawns feed trees to animals" issue;
 
 1.1.24
