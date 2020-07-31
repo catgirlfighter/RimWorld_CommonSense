@@ -16,14 +16,7 @@ namespace CommonSense
         static private WorkTypeDef fCleaningDef = null;
         static public WorkTypeDef CleaningDef
         {
-            get
-            {
-                if (fCleaningDef == null)
-                {
-                    fCleaningDef = DefDatabase<WorkTypeDef>.GetNamed("Cleaning");
-                }
-                return fCleaningDef;
-            }
+            get => fCleaningDef ?? (fCleaningDef = DefDatabase<WorkTypeDef>.GetNamed("Cleaning"));
         }
 
         public static bool IncapableOfCleaning(Pawn pawn)
@@ -101,132 +94,65 @@ namespace CommonSense
         }
 
         static public void OptimizePath(List<LocalTargetInfo> q, Thing Starter)
-        {
-            if (q.Count > 0)
-            {
-                int x = 0;
-                int idx = 0;
-                int n = 0;
-                LocalTargetInfo out_of_all_things_they_didnt_add_a_simple_swap = null;
-
-                if (Starter != null)
-                {
-                    if (q[0].Cell == null)
-                        n = int.MaxValue;
-                    else
-                        n = q[0].Cell.DistanceToSquared(Starter.Position);
-
-                    for (int i = 1; i < q.Count(); i++)
-                    {
-                        if (q[i].Cell == null)
-                            continue;
-                        x = q[i].Cell.DistanceToSquared(Starter.Position);
-                        if (Math.Abs(x) < Math.Abs(n))
-                        {
-                            n = x;
-                            idx = i;
-                        }
-                    }
-
-                    if (idx != 0)
-                    {
-                        out_of_all_things_they_didnt_add_a_simple_swap = q[idx];
-                        q[idx] = q[0];
-                        q[0] = out_of_all_things_they_didnt_add_a_simple_swap;
-                    }
-                }
-
-                for (int i = 0; i < q.Count() - 1; i++)
-                {
-                    if (q[i + 1].Cell == null)
-                        continue;
-
-                    n = q[i].Cell.DistanceToSquared(q[i + 1].Cell);
-                    idx = i + 1;
-                    for (int c = i + 2; c < q.Count(); c++)
-                    {
-                        if (q[c].Cell == null)
-                            continue;
-
-                        x = q[i].Cell.DistanceToSquared(q[c].Cell);
-                        if (Math.Abs(x) < Math.Abs(n))
-                        {
-                            n = x;
-                            idx = c;
-                        }
-                    }
-
-                    if (idx != i + 1)
-                    {
-                        out_of_all_things_they_didnt_add_a_simple_swap = q[idx];
-                        q[idx] = q[i + 1];
-                        q[i + 1] = out_of_all_things_they_didnt_add_a_simple_swap;
-                    }
-                }
-            }
-        }
+            => OptimizePath(q, Starter?.Position, lti => lti.Cell);
 
         static public void OptimizePath(List<ThingCount> q, Thing Starter = null)
+            => OptimizePath(q, Starter?.Position, tc => tc.Thing.Position);
+
+        static private void OptimizePath<T>(List<T> q, IntVec3? startPosition, Func<T, IntVec3> position)
         {
             if (q.Count > 0)
             {
-                int x = 0;
+                int vertexCostOption = 0;
                 int idx = 0;
-                int n = 0;
-                ThingCount out_of_all_things_they_didnt_add_a_simple_swap = default(ThingCount);
+                int vertexCostCurrent = 0;
 
-                if (Starter != null)
+                if (startPosition != null)
                 {
-                    if (q[0].Thing.Position == null)
-                        n = int.MaxValue;
+                    if (startPosition.Value == null)
+                        vertexCostCurrent = int.MaxValue;
                     else
-                        n = q[0].Thing.Position.DistanceToSquared(Starter.Position);
+                        vertexCostCurrent = position(q[0]).DistanceToSquared(startPosition.Value);
 
                     for (int i = 1; i < q.Count(); i++)
                     {
-                        if (q[i].Thing.Position == null)
+                        var positionI = position(q[i]);
+                        if (positionI == null)  // are these null checks actually doing anything? It's a struct but that operator is overridden.
                             continue;
-                        x = q[i].Thing.Position.DistanceToSquared(Starter.Position);
-                        if (Math.Abs(x) < Math.Abs(n))
+                        vertexCostOption = positionI.DistanceToSquared(startPosition.Value);
+                        if (Math.Abs(vertexCostOption) < Math.Abs(vertexCostCurrent))
                         {
-                            n = x;
+                            vertexCostCurrent = vertexCostOption;
                             idx = i;
                         }
                     }
-                    if (idx != 0)
-                    {
-                        out_of_all_things_they_didnt_add_a_simple_swap = q[idx];
-                        q[idx] = q[0];
-                        q[0] = out_of_all_things_they_didnt_add_a_simple_swap;
-                    }
+                    q.SwapIndices(idx, 0);
                 }
 
                 for (int i = 0; i < q.Count() - 1; i++)
                 {
-                    if (q[i + 1].Thing.Position == null)
+                    var position1 = position(q[i + 1]);
+                    if (position1 == null)
                         continue;
 
-                    n = q[i].Thing.Position.DistanceToSquared(q[i + 1].Thing.Position);
+                    var position0 = position(q[i]);
+                    vertexCostCurrent = position0.DistanceToSquared(position1);
                     idx = i + 1;
                     for (int c = i + 2; c < q.Count(); c++)
                     {
-                        if (q[c].Thing.Position == null)
+                        var position2 = position(q[c]);
+                        if (position2 == null)
                             continue;
 
-                        x = q[i].Thing.Position.DistanceToSquared(q[c].Thing.Position);
-                        if (Math.Abs(x) < Math.Abs(n))
+                        vertexCostOption = position0.DistanceToSquared(position2);
+                        if (Math.Abs(vertexCostOption) < Math.Abs(vertexCostCurrent))
                         {
-                            n = x;
+                            vertexCostCurrent = vertexCostOption;
                             idx = c;
                         }
                     }
 
-                    if (idx != i + 1)
-                    {
-                        out_of_all_things_they_didnt_add_a_simple_swap = q[idx];
-                        q[idx] = q[i + 1];
-                        q[i + 1] = out_of_all_things_they_didnt_add_a_simple_swap;
-                    }
+                    q.SwapIndices(idx, i + 1);
                 }
             }
         }
