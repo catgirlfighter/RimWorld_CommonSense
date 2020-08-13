@@ -62,21 +62,21 @@ namespace CommonSense
     }
 
     //obsolete now, but left in case
-    [HarmonyPatch(typeof(GenDrop), nameof(GenDrop.TryDropSpawn))]
-    static class GenPlace_TryDropSpawn_CommonSensePatch
-    {
+    //[HarmonyPatch(typeof(GenDrop), nameof(GenDrop.TryDropSpawn))]
+    //static class GenPlace_TryDropSpawn_CommonSensePatch
+    //{
 
-        static void Postfix(Thing thing, IntVec3 dropCell, Map map, ThingPlaceMode mode, Thing resultingThing, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator)
-        {
-            CompUnloadChecker UChecker = resultingThing.TryGetComp<CompUnloadChecker>();
-            if (UChecker != null)
-            {
-                UChecker.WasInInventory = false;
-                UChecker.ShouldUnload = false;
-            }
+    //    static void Postfix(Thing thing, IntVec3 dropCell, Map map, ThingPlaceMode mode, Thing resultingThing, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator)
+    //    {
+    //        CompUnloadChecker UChecker = resultingThing.TryGetComp<CompUnloadChecker>();
+    //        if (UChecker != null)
+    //        {
+    //            UChecker.WasInInventory = false;
+    //            UChecker.ShouldUnload = false;
+    //        }
 
-        }
-    }
+    //    }
+    //}
 
     [HarmonyPatch(typeof(GenDrop), nameof(GenDrop.TryDropSpawn_NewTmp))]
     static class GenPlace_TryDropSpawn_NewTmp_CommonSensePatch
