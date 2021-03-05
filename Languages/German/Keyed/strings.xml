@@ -57,5 +57,6 @@
   <prefer_spoiling_meals_note>WARNUNG: mit mehr Gegenständen zur Auswahl kann es zu einer Verzögerung kommen</prefer_spoiling_meals_note>
   <allow_feeding_with_plants_label>Erlauben Sie den Kolonisten , die Tiere mit Heu zu füttern und ermutigen Sie sie dazu.</allow_feeding_with_plants_label>
   <allow_feeding_with_plants_note>Tiere bevorzugen auch nicht-menschliche Nahrung mehr.</allow_feeding_with_plants_note>
-
+  <give_sick_joy_drugs_label>Pawns are encouraged to give allowed social drugs or joy giving food to sick pawns</give_sick_joy_drugs_label>
+  <give_sick_joy_drugs_note>Why talk if you can give them a chocolate bar?</give_sick_joy_drugs_note>
 </LanguageData>

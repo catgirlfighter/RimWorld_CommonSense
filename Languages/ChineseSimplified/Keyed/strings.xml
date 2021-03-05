@@ -57,5 +57,6 @@
   <prefer_spoiling_meals_note>警告：如果选择范围内的东西数量过多，此选项有可能导致卡顿</prefer_spoiling_meals_note>
   <allow_feeding_with_plants_label>小人优先使用干草喂养和训练动物。</allow_feeding_with_plants_label>
   <allow_feeding_with_plants_note>动物优先更倾向于非小人食物。</allow_feeding_with_plants_note>
-
+  <give_sick_joy_drugs_label>Pawns are encouraged to give allowed social drugs or joy giving food to sick pawns</give_sick_joy_drugs_label>
+  <give_sick_joy_drugs_note>Why talk if you can give them a chocolate bar?</give_sick_joy_drugs_note>
 </LanguageData>

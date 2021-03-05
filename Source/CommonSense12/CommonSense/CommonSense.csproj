@@ -83,6 +83,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="UnloadChecker.cs" />
     <Compile Include="Utility.cs" />
+    <Compile Include="WorkGiver_VisitSickPawnPatches.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

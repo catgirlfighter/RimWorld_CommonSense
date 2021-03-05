@@ -55,4 +55,6 @@
 	<prefer_spoiling_meals_note>ПРЕДУПРЕЖДЕНИЕ: чем больше предметов на корте, тем выше риск лага</prefer_spoiling_meals_note>
 	<allow_feeding_with_plants_label>Разрешить пешка кормить зверей сеном, и они будут предпочитать сено.</allow_feeding_with_plants_label>
 	<allow_feeding_with_plants_note>Также животные будут предпочитать еду, которая мало пригодна для людей.</allow_feeding_with_plants_note>
+	<give_sick_joy_drugs_label>Поощрять пешек давать больным пешкам разрешенные соц. препараты или развлекательную еду</give_sick_joy_drugs_label>
+	<give_sick_joy_drugs_note>Зачем просто говорить если можно дать плитку шоколада?</give_sick_joy_drugs_note>
 </LanguageData>

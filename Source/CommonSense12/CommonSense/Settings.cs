@@ -30,6 +30,7 @@ namespace CommonSense
         public static int doc_clean_num = 0;
         public static bool skip_snow_clean = true;
         private static Vector2 ScrollPos = Vector2.zero;
+        public static bool give_sick_joy_drugs = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -43,6 +44,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("drugs_use_potential_mood_label".Translate(), ref drugs_use_potential_mood, "drugs_use_potential_mood_note".Translate());
             listing_Standard.CheckboxLabeled("pick_proper_amount_label".Translate(), ref pick_proper_amount, "pick_proper_amount_note".Translate());
             listing_Standard.CheckboxLabeled("fun_police_label".Translate(), ref fun_police, "fun_police_note".Translate());
+            listing_Standard.CheckboxLabeled("give_sick_joy_drugs_label".Translate(), ref give_sick_joy_drugs, "give_sick_joy_drugs_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("clean_head".Translate());
@@ -108,6 +110,7 @@ namespace CommonSense
             Scribe_Values.Look(ref adv_clean_num, "adv_clean_num", 5, false);
             Scribe_Values.Look(ref doc_clean_num, "doc_clean_num", 0, false);
             Scribe_Values.Look(ref skip_snow_clean, "skip_snow_clean", true, false);
+            Scribe_Values.Look(ref give_sick_joy_drugs, "give_sick_joy_drugs", true, false);
         }
     }
 }
