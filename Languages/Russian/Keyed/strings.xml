@@ -57,4 +57,6 @@
 	<allow_feeding_with_plants_note>Также животные будут предпочитать еду, которая мало пригодна для людей.</allow_feeding_with_plants_note>
 	<give_sick_joy_drugs_label>Поощрять пешек давать больным пешкам разрешенные соц. препараты или развлекательную еду</give_sick_joy_drugs_label>
 	<give_sick_joy_drugs_note>Зачем просто говорить если можно дать плитку шоколада?</give_sick_joy_drugs_note>
+	<social_relax_economy_label>Изменить, как пешки используют препараты когда социально расслабляются чтобы избежать их неэффективное использование</social_relax_economy_label>
+	<social_relax_economy_note>Обычно пешки сидят час или два прежде чем использовать препарат, бессмысленно тратя эффект</social_relax_economy_note>
 </LanguageData>

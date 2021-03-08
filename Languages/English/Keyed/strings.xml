@@ -59,4 +59,6 @@
 	<allow_feeding_with_plants_note> Animals also encouraged to prefer non-human food more.</allow_feeding_with_plants_note>
 	<give_sick_joy_drugs_label>Pawns are encouraged to give allowed social drugs or joy giving food to sick pawns</give_sick_joy_drugs_label>
 	<give_sick_joy_drugs_note>Why talk if you can give them a chocolate bar?</give_sick_joy_drugs_note>
+	<social_relax_economy_label>Change how pawns use drugs when relaxing socially to prevent them from "wasting joy"</social_relax_economy_label>
+	<social_relax_economy_note>Normally pawns sit down for a hour or two before actually consuming the drug, wasting the effect</social_relax_economy_note>
 </LanguageData>

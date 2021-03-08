@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JobDriver_SocialRelaxPatches.cs" />
     <Compile Include="ScribeMetaHeaderUtility_Patch.cs" />
     <Compile Include="WorkGiver_ClearSnow.cs" />
     <Compile Include="FoodCountLimiter.cs" />
