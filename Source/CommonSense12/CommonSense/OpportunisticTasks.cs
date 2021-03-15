@@ -195,24 +195,21 @@ namespace CommonSense
                             return true;
                         }
 
-                        if (Settings.clean_before_work && (newJob.targetA.Thing != null
+                        if (Settings.clean_before_work && (newJob.def == JobDefOf.PrisonerAttemptRecruit
+                            || newJob.targetA.Thing != null
                             && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) && newJob.def != JobDefOf.PlaceNoCostFrame && newJob.def != JobDefOf.FinishFrame
                             || newJob.def.joyKind != null)
                             && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
                             job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
                     }
 
-                    //Log.Message($"pawn={__instance._pawn},job={newJob},enque={job}, limit = {Settings.op_clean_num}");
                     if (job != null)
                     {
                         if (Settings.add_to_que)
                         {
-                            //newJob.playerForced = true;
                             __instance.jobQueue.EnqueueFirst(newJob);
                         }
                         __instance.jobQueue.EnqueueFirst(job);
-                        //__instance.curJob = null;
-                        //__instance.curDriver = null;
                         return false;
                     }
                 }

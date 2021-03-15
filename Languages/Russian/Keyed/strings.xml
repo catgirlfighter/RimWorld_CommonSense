@@ -59,4 +59,6 @@
 	<give_sick_joy_drugs_note>Зачем просто говорить если можно дать плитку шоколада?</give_sick_joy_drugs_note>
 	<social_relax_economy_label>Изменить, как пешки используют препараты когда социально расслабляются чтобы избежать их неэффективное использование</social_relax_economy_label>
 	<social_relax_economy_note>Обычно пешки сидят час или два прежде чем использовать препарат, бессмысленно тратя эффект</social_relax_economy_note>
+	<advanced_cleaning_ingest_label>Экспериментальный: пешки будут убираться когда едят за столом или социально отдыхают</advanced_cleaning_ingest_label>
+	<advanced_cleaning_ingest_note>Помогает, но реализация не особо изящная</advanced_cleaning_ingest_note>
 </LanguageData>

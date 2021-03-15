@@ -1,6 +1,11 @@
-﻿1.1.28
+﻿1.1.29
+- added an option to clean rooms where pawns are planning to eat (normally or when relaxing socially). Doesn't look very nice so it's disabled by default;
+- removed an option to prefer feeding animals with plant matter. Moved that functionaly to the new mod AnimalControls;
+
+1.1.28
+- added "talk to prisoner" to pre-cleaning tasks list;
 - added an option for pawns to give joy drugs or food to sick pawns instead of just talking to them;
-- added an option to change, how social relaxation uses drugs in order avoid "wasting joy";
+- added an option to change, how social relaxation uses drugs in order to avoid "wasting joy";
 
 1.1.27+
 - updated for 1.2;

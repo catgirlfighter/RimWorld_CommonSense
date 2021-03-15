@@ -111,7 +111,8 @@ This is probably the final changes to the mod. For now I've fulfilled all I want
 	<HugsLib.UpdateFeatureDef ParentName="CommonSense_UpdateFeatureBase">
 		<defName>CS_1_1_28</defName>
 		<assemblyVersion>1.1.28</assemblyVersion>
-		<content>-added an option for pawns to give joy drugs or food to sick pawns instead of just talking to them;
+		<content>- added "talk to prisoner" to pre-cleaning tasks list;
+-added an option for pawns to give joy drugs or food to sick pawns instead of just talking to them;
 - added an option to change, how social relaxation uses drugs in order avoid "wasting joy";</content>
 	</HugsLib.UpdateFeatureDef>
 </Defs>

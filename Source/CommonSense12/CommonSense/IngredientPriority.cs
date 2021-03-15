@@ -84,7 +84,8 @@ namespace CommonSense
         {
             static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
             {
-                if(Settings.allow_feeding_with_plants && (eater.needs == null || eater.needs.mood == null))
+                /*
+                if (Settings.allow_feeding_with_plants && (eater.needs == null || eater.needs.mood == null))
                 {
                     float modifier = 0f;
                     FoodPreferability pref = foodDef.ingestible.preferability;
@@ -121,6 +122,7 @@ namespace CommonSense
                     }
                     __result += modifier;
                 }
+                */
 
                 if (!Settings.prefer_spoiling_meals)
                     return;
@@ -139,6 +141,7 @@ namespace CommonSense
             }
         }
 
+        /*
         [HarmonyPatch(typeof(ThingListGroupHelper), nameof(ThingListGroupHelper.Includes))]
         public static class ThingListGroupHelper_Includes_CommonSensePatch
         {
@@ -152,5 +155,6 @@ namespace CommonSense
                 return false;
             }
         }
+        */
     }
 }

@@ -61,4 +61,6 @@
 	<give_sick_joy_drugs_note>Why talk if you can give them a chocolate bar?</give_sick_joy_drugs_note>
 	<social_relax_economy_label>Change how pawns use drugs when relaxing socially to prevent them from "wasting joy"</social_relax_economy_label>
 	<social_relax_economy_note>Normally pawns sit down for a hour or two before actually consuming the drug, wasting the effect</social_relax_economy_note>
+	<advanced_cleaning_ingest_label>Experimental: pawns will clean when eating at a table or relaxing socially</advanced_cleaning_ingest_label>
+	<advanced_cleaning_ingest_note>Helpful, but realisation isn't graceful</advanced_cleaning_ingest_note>
 </LanguageData>
