@@ -33,6 +33,7 @@ namespace CommonSense
         public static bool give_sick_joy_drugs = true;
         public static bool social_relax_economy = true;
         public static bool adv_cleaning_ingest = true;
+        public static bool mood_regen = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -77,6 +78,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("gen_ingredients_label".Translate(), ref add_meal_ingredients, "gen_ingredients_note".Translate());
             listing_Standard.CheckboxLabeled("extended_recipe_label".Translate(), ref gui_extended_recipe, "extended_recipe_note".Translate());
             listing_Standard.CheckboxLabeled("manual_unload_label".Translate(), ref gui_manual_unload, "manual_unload_note".Translate());
+            listing_Standard.CheckboxLabeled("mood_regen_label".Translate(), ref mood_regen, "mood_regen_note".Translate());
             listing_Standard.GapLine();
             listing_Standard.Label("numbers_head".Translate());
             string op_clean_num_str = op_clean_num.ToString();
@@ -117,6 +119,7 @@ namespace CommonSense
             Scribe_Values.Look(ref give_sick_joy_drugs, "give_sick_joy_drugs", true, false);
             Scribe_Values.Look(ref social_relax_economy, "social_relax_economy", true, false);
             Scribe_Values.Look(ref adv_cleaning_ingest, "adv_cleaning_ingest", false, false);
+            Scribe_Values.Look(ref mood_regen, "mood_regen", false, false);
         }
     }
 }

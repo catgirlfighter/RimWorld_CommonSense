@@ -61,4 +61,6 @@
 	<social_relax_economy_note>Обычно пешки сидят час или два прежде чем использовать препарат, бессмысленно тратя эффект</social_relax_economy_note>
 	<advanced_cleaning_ingest_label>Экспериментальный: пешки будут убираться когда едят за столом или социально отдыхают</advanced_cleaning_ingest_label>
 	<advanced_cleaning_ingest_note>Помогает, но реализация не особо изящная</advanced_cleaning_ingest_note>
+	<mood_regen_label>Настроение пешек медленно двигается в направлении 50% пока они спят, если возможно</mood_regen_label>
+	<mood_regen_note>Утро вечера мудренее</mood_regen_note>
 </LanguageData>

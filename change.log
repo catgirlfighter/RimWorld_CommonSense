@@ -1,6 +1,10 @@
-﻿1.1.29
+﻿1.1.29+
+- forgot to actually add an option to disable mood regen. Added it and disabled by default (because for unknown reason it does bad things to fps for some people);
+
+1.1.29
 - added an option to clean rooms where pawns are planning to eat (normally or when relaxing socially). Doesn't look very nice so it's disabled by default;
 - removed an option to prefer feeding animals with plant matter. Moved that functionaly to the new mod AnimalControls;
+- added an option for pawn's mood to move towards resting point while they sleep (but only if potential mood allows it). Means instead of "freezing" when pawn is a sleep, mood will slowly move towards 50% point.
 
 1.1.28
 - added "talk to prisoner" to pre-cleaning tasks list;
