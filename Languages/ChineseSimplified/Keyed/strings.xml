@@ -63,6 +63,6 @@
   <social_relax_economy_note>Normally pawns sit down for a hour or two before actually consuming the drug, wasting the effect</social_relax_economy_note>
   <advanced_cleaning_ingest_label>Experimental: pawns will clean when eating at a table or relaxing socially</advanced_cleaning_ingest_label>
   <advanced_cleaning_ingest_note>Helpful, but realisation isn't graceful</advanced_cleaning_ingest_note>
-  <mood_regen_label>Pawn's mood slowly moves thowards 50% while they're asleep if possible</mood_regen_label>
+  <mood_regen_label>Pawn's mood slowly moves towards 50% while they're asleep if possible</mood_regen_label>
   <mood_regen_note>Just let pawns "sleep on it"</mood_regen_note>
 </LanguageData>
