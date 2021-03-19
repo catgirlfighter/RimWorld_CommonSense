@@ -57,12 +57,12 @@
   <prefer_spoiling_meals_note>警告：如果选择范围内的东西数量过多，此选项有可能导致卡顿</prefer_spoiling_meals_note>
   <allow_feeding_with_plants_label>小人优先使用干草喂养和训练动物。</allow_feeding_with_plants_label>
   <allow_feeding_with_plants_note>动物优先更倾向于非小人食物。</allow_feeding_with_plants_note>
-  <give_sick_joy_drugs_label>Pawns are encouraged to give allowed social drugs or joy giving food to sick pawns</give_sick_joy_drugs_label>
-  <give_sick_joy_drugs_note>Why talk if you can give them a chocolate bar?</give_sick_joy_drugs_note>
-  <social_relax_economy_label>Change how pawns use drugs when relaxing socially to prevent them from "wasting joy"</social_relax_economy_label>
-  <social_relax_economy_note>Normally pawns sit down for a hour or two before actually consuming the drug, wasting the effect</social_relax_economy_note>
-  <advanced_cleaning_ingest_label>Experimental: pawns will clean when eating at a table or relaxing socially</advanced_cleaning_ingest_label>
-  <advanced_cleaning_ingest_note>Helpful, but realisation isn't graceful</advanced_cleaning_ingest_note>
-  <mood_regen_label>Pawn's mood slowly moves towards 50% while they're asleep if possible</mood_regen_label>
-  <mood_regen_note>Just let pawns "sleep on it"</mood_regen_note>
+  <give_sick_joy_drugs_label>小人更倾向于给予病人用药方针里允许的社交类成瘾品或提升娱乐值的食物</give_sick_joy_drugs_label>
+  <give_sick_joy_drugs_note>你直说给他们根巧克力棒就完事了嘛，扯那么多？</give_sick_joy_drugs_note>
+  <social_relax_economy_label>改变小人在社交放松中使用成瘾品的方式以避免"虚度光阴"</social_relax_economy_label>
+  <social_relax_economy_note>一般而言小人会在实际使用成瘾品前闲坐1~2小时，这浪费了成瘾品的功效</social_relax_economy_note>
+  <advanced_cleaning_ingest_label>实验性功能:小人在饭桌上进食或社交放松前清理周围地板</advanced_cleaning_ingest_label>
+  <advanced_cleaning_ingest_note>效果不错，但实现起来有难度</advanced_cleaning_ingest_note>
+  <mood_regen_label>条件允许的话入眠时小人心情缓慢向50%靠拢</mood_regen_label>
+  <mood_regen_note>"今日事明日毕"</mood_regen_note>
 </LanguageData>
