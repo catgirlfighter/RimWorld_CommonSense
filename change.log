@@ -1,4 +1,43 @@
-﻿1.1.20
+﻿1.1.29+
+- forgot to actually add an option to disable mood regen. Added it and disabled by default (because for unknown reason it does bad things to fps for some people);
+
+1.1.29
+- added an option to clean rooms where pawns are planning to eat (normally or when relaxing socially). Doesn't look very nice so it's disabled by default;
+- removed an option to prefer feeding animals with plant matter. Moved that functionaly to the new mod AnimalControls;
+- added an option for pawn's mood to move towards resting point while they sleep (but only if potential mood allows it). Means instead of "freezing" when pawn is a sleep, mood will slowly move towards 50% point.
+
+1.1.28
+- added "talk to prisoner" to pre-cleaning tasks list;
+- added an option for pawns to give joy drugs or food to sick pawns instead of just talking to them;
+- added an option to change, how social relaxation uses drugs in order to avoid "wasting joy";
+
+1.1.27+
+- updated for 1.2;
+- fixed HugLib's complain about patching obsolete methods;
+
+1.1.26
+- added a fix suggested by @BryanAldrich that supposed to fix some issue with forming a caravan;
+
+1.1.25
+- made a minor tweak that might or might not help people with their "pawns feed trees to animals" issue;
+
+1.1.24
+- fixed random ingredients appearing for cooked meals (caused by changes in 1.1);
+- fixed pawns not prioritizing faster spoiling ingredients (caused by changes in 1.1);
+
+1.1.23
+- officially added Harmony dependency. Now this mod requires a Harmony mod to work properly. Nothing really changed, because this mod've used Harmony assemblies since the beginning anyway;
+- changed, how actions are added to queue to be active after cleaning. Before they was added FORCED, so pawn could understand if he should try to take an opportunistic task again (opportunistic tasks are not taken for FORCED tasks). Now tasks are added to queue normally, and pawns also don't take opportunistic actions that was triggered from queue. It was changed so animals that set to follow pawns when they're on the job wouldn't "follow" the pawn WHILE he's asleep.
+- fixed an unintended ability to unload locked out items (from quest characters and etc). New feature that wasn't taken into account after adaptation to a new version;
+- fixed a bug that caused pawns to drop and pick up an item indefinitely when unloading. Item drop now triggered by different means than it used to be in 1.0.
+
+1.1.22
+- Updated for RimWorld 1.1! Now, that doesn't mean it works at least as good as before, because some things may be broken silently, without me knowing about it, so it may take a bit more time to fine tune everything.
+
+1.1.21
+- updated simplified chinese translation. Thanks, HawnHan.
+
+1.1.20
 - opportunistic task checker now reverts to default activity if error is occurred (i. e. instead of getting stuck in one error, it'll at least try to avoid it by leaving the rest to default behavior);
 
 1.1.19

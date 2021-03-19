@@ -57,5 +57,12 @@
   <prefer_spoiling_meals_note>警告：如果选择范围内的东西数量过多，此选项有可能导致卡顿</prefer_spoiling_meals_note>
   <allow_feeding_with_plants_label>小人优先使用干草喂养和训练动物。</allow_feeding_with_plants_label>
   <allow_feeding_with_plants_note>动物优先更倾向于非小人食物。</allow_feeding_with_plants_note>
-
+  <give_sick_joy_drugs_label>Pawns are encouraged to give allowed social drugs or joy giving food to sick pawns</give_sick_joy_drugs_label>
+  <give_sick_joy_drugs_note>Why talk if you can give them a chocolate bar?</give_sick_joy_drugs_note>
+  <social_relax_economy_label>Change how pawns use drugs when relaxing socially to prevent them from "wasting joy"</social_relax_economy_label>
+  <social_relax_economy_note>Normally pawns sit down for a hour or two before actually consuming the drug, wasting the effect</social_relax_economy_note>
+  <advanced_cleaning_ingest_label>Experimental: pawns will clean when eating at a table or relaxing socially</advanced_cleaning_ingest_label>
+  <advanced_cleaning_ingest_note>Helpful, but realisation isn't graceful</advanced_cleaning_ingest_note>
+  <mood_regen_label>Pawn's mood slowly moves towards 50% while they're asleep if possible</mood_regen_label>
+  <mood_regen_note>Just let pawns "sleep on it"</mood_regen_note>
 </LanguageData>
