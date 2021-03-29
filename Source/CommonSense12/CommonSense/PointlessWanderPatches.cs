@@ -52,11 +52,11 @@ namespace CommonSense
                 return true;
 
 
-            Predicate<IntVec3> cellValidator = (IntVec3 x) => !PawnUtility.KnownDangerAt(x, pawn.Map, pawn) && !x.GetTerrain(pawn.Map).avoidWander && x.Standable(pawn.Map) && x.Roofed(pawn.Map);
+            Predicate<IntVec3> cellValidator = (IntVec3 x) => pawn.Map.areaManager.Home[x] && !PawnUtility.KnownDangerAt(x, pawn.Map, pawn) && !x.GetTerrain(pawn.Map).avoidWander && x.Standable(pawn.Map) && x.Roofed(pawn.Map);
             Predicate<Region> validator = delegate (Region x)
             {
                 IntVec3 intVec;
-                return x.OverlapWith(pawn.Map.areaManager.Home) > AreaOverlap.None /*&& !x.Room.PsychologicallyOutdoors*/ && !x.IsForbiddenEntirely(pawn) && x.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out intVec);
+                return x.OverlapWith(pawn.Map.areaManager.Home) > AreaOverlap.None && !x.IsForbiddenEntirely(pawn) && x.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out intVec);
             };
             Region reg;
             if (!CellFinder.TryFindClosestRegionWith(pawn.GetRegion(RegionType.Set_Passable), TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), validator, 100, out reg, RegionType.Set_Passable))
