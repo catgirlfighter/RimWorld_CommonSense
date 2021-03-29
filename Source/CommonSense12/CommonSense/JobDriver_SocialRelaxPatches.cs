@@ -134,18 +134,12 @@ namespace CommonSense
                 {
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
                     var progQue = clean.actor.jobs.curJob.GetTargetQueue(TargetIndex.B);
-                    //x = billStartTick, y = ticksSpentDoingRecipeWork, z = workLeft;
                     progQue[0] = new IntVec3(0, 0, (int)filth.def.filth.cleaningWorkToReduceThickness * filth.thickness);
-                    //driver.billStartTick = 0;
-                    //driver.ticksSpentDoingRecipeWork = 0;
-                    //driver.workLeft = filth.def.filth.cleaningWorkToReduceThickness * filth.thickness;
                 };
                 clean.tickAction = delegate ()
                 {
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
                     var progQue = clean.actor.jobs.curJob.GetTargetQueue(TargetIndex.B);
-                    //driver.billStartTick += 1;
-                    //driver.ticksSpentDoingRecipeWork += 1;
                     IntVec3 iv = progQue[0].Cell;
                     iv.x += 1;
                     iv.y += 1;
@@ -153,7 +147,6 @@ namespace CommonSense
                     {
                         filth.ThinFilth();
                         iv.x = 0;
-                        progQue[0] = iv;
                         if (filth.Destroyed)
                         {
                             clean.actor.records.Increment(RecordDefOf.MessesCleaned);
@@ -165,12 +158,19 @@ namespace CommonSense
                 };
                 clean.defaultCompleteMode = ToilCompleteMode.Never;
                 clean.WithEffect(EffecterDefOf.Clean, TargetIndex.A);
-                clean.WithProgressBar(TargetIndex.A, () => driver.job.GetTargetQueue(TargetIndex.B)[0].Cell.y / driver.job.GetTargetQueue(TargetIndex.B)[0].Cell.z, true, -0.5f);
+                clean.WithProgressBar(TargetIndex.A,
+                    delegate ()
+                    {
+                        var q = driver.job.GetTargetQueue(TargetIndex.B)[0];
+                        float result = (float)q.Cell.y / q.Cell.z;
+                        return result;
+                    }
+                    , true, -0.5f);
                 clean.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
-                clean.JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, FilthList);
-                clean.JumpIfOutsideHomeArea(TargetIndex.A, FilthList);
+                clean.JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList);
+                clean.JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
                 yield return clean;
-                yield return Toils_Jump.Jump(FilthList);
+                yield return Toils_Jump.Jump(CleanFilthList);
             }
 
             yield return GoToRelaxPlace;

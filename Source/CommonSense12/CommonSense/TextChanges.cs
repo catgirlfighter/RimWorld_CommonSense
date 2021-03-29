@@ -53,11 +53,20 @@ namespace CommonSense
             }
         }
 
-        public static StatDrawEntry CategoryEntry(ThingCategoryDef tcDef)
+        static string GetCategList(List<ThingCategoryDef> list)
         {
-
-            return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), GetCategoryPath(tcDef), ShortCategory(tcDef), 1000);
+            //if (list.NullOrEmpty()) return "NoCategory".Translate().CapitalizeFirst();
+            string s = "";
+            foreach (var i in list)
+                s += GetCategoryPath(i) + "\n";
+            if (s == "") return "NoCategory".Translate().CapitalizeFirst();
+            else return s;
         }
+
+        //public static StatDrawEntry CategoryEntry(ThingCategoryDef tcDef)
+        //{
+        //    return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), GetCategoryPath(tcDef), ShortCategory(tcDef), 1000);
+        //}
 
         static IEnumerable<StatDrawEntry> CategoryEntryRow(Thing thing)
         {
@@ -65,7 +74,7 @@ namespace CommonSense
             if (thing == null || thing.def == null || (d = thing.def.FirstThingCategory) == null)
                 yield break;
             
-            yield return CategoryEntry(d);
+            yield return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), GetCategoryPath(d), GetCategList(thing.def.thingCategories), 1000);
         }
 
         //public static void DrawStatsReport(Rect rect, Thing thing)
