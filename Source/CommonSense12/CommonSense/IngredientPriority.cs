@@ -55,7 +55,6 @@ namespace CommonSense
                             return -1;
                         else
                         {
-
                             return (int)(compa.PropsRot.TicksToRotStart - compa.RotProgress) / 2500 - (int)(compb.PropsRot.TicksToRotStart - compb.RotProgress) / 2500;
                         }
                     }
@@ -84,45 +83,6 @@ namespace CommonSense
         {
             static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
             {
-                /*
-                if (Settings.allow_feeding_with_plants && (eater.needs == null || eater.needs.mood == null))
-                {
-                    float modifier = 0f;
-                    FoodPreferability pref = foodDef.ingestible.preferability;
-                    if (eater.RaceProps.Eats(FoodTypeFlags.Plant))
-                    {
-                        if (foodDef.ingestible.foodType == FoodTypeFlags.Plant)
-                            modifier += 5f;
-                        if (foodSource is Plant)
-                            modifier += 25f;
-                    }
-                    switch (pref)
-                    {
-                        case FoodPreferability.DesperateOnlyForHumanlikes:
-                            modifier += 5f;
-                            break;
-                        case FoodPreferability.RawBad:
-                            modifier += 5f;
-                            break;
-                        case FoodPreferability.RawTasty:
-                            modifier -= 5f;
-                            break;
-                        case FoodPreferability.MealAwful:
-                            modifier += 5f;
-                            break;
-                        case FoodPreferability.MealFine:
-                            modifier -= 10f;
-                            break;
-                        case FoodPreferability.MealLavish:
-                            modifier -= 15f;
-                            break;
-                        default:
-                            modifier -= 5f;
-                            break;
-                    }
-                    __result += modifier;
-                }
-                */
 
                 if (!Settings.prefer_spoiling_meals)
                     return;
@@ -141,20 +101,5 @@ namespace CommonSense
             }
         }
 
-        /*
-        [HarmonyPatch(typeof(ThingListGroupHelper), nameof(ThingListGroupHelper.Includes))]
-        public static class ThingListGroupHelper_Includes_CommonSensePatch
-        {
-            static bool Prefix(ref bool __result, ThingRequestGroup group, ThingDef def)
-            {
-                if (!Settings.allow_feeding_with_plants || group != ThingRequestGroup.FoodSourceNotPlantOrTree)
-                    return true;
-
-                Type TPlant = typeof(Plant);
-                __result = (def.IsNutritionGivingIngestible && def.thingClass != TPlant && !def.thingClass.IsSubclassOf(TPlant)) || def.thingClass == typeof(Building_NutrientPasteDispenser);
-                return false;
-            }
-        }
-        */
     }
 }

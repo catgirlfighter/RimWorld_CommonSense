@@ -321,10 +321,10 @@ namespace CommonSense
                 clean.WithEffect(EffecterDefOf.Clean, TargetIndex.A);
                 clean.WithProgressBar(TargetIndex.A, () => __instance.ticksSpentDoingRecipeWork / __instance.workLeft, true, -0.5f);
                 clean.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
-                clean.JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, FilthList);
-                clean.JumpIfOutsideHomeArea(TargetIndex.A, FilthList);
+                clean.JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList);
+                clean.JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
                 yield return clean;
-                yield return Toils_Jump.Jump(FilthList);
+                yield return Toils_Jump.Jump(CleanFilthList);
                 yield return returnToBillGiver;
             }
 

@@ -61,8 +61,10 @@
   <give_sick_joy_drugs_note>你直说给他们根巧克力棒就完事了嘛，扯那么多？</give_sick_joy_drugs_note>
   <social_relax_economy_label>改变小人在社交放松中使用成瘾品的方式以避免"虚度光阴"</social_relax_economy_label>
   <social_relax_economy_note>一般而言小人会在实际使用成瘾品前闲坐1~2小时，这浪费了成瘾品的功效</social_relax_economy_note>
-  <advanced_cleaning_ingest_label>实验性功能:小人在饭桌上进食或社交放松前清理周围地板</advanced_cleaning_ingest_label>
-  <advanced_cleaning_ingest_note>效果不错，但实现起来有难度</advanced_cleaning_ingest_note>
+  <advanced_cleaning_ingest_label>Pawns are encouraged to clean before eating at a table or relaxing socially</advanced_cleaning_ingest_label>
+  <advanced_cleaning_ingest_note>Pawns will clean around the table where they're planning to sit</advanced_cleaning_ingest_note>
   <mood_regen_label>条件允许的话入眠时小人心情缓慢向50%靠拢</mood_regen_label>
   <mood_regen_note>"今日事明日毕"</mood_regen_note>
+  <safe_wander_label>Pawns are encouraged to avoid bad weather when wandering aimlessly</safe_wander_label>
+  <safe_wander_note>Just stop walking out into the toxic fallout, you idiots</safe_wander_note>
 </LanguageData>

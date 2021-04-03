@@ -39,7 +39,6 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_UseToilet")) != null)
                 {
-                    //Log.Message($"patching {type}");
                     if ((target = AccessTools.Method(type, "GetPriority"))==null)
                     {
                         Log.Error($"Couldn't get {type}.GetPriority");
@@ -51,8 +50,6 @@ namespace CommonSense
                         Log.Error($"Couldn't get class Need_Bladder");
                         return false;
                     }
-                    //TNeed_Hygiene = AccessTools.TypeByName("Need_Hygiene");
-                    //TNeed_Thirst = AccessTools.TypeByName("Need_Thirst");
                     return true;
                 }
                 return false;
@@ -117,7 +114,6 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_HaveWash")) != null)
                 {
-                    //Log.Message($"patching {type}");
                     if ((target = AccessTools.Method(type, "GetPriority")) == null)
                     {
                         Log.Error($"Couldn't get {type}.GetPriority");
@@ -194,7 +190,6 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_DrinkWater")) != null)
                 {
-                    //Log.Message($"patching {type}");
                     if ((target = AccessTools.Method(type, "GetPriority")) == null)
                     {
                         Log.Error($"Couldn't get {type}.GetPriority");
