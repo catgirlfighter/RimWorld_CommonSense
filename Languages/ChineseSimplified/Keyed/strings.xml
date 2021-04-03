@@ -30,7 +30,7 @@
   <extended_recipe_label>配方可以显示完整的原料表</extended_recipe_label>
   <extended_recipe_note>而不是模糊不清的“原料”</extended_recipe_note>
   <advanced_head>高级智能</advanced_head>
-  <advanced_inbetween_cleaning_label>小人会在搬运之后、制作之前清洁房间</advanced_inbetween_cleaning_label>
+  <advanced_inbetween_cleaning_label>小人会在搬运之后、制作之前清扫房间</advanced_inbetween_cleaning_label>
   <advanced_inbetween_cleaning_note>前面的“机智地工作”中的功能只会让他们在搬运前清理房间</advanced_inbetween_cleaning_note>
   <advanced_haul_all_ings_label>小人会在制作前把所有的原材料搬运到制作处</advanced_haul_all_ings_label>
   <advanced_haul_all_ings_note>小人会把所有需要的原材料放到自己的身上，然后一起拿到制作的地方进行制作</advanced_haul_all_ings_note>
@@ -56,13 +56,15 @@
   <prefer_spoiling_meals_label>小人优先吃快要腐烂的食物</prefer_spoiling_meals_label>
   <prefer_spoiling_meals_note>警告：如果选择范围内的东西数量过多，此选项有可能导致卡顿</prefer_spoiling_meals_note>
   <allow_feeding_with_plants_label>小人优先使用干草喂养和训练动物。</allow_feeding_with_plants_label>
-  <allow_feeding_with_plants_note>动物优先更倾向于非小人食物。</allow_feeding_with_plants_note>
+  <allow_feeding_with_plants_note>动物更倾向于非小人食物。</allow_feeding_with_plants_note>
   <give_sick_joy_drugs_label>小人更倾向于给予病人用药方针里允许的社交类成瘾品或提升娱乐值的食物</give_sick_joy_drugs_label>
   <give_sick_joy_drugs_note>你直说给他们根巧克力棒就完事了嘛，扯那么多？</give_sick_joy_drugs_note>
-  <social_relax_economy_label>改变小人在社交放松中使用成瘾品的方式以避免"虚度光阴"</social_relax_economy_label>
+  <social_relax_economy_label>改变小人在社交放松中使用成瘾品的方式来避免"虚耗良辰"</social_relax_economy_label>
   <social_relax_economy_note>一般而言小人会在实际使用成瘾品前闲坐1~2小时，这浪费了成瘾品的功效</social_relax_economy_note>
-  <advanced_cleaning_ingest_label>实验性功能:小人在饭桌上进食或社交放松前清理周围地板</advanced_cleaning_ingest_label>
-  <advanced_cleaning_ingest_note>效果不错，但实现起来有难度</advanced_cleaning_ingest_note>
+  <advanced_cleaning_ingest_label>小人倾向于在进食或社交放松前清扫桌子周围</advanced_cleaning_ingest_label>
+  <advanced_cleaning_ingest_note>小人在入座前会清扫桌子周围</advanced_cleaning_ingest_note>
   <mood_regen_label>条件允许的话入眠时小人心情缓慢向50%靠拢</mood_regen_label>
-  <mood_regen_note>"今日事明日毕"</mood_regen_note>
+  <mood_regen_note>"来日方长"</mood_regen_note>
+  <safe_wander_label>小人在闲逛时尽量避免坏天气的影响</safe_wander_label>
+  <safe_wander_note>笨比你能别在毒雾里漫步了吗？</safe_wander_note>
 </LanguageData>
