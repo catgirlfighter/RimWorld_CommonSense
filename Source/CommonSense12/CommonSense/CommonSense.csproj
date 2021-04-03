@@ -66,7 +66,7 @@
     <Compile Include="JobDriver_IngestPatches.cs" />
     <Compile Include="JobDriver_SocialRelaxPatches.cs" />
     <Compile Include="Need_MoodPatches.cs" />
-    <Compile Include="ScribeMetaHeaderUtility_Patch.cs" />
+    <Compile Include="PointlessWanderPatches.cs" />
     <Compile Include="WorkGiver_ClearSnow.cs" />
     <Compile Include="FoodCountLimiter.cs" />
     <Compile Include="JoyPriority.cs" />

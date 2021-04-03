@@ -31,7 +31,6 @@ namespace CommonSense
             return pawn.def.race == null ||
                 (int)pawn.def.race.intelligence < 2 ||
                 pawn.Faction != Faction.OfPlayer ||
-                //pawn.Drafted || 
                 (int)pawn.RaceProps.intelligence < 2 ||
                 pawn.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
                 pawn.InMentalState || pawn.IsBurning() ||
@@ -79,7 +78,6 @@ namespace CommonSense
             else
                 enumerable = room.ContainedAndAdjacentThings.OfType<Filth>().Where(delegate (Filth f)
                 {
-                    //Log.Message(f.ToString() + "," + f.Destroyed.ToString()+","+ f.Position.InAllowedArea(pawn).ToString()+","+ ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f).ToString());
                     if (f == null || f.Destroyed || !f.Position.InAllowedArea(pawn) || !((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f))
                         return false;
 

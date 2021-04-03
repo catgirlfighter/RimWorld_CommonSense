@@ -32,8 +32,9 @@ namespace CommonSense
         private static Vector2 ScrollPos = Vector2.zero;
         public static bool give_sick_joy_drugs = true;
         public static bool social_relax_economy = true;
-        public static bool adv_cleaning_ingest = true;
-        public static bool mood_regen = true;
+        public static bool adv_cleaning_ingest = false;
+        public static bool mood_regen = false;
+        public static bool safe_wander = false;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -72,6 +73,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_label".Translate(), ref adv_cleaning, "advanced_inbetween_cleaning_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_haul_all_ings_label".Translate(), ref adv_haul_all_ings, "advanced_haul_all_ings_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_cleaning_ingest_label".Translate(), ref adv_cleaning_ingest, "advanced_cleaning_ingest_note".Translate());
+            listing_Standard.CheckboxLabeled("safe_wander_label".Translate(), ref safe_wander, "safe_wander_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("miscellaneous_head".Translate());
@@ -120,6 +122,7 @@ namespace CommonSense
             Scribe_Values.Look(ref social_relax_economy, "social_relax_economy", true, false);
             Scribe_Values.Look(ref adv_cleaning_ingest, "adv_cleaning_ingest", false, false);
             Scribe_Values.Look(ref mood_regen, "mood_regen", false, false);
+            Scribe_Values.Look(ref safe_wander, "safe_wander", false, false);
         }
     }
 }

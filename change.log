@@ -1,4 +1,12 @@
-﻿1.1.29+
+﻿1.1.30+
+- tiny fix to "avoid bad weather" option - made so pawns will search for home only roofed cells when caught under open sky;
+
+1.1.30
+- "display category" now shows all categories (if there a multiple) in full description;
+- added an option for pawns to avoid bad weather when idling;
+- did some changes to "cleaning before eating or relaxing" to make it more efficient;
+
+1.1.29+
 - forgot to actually add an option to disable mood regen. Added it and disabled by default (because for unknown reason it does bad things to fps for some people);
 
 1.1.29
