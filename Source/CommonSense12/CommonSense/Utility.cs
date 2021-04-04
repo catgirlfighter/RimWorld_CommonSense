@@ -8,7 +8,7 @@ using RimWorld;
 
 namespace CommonSense
 {
-    class Utility
+    static class Utility
     {
         static private WorkGiverDef cleanFilth = null;
         public const byte largeRoomSize = 160;
@@ -227,6 +227,29 @@ namespace CommonSense
                     }
                 }
             }
+        }
+
+        public static bool ShouldHideFromWeather(this Pawn pawn)
+        {
+            if (!Settings.safe_wander
+                || pawn.Faction != Faction.OfPlayer
+                || !pawn.Map.IsPlayerHome
+                || pawn.mindState?.duty != null)
+                return false;
+            //
+            bool cares = pawn.needs?.mood != null;
+            if (cares)
+            {
+                if (JoyUtility.EnjoyableOutsideNow(pawn.Map))
+                    return false;
+            }
+            else if (!pawn.RaceProps.IsFlesh || pawn.Map.gameConditionManager.ActiveConditions.FirstOrDefault(x => x is GameCondition_ToxicFallout) == null)
+                return false;
+            //
+            //if (pawn.Position.Roofed(pawn.Map))
+            //    return false;
+
+            return true;
         }
     }
 }

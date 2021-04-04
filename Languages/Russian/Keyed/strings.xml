@@ -65,4 +65,7 @@
 	<mood_regen_note>Утро вечера мудренее</mood_regen_note>
 	<safe_wander_label>Когда пешки безцельно блуждают, поощрять их избегать плохую погоду</safe_wander_label>
 	<safe_wander_note>Хватит уже выходить под токсичные осадки, придруки</safe_wander_note>
+	<pathing_head>Поиск пути</pathing_head>
+	<polite_wander_label>Поощрять дружественные пешки избегать безцельно заходить в спальни, тюремные камеры и тюремные бараки</polite_wander_label>
+	<polite_wander_note>Это ведь неприлично, или даже опасно, разве нет?</polite_wander_note>
 </LanguageData>

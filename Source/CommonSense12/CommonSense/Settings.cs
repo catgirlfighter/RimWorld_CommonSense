@@ -35,6 +35,7 @@ namespace CommonSense
         public static bool adv_cleaning_ingest = false;
         public static bool mood_regen = false;
         public static bool safe_wander = false;
+        public static bool polite_wander = false;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -58,7 +59,6 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("hauling_over_bills_label".Translate(), ref hauling_over_bills, "hauling_over_bills_note".Translate());
             listing_Standard.CheckboxLabeled("prefer_spoiling_ingredients_label".Translate(), ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients_note".Translate());
             listing_Standard.CheckboxLabeled("prefer_spoiling_meals_label".Translate(), ref prefer_spoiling_meals, "prefer_spoiling_meals_note".Translate());
-            //listing_Standard.CheckboxLabeled("allow_feeding_with_plants_label".Translate(), ref allow_feeding_with_plants, "allow_feeding_with_plants_note".Translate());
             listing_Standard.CheckboxLabeled("put_back_to_inv_label".Translate(), ref put_back_to_inv, "put_back_to_inv_note".Translate());
             listing_Standard.CheckboxLabeled("skip_snow_clean_label".Translate(), ref skip_snow_clean, "skip_snow_clean_note".Translate());
 
@@ -73,7 +73,10 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_label".Translate(), ref adv_cleaning, "advanced_inbetween_cleaning_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_haul_all_ings_label".Translate(), ref adv_haul_all_ings, "advanced_haul_all_ings_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_cleaning_ingest_label".Translate(), ref adv_cleaning_ingest, "advanced_cleaning_ingest_note".Translate());
+
+            listing_Standard.Label("pathing_head".Translate());
             listing_Standard.CheckboxLabeled("safe_wander_label".Translate(), ref safe_wander, "safe_wander_note".Translate());
+            listing_Standard.CheckboxLabeled("polite_wander_label".Translate(), ref polite_wander, "polite_wander_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("miscellaneous_head".Translate());
@@ -108,7 +111,6 @@ namespace CommonSense
             Scribe_Values.Look(ref gui_extended_recipe, "extended_recipe", true, false);
             Scribe_Values.Look(ref prefer_spoiling_ingredients, "prefer_spoiling_ingredients", true, false);
             Scribe_Values.Look(ref prefer_spoiling_meals, "prefer_spoiling_meals", true, false);
-            //Scribe_Values.Look(ref allow_feeding_with_plants, "allow_feeding_with_plants", true, false);
             Scribe_Values.Look(ref gui_manual_unload, "gui_manual_unload", true, false);
             Scribe_Values.Look(ref put_back_to_inv, "put_back_to_inv", true, false);
             Scribe_Values.Look(ref pick_proper_amount, "pick_proper_amount", true, false);
@@ -123,6 +125,7 @@ namespace CommonSense
             Scribe_Values.Look(ref adv_cleaning_ingest, "adv_cleaning_ingest", false, false);
             Scribe_Values.Look(ref mood_regen, "mood_regen", false, false);
             Scribe_Values.Look(ref safe_wander, "safe_wander", false, false);
+            Scribe_Values.Look(ref polite_wander, "safe_wander", safe_wander, false);
         }
     }
 }

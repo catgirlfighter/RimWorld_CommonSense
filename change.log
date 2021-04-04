@@ -1,4 +1,13 @@
-﻿1.1.30+
+﻿1.1.32
+- made so pawns naturally not affected by mood wouldn't use "avoid bad weather" unless it's a toxic fallout. Non-organic pawns don't care about toxic fallout either;
+- made so pawns avoid standing in doorways when they use "avoid bad weather" logic;
+- added an option for friendly pawns to avoid wandering into bedrooms, prison cells and prison barracks;
+
+1.1.31
+- made so pawns wouldn't use "avoid bad weather" logic when "on duty";
+- made an option to disable "avoid bad weather". It seems I'm quite forgetful about stuff like that lately;
+
+1.1.30+
 - tiny fix to "avoid bad weather" option - made so pawns will search for home only roofed cells when caught under open sky;
 
 1.1.30
