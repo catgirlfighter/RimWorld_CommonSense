@@ -74,6 +74,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("advanced_haul_all_ings_label".Translate(), ref adv_haul_all_ings, "advanced_haul_all_ings_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_cleaning_ingest_label".Translate(), ref adv_cleaning_ingest, "advanced_cleaning_ingest_note".Translate());
 
+            listing_Standard.GapLine();
             listing_Standard.Label("pathing_head".Translate());
             listing_Standard.CheckboxLabeled("safe_wander_label".Translate(), ref safe_wander, "safe_wander_note".Translate());
             listing_Standard.CheckboxLabeled("polite_wander_label".Translate(), ref polite_wander, "polite_wander_note".Translate());
@@ -84,6 +85,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("extended_recipe_label".Translate(), ref gui_extended_recipe, "extended_recipe_note".Translate());
             listing_Standard.CheckboxLabeled("manual_unload_label".Translate(), ref gui_manual_unload, "manual_unload_note".Translate());
             listing_Standard.CheckboxLabeled("mood_regen_label".Translate(), ref mood_regen, "mood_regen_note".Translate());
+
             listing_Standard.GapLine();
             listing_Standard.Label("numbers_head".Translate());
             string op_clean_num_str = op_clean_num.ToString();
