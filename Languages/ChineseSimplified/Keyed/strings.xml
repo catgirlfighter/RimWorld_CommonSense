@@ -67,7 +67,7 @@
   <mood_regen_note>"来日方长"</mood_regen_note>
   <safe_wander_label>小人在闲逛时尽量避免坏天气的影响</safe_wander_label>
   <safe_wander_note>笨比你能别在毒雾里漫步了吗？</safe_wander_note>
-  <pathing_head>Pathing</pathing_head>
-  <polite_wander_label>Any friendly pawns are encouraged to avoid wandering into bedrooms, prison cells and prison barracks</polite_wander_label>
-  <polite_wander_note>This is just indecent or even dangerous, isn't it?</polite_wander_note>
+  <pathing_head>寻路调整</pathing_head>
+  <polite_wander_label>避免友方生物闲逛到卧室及牢房</polite_wander_label>
+  <polite_wander_note>这种行为不仅无礼还危险</polite_wander_note>
 </LanguageData>
