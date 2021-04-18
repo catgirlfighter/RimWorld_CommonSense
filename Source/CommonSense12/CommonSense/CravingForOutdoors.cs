@@ -73,7 +73,16 @@ namespace CommonSense
                     {
                         break;
                     }
-                    Job job = __instance.TryGiveJobFromJoyGiverDefDirectCrutch(result, pawn);
+
+                    Job job;
+                    try
+                    {
+                         job = __instance.TryGiveJobFromJoyGiverDefDirectCrutch(result, pawn);
+                    } catch //(Exception e)
+                    {
+                        //Log.Message($"Common Sense (LF Outdoors): skipped potential job ({result}) for {pawn} due to error: {e}");
+                        job = null;
+                    }
                     if (job != null && job.targetA != null)
                             if (job.targetA.Thing != null)
                             {

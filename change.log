@@ -1,4 +1,7 @@
-﻿1.1.32
+﻿1.1.33
+- added a tiny fix for an option to look for joy outdoors: algorithm now will skip erroneous jobs;
+
+1.1.32
 - made so pawns naturally not affected by mood wouldn't use "avoid bad weather" unless it's a toxic fallout. Non-organic pawns don't care about toxic fallout either;
 - made so pawns avoid standing in doorways when they use "avoid bad weather" logic;
 - added an option for friendly pawns to avoid wandering into bedrooms, prison cells and prison barracks;
