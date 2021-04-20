@@ -1,5 +1,11 @@
-﻿1.1.33
-- added a tiny fix for an option to look for joy outdoors: algorithm now will skip erroneous jobs;
+﻿1.1.34
+- added compatibility with "awesome inventory" mod (to display "unload" button);
+- fixed "polite_wander" would save and load as "safe_wander";
+- added an option to allow any drugs to be taken from inventory (misc category). Ironically, does nothing for "awesome inventory";
+- added an option to show a toggle using which you can disable cleaning around some benches;
+
+1.1.33
+- made a tiny fix for an option to look for joy outdoors: algorithm now will skip erroneous jobs;
 
 1.1.32
 - made so pawns naturally not affected by mood wouldn't use "avoid bad weather" unless it's a toxic fallout. Non-organic pawns don't care about toxic fallout either;

@@ -5,7 +5,6 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 using Verse.AI;
-using Verse.Sound;
 using UnityEngine;
 
 namespace CommonSense
@@ -296,92 +295,11 @@ namespace CommonSense
     [HarmonyPatch(typeof(ITab_Pawn_Gear), "DrawThingRow")]
     public static class ITab_Pawn_Gear_DrawThingRow_CommonSensePatch
     {
-        static readonly Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
-
-        static bool IsBiocodedOrLinked(Pawn pawn, Thing thing, bool inventory)
-        {
-            if (pawn.IsQuestLodger())
-            {
-                if (inventory)
-                {
-                    return true;
-                }
-                else
-                {
-                    CompBiocodable compBiocodable = thing.TryGetComp<CompBiocodable>();
-                    if (compBiocodable != null && compBiocodable.Biocoded)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        CompBladelinkWeapon compBladelinkWeapon = thing.TryGetComp<CompBladelinkWeapon>();
-                        return (compBladelinkWeapon != null && compBladelinkWeapon.bondedPawn == pawn);
-                    }
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        static bool IsLocked(Pawn pawn, Thing thing)
-        {
-            Apparel apparel;
-            return (apparel = (thing as Apparel)) != null && pawn.apparel != null && pawn.apparel.IsLocked(apparel);
-        }
-
         public static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory)
         {
-            if (!Settings.gui_manual_unload)
-                return true;
-
             bool CanControl = Traverse.Create(__instance).Property("CanControl").GetValue<bool>();
             Pawn SelPawnForGear = Traverse.Create(__instance).Property("SelPawnForGear").GetValue<Pawn>();
-            Rect rect = new Rect(0f, y, width, 28f);
-
-            if (CanControl 
-                && (SelPawnForGear.IsColonistPlayerControlled ||  SelPawnForGear.Spawned && !SelPawnForGear.Map.IsPlayerHome) 
-                && (thing is ThingWithComps)
-                && !IsBiocodedOrLinked(SelPawnForGear, thing, inventory)
-                && !IsLocked(SelPawnForGear, thing))
-            {
-                Rect rect2 = new Rect(rect.width - 24f, y, 24f, 24f);
-                CompUnloadChecker c = CompUnloadChecker.GetChecker(thing,false,true);
-                if (c.ShouldUnload)
-                {
-                    TooltipHandler.TipRegion(rect2, "UnloadThingCancel".Translate());
-
-                    //weird shenanigans with colors
-                    var cl = GUI.color;
-                    if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing_Cancel"), hColor))
-                    {
-                        SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-                        c.ShouldUnload = false;
-
-                        if (MassUtility.Capacity(SelPawnForGear, null) < MassUtility.GearAndInventoryMass(SelPawnForGear) 
-                            && thing.stackCount * thing.GetStatValue(StatDefOf.Mass, true) > 0 
-                            && !thing.def.destroyOnDrop)
-                        {
-                            Thing t;
-                            SelPawnForGear.inventory.innerContainer.TryDrop(thing, SelPawnForGear.Position, SelPawnForGear.Map, ThingPlaceMode.Near, out t, null, null);
-                        }
-                    }
-                    GUI.color = cl;
-                }
-                else
-                {
-                    TooltipHandler.TipRegion(rect2, "UnloadThing".Translate());
-                    if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing")))
-                    {
-                        SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-                        c.ShouldUnload = true;
-                    }
-                }
-                width -= 24f;
-            }
-            return true;
+            return Utility.DrawThingRow(SelPawnForGear, CanControl, ref y, ref width, thing, inventory);
         }
     }
 }

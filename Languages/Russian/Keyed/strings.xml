@@ -68,4 +68,11 @@
 	<pathing_head>Поиск пути</pathing_head>
 	<polite_wander_label>Поощрять дружественные пешки избегать безцельно заходить в спальни, тюремные камеры и тюремные бараки</polite_wander_label>
 	<polite_wander_note>Это ведь неприлично, или даже опасно, разве нет?</polite_wander_note>
+	<ingest_any_drugs_label>Разрешить употреблять любые препараты из инвентаря</ingest_any_drugs_label>
+	<ingest_any_drugs_note>Если это съедобно, должна быть возможность съесть это без бросания на землю</ingest_any_drugs_note>
+	<DoCleanCompToggleLabel>Убирать возле этого рабочего места</DoCleanCompToggleLabel>
+	<DoCleanCompToggleDescActive>Пешки будут убирать возле этого места</DoCleanCompToggleDescActive>
+	<DoCleanCompToggleDescInactive>Пешки НЕ будут убирать возле этого места</DoCleanCompToggleDescInactive>
+	<advanced_inbetween_cleaning_gizmo_label>Показывать переключатель, какие места нуждаются в уборке</advanced_inbetween_cleaning_gizmo_label>
+	<advanced_inbetween_cleaning_gizmo_note>Будет возможным выключать уборку возле некоторых рабочих мест</advanced_inbetween_cleaning_gizmo_note>
 </LanguageData>

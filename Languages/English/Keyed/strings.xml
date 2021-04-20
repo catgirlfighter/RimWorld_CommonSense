@@ -70,4 +70,11 @@
 	<pathing_head>Pathing</pathing_head>
 	<polite_wander_label>Any friendly pawns are encouraged to avoid wandering into bedrooms, prison cells and prison barracks</polite_wander_label>
 	<polite_wander_note>This is just indecent or even dangerous, isn't it?</polite_wander_note>
+	<ingest_any_drugs_label>Allow to take any drugs from inventory</ingest_any_drugs_label>
+	<ingest_any_drugs_note>If it's ingestible, it should be possible to eat it without dropping on the ground</ingest_any_drugs_note>
+	<DoCleanCompToggleLabel>Clean around this bench</DoCleanCompToggleLabel>
+	<DoCleanCompToggleDescActive>Pawns will clean around this bench</DoCleanCompToggleDescActive>
+	<DoCleanCompToggleDescInactive>Pawns will NOT clean around this bench</DoCleanCompToggleDescInactive>
+	<advanced_inbetween_cleaning_gizmo_label>Show a toggle to be able switch which benches need cleaning</advanced_inbetween_cleaning_gizmo_label>
+	<advanced_inbetween_cleaning_gizmo_note>It will be possible to disable cleaning around some benches</advanced_inbetween_cleaning_gizmo_note>
 </LanguageData>
