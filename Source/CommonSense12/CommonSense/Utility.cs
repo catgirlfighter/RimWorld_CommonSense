@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Collections.Generic;
+using HarmonyLib;
+using RimWorld;
 using Verse;
 using Verse.AI;
-using RimWorld;
+using Verse.Sound;
+using UnityEngine;
 
 namespace CommonSense
 {
@@ -249,6 +251,93 @@ namespace CommonSense
             //if (pawn.Position.Roofed(pawn.Map))
             //    return false;
 
+            return true;
+        }
+
+
+
+        public static bool DrawThingRow(Pawn SelPawn, bool CanControl, ref float y, ref float width, Thing thing, bool inventory)
+        {
+            Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
+
+            bool IsBiocodedOrLinked(Pawn pawn, Thing athing, bool ainventory)
+            {
+                if (pawn.IsQuestLodger())
+                {
+                    if (ainventory)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        CompBiocodable compBiocodable = athing.TryGetComp<CompBiocodable>();
+                        if (compBiocodable != null && compBiocodable.Biocoded)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            CompBladelinkWeapon compBladelinkWeapon = athing.TryGetComp<CompBladelinkWeapon>();
+                            return (compBladelinkWeapon != null && compBladelinkWeapon.bondedPawn == pawn);
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            bool IsLocked(Pawn pawn, Thing athing)
+            {
+                Apparel apparel;
+                return (apparel = (athing as Apparel)) != null && pawn.apparel != null && pawn.apparel.IsLocked(apparel);
+            }
+
+            if (!Settings.gui_manual_unload)
+                return true;
+
+            Rect rect = new Rect(0f, y, width, 28f);
+            if (CanControl
+                && (SelPawn.IsColonistPlayerControlled || SelPawn.Spawned && !SelPawn.Map.IsPlayerHome)
+                && (thing is ThingWithComps)
+                && !IsBiocodedOrLinked(SelPawn, thing, inventory)
+                && !IsLocked(SelPawn, thing))
+            {
+                Rect rect2 = new Rect(rect.width - 24f, y, 24f, 24f);
+                CompUnloadChecker c = CompUnloadChecker.GetChecker(thing, false, true);
+                if (c.ShouldUnload)
+                {
+                    TooltipHandler.TipRegion(rect2, "UnloadThingCancel".Translate());
+
+                    //weird shenanigans with colors
+                    var cl = GUI.color;
+                    if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing_Cancel"), hColor))
+                    {
+                        SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+                        c.ShouldUnload = false;
+
+                        if (MassUtility.Capacity(SelPawn, null) < MassUtility.GearAndInventoryMass(SelPawn)
+                            && thing.stackCount * thing.GetStatValue(StatDefOf.Mass, true) > 0
+                            && !thing.def.destroyOnDrop)
+                        {
+                            Thing t;
+                            SelPawn.inventory.innerContainer.TryDrop(thing, SelPawn.Position, SelPawn.Map, ThingPlaceMode.Near, out t, null, null);
+                        }
+                    }
+                    GUI.color = cl;
+                }
+                else
+                {
+                    TooltipHandler.TipRegion(rect2, "UnloadThing".Translate());
+                    if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing")))
+                    {
+                        SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+                        c.ShouldUnload = true;
+                    }
+                }
+                width -= 24f;
+            }
             return true;
         }
     }

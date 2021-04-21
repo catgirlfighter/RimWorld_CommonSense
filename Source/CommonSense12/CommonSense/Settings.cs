@@ -36,6 +36,9 @@ namespace CommonSense
         public static bool mood_regen = false;
         public static bool safe_wander = false;
         public static bool polite_wander = false;
+        public static bool ingest_any_drugs = true;
+        public static bool clean_gizmo = false;
+
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -71,6 +74,7 @@ namespace CommonSense
             listing_Standard.GapLine();
             listing_Standard.Label("advanced_head".Translate());
             listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_label".Translate(), ref adv_cleaning, "advanced_inbetween_cleaning_note".Translate());
+            listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_gizmo_label".Translate(), ref clean_gizmo, "advanced_inbetween_cleaning_gizmo_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_haul_all_ings_label".Translate(), ref adv_haul_all_ings, "advanced_haul_all_ings_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_cleaning_ingest_label".Translate(), ref adv_cleaning_ingest, "advanced_cleaning_ingest_note".Translate());
 
@@ -84,6 +88,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("gen_ingredients_label".Translate(), ref add_meal_ingredients, "gen_ingredients_note".Translate());
             listing_Standard.CheckboxLabeled("extended_recipe_label".Translate(), ref gui_extended_recipe, "extended_recipe_note".Translate());
             listing_Standard.CheckboxLabeled("manual_unload_label".Translate(), ref gui_manual_unload, "manual_unload_note".Translate());
+            listing_Standard.CheckboxLabeled("ingest_any_drugs_label".Translate(), ref ingest_any_drugs, "ingest_any_drugs_note".Translate());
             listing_Standard.CheckboxLabeled("mood_regen_label".Translate(), ref mood_regen, "mood_regen_note".Translate());
 
             listing_Standard.GapLine();
@@ -127,7 +132,9 @@ namespace CommonSense
             Scribe_Values.Look(ref adv_cleaning_ingest, "adv_cleaning_ingest", false, false);
             Scribe_Values.Look(ref mood_regen, "mood_regen", false, false);
             Scribe_Values.Look(ref safe_wander, "safe_wander", false, false);
-            Scribe_Values.Look(ref polite_wander, "safe_wander", safe_wander, false);
+            Scribe_Values.Look(ref polite_wander, "polite_wander", safe_wander, false);
+            Scribe_Values.Look(ref ingest_any_drugs, "ingest_any_drugs", true, false);
+            Scribe_Values.Look(ref clean_gizmo, "clean_gizmo", false, false);
         }
     }
 }
