@@ -6,6 +6,7 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 using UnityEngine;
+using System.Reflection;
 
 namespace CommonSense
 {
@@ -295,11 +296,18 @@ namespace CommonSense
     [HarmonyPatch(typeof(ITab_Pawn_Gear), "DrawThingRow")]
     public static class ITab_Pawn_Gear_DrawThingRow_CommonSensePatch
     {
+        public static MethodBase LInterfaceDrop;
+
+        static void Prepare()
+        {
+            LInterfaceDrop = AccessTools.Method(typeof(ITab_Pawn_Gear), "InterfaceDrop");
+        }
+
         public static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory)
         {
             bool CanControl = Traverse.Create(__instance).Property("CanControl").GetValue<bool>();
             Pawn SelPawnForGear = Traverse.Create(__instance).Property("SelPawnForGear").GetValue<Pawn>();
-            return Utility.DrawThingRow(SelPawnForGear, CanControl, ref y, ref width, thing, inventory);
+            return Utility.DrawThingRow(SelPawnForGear, CanControl, ref y, ref width, thing, inventory, __instance);
         }
     }
 }

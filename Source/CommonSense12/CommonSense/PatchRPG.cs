@@ -45,7 +45,7 @@ namespace CommonSense
             if (selPawn == null || thing == null) return;
             var val = Traverse.Create(__instance).Field("_gearTab").GetValue();
             //ITab_Pawn_Gear tab = val as ITab_Pawn_Gear;
-            Utility.DrawThingRow(selPawn, (bool)LCanControl.GetValue(val), ref y, ref width, thing, inventory);
+            Utility.DrawThingRow(selPawn, (bool)LCanControl.GetValue(val), ref y, ref width, thing, inventory, val);
         }
     }
 }
