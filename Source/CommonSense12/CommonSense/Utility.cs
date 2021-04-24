@@ -256,13 +256,36 @@ namespace CommonSense
 
 
 
-        public static bool DrawThingRow(Pawn SelPawn, bool CanControl, ref float y, ref float width, Thing thing, bool inventory, object instance)
+        public static bool DrawThingRow(Pawn SelPawn, bool CanControl, ref float y, ref float width, Thing thing, bool inventory)
         {
             Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
 
             bool IsBiocodedOrLinked(Pawn pawn, Thing athing, bool ainventory)
             {
-                return pawn.IsQuestLodger() && (ainventory || !EquipmentUtility.QuestLodgerCanUnequip(athing, pawn));
+                if (pawn.IsQuestLodger())
+                {
+                    if (ainventory)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        CompBiocodable compBiocodable = athing.TryGetComp<CompBiocodable>();
+                        if (compBiocodable != null && compBiocodable.Biocoded)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            CompBladelinkWeapon compBladelinkWeapon = athing.TryGetComp<CompBladelinkWeapon>();
+                            return (compBladelinkWeapon != null && compBladelinkWeapon.bondedPawn == pawn);
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             bool IsLocked(Pawn pawn, Thing athing)
@@ -270,29 +293,6 @@ namespace CommonSense
                 Apparel apparel;
                 return (apparel = (athing as Apparel)) != null && pawn.apparel != null && pawn.apparel.IsLocked(apparel);
             }
-
-            /*
-            void InterfaceDrop(Pawn pawn, Thing athing)
-            {
-                ThingWithComps thingWithComps = athing as ThingWithComps;
-                Apparel apparel = athing as Apparel;
-                if (apparel != null && pawn.apparel != null && pawn.apparel.WornApparel.Contains(apparel))
-                {
-                    pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.RemoveApparel, apparel), JobTag.Misc);
-                    return;
-                }
-                if (thingWithComps != null && pawn.equipment != null && pawn.equipment.AllEquipmentListForReading.Contains(thingWithComps))
-                {
-                    pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.DropEquipment, thingWithComps), JobTag.Misc);
-                    return;
-                }
-                if (!athing.def.destroyOnDrop)
-                {
-                    Thing t;
-                    pawn.inventory.innerContainer.TryDrop(athing, pawn.Position, pawn.Map, ThingPlaceMode.Near, out t, null, null);
-                }
-            }
-            */
 
             if (!Settings.gui_manual_unload)
                 return true;
@@ -321,7 +321,8 @@ namespace CommonSense
                             && thing.stackCount * thing.GetStatValue(StatDefOf.Mass, true) > 0
                             && !thing.def.destroyOnDrop)
                         {
-                            ITab_Pawn_Gear_DrawThingRow_CommonSensePatch.LInterfaceDrop.Invoke(thing, new object[] { thing });
+                            Thing t;
+                            SelPawn.inventory.innerContainer.TryDrop(thing, SelPawn.Position, SelPawn.Map, ThingPlaceMode.Near, out t, null, null);
                         }
                     }
                     GUI.color = cl;
