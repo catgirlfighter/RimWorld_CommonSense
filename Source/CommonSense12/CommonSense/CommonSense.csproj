@@ -34,8 +34,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lib.Harmony.2.0.2\lib\net472\0Harmony.dll</HintPath>
+    <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lib.Harmony.2.0.4\lib\net472\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
@@ -68,6 +68,7 @@
     <Compile Include="JobDriver_SocialRelaxPatches.cs" />
     <Compile Include="Need_MoodPatches.cs" />
     <Compile Include="PointlessWanderPatches.cs" />
+    <Compile Include="SideArmsPatch.cs" />
     <Compile Include="TakeAnyDrugs.cs" />
     <Compile Include="WorkGiver_ClearSnow.cs" />
     <Compile Include="FoodCountLimiter.cs" />

@@ -6,6 +6,7 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 using UnityEngine;
+using System.Reflection;
 
 namespace CommonSense
 {
@@ -31,7 +32,7 @@ namespace CommonSense
 
         static public CompUnloadChecker GetChecker(Thing thing, bool InitShouldUnload = false, bool InitWasInInventory = false)
         {
-            
+
             if (!(thing is ThingWithComps) && !thing.GetType().IsSubclassOf(typeof(ThingWithComps)))
                 return null;
             ThingWithComps TWC = (ThingWithComps)thing;
@@ -52,7 +53,7 @@ namespace CommonSense
         public static Thing getFirstMarked(Pawn pawn)
         {
             Thing t = null;
-            if(pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            if (pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
             if (!Settings.gui_manual_unload) return t;
             if (t == null && pawn.equipment != null) t = pawn.equipment.AllEquipmentListForReading.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
             if (t == null && pawn.apparel != null) t = pawn.apparel.WornApparel.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
@@ -239,7 +240,7 @@ namespace CommonSense
             };
             wait.tickAction = delegate ()
             {
-                if(ticker >= duration) ReadyForNextToil();
+                if (ticker >= duration) ReadyForNextToil();
                 ticker++;
             };
             wait.defaultCompleteMode = ToilCompleteMode.Never;
@@ -278,9 +279,18 @@ namespace CommonSense
                     thing.SetForbidden(false, false);
                 }
             };
-            Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate() { return !stillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing);  } );
+            Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate () { return !stillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing); });
             yield return carryToCell;
             yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.B, carryToCell, true);
+            if (Sidearms_Utility.Active)
+                yield return new Toil
+                {
+                    initAction = delegate ()
+                    {
+                        Thing thing = job.GetTarget(TargetIndex.A).Thing;
+                        Sidearms_Utility.ForgetSidearm(GetActor(), thing);
+                    }
+                };
             yield break;
         }
 
@@ -290,16 +300,26 @@ namespace CommonSense
         private const int UnloadDuration = 10;
     }
 
+    public static class ITab_Pawn_Gear_Utility
+    {
+        public static PropertyInfo LCanControl = null;
+        public static PropertyInfo LSelPawnForGear = null;
+        public static MethodInfo LInterfaceDrop = null;
+        //
+    }
 
-    //private void DrawThingRow(ref float y, float width, Thing thing, bool inventory = false)
     [HarmonyPatch(typeof(ITab_Pawn_Gear), "DrawThingRow")]
     public static class ITab_Pawn_Gear_DrawThingRow_CommonSensePatch
     {
+        static void Prepare()
+        {
+            ITab_Pawn_Gear_Utility.LCanControl = AccessTools.Property(typeof(ITab_Pawn_Gear), "CanControl");
+            ITab_Pawn_Gear_Utility.LSelPawnForGear = AccessTools.Property(typeof(ITab_Pawn_Gear), "SelPawnForGear");
+            ITab_Pawn_Gear_Utility.LInterfaceDrop = AccessTools.Method(typeof(ITab_Pawn_Gear), "InterfaceDrop", new Type[] { typeof(Thing) });
+        }
         public static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory)
         {
-            bool CanControl = Traverse.Create(__instance).Property("CanControl").GetValue<bool>();
-            Pawn SelPawnForGear = Traverse.Create(__instance).Property("SelPawnForGear").GetValue<Pawn>();
-            return Utility.DrawThingRow(SelPawnForGear, CanControl, ref y, ref width, thing, inventory);
+            return Utility.DrawThingRow(__instance, ref y, ref width, thing, inventory);
         }
     }
 }
