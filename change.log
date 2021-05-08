@@ -1,4 +1,10 @@
-﻿1.1.35
+﻿1.1.36
+- fixed an issue, due to which pawns wouldn't clean around benches that for some reason don't or can't have a gizmo when their use is active;
+
+1.1.35+
+- french translation by qux;
+
+1.1.35
 - added synergy with sidearms to work with unload button;
 
 1.1.34
