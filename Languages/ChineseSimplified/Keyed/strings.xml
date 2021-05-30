@@ -70,11 +70,11 @@
   <pathing_head>寻路调整</pathing_head>
   <polite_wander_label>避免友方生物闲逛到卧室及牢房</polite_wander_label>
   <polite_wander_note>这种行为不仅无礼还危险</polite_wander_note>
-  <ingest_any_drugs_label>Allow to take any drugs from inventory</ingest_any_drugs_label>
-  <ingest_any_drugs_note>If it's ingestible, it should be possible to eat it without dropping on the ground</ingest_any_drugs_note>
-  <DoCleanCompToggleLabel>Clean around this bench</DoCleanCompToggleLabel>
-  <DoCleanCompToggleDescActive>Pawns will clean around this bench</DoCleanCompToggleDescActive>
-  <DoCleanCompToggleDescInactive>Pawns will NOT clean around this bench</DoCleanCompToggleDescInactive>
-  <advanced_inbetween_cleaning_gizmo_label>Show a toggle to be able switch which benches need cleaning</advanced_inbetween_cleaning_gizmo_label>
-  <advanced_inbetween_cleaning_gizmo_note>It will be possible to disable cleaning around some benches</advanced_inbetween_cleaning_gizmo_note>
+  <ingest_any_drugs_label>可直接使用货物中的药物</ingest_any_drugs_label>
+  <ingest_any_drugs_note>若该物品可食用，则不会掉落在地上而是直接使用</ingest_any_drugs_note>
+  <DoCleanCompToggleLabel>清扫</DoCleanCompToggleLabel>
+  <DoCleanCompToggleDescActive>小人入座前会清扫该桌子周围区域</DoCleanCompToggleDescActive>
+  <DoCleanCompToggleDescInactive>不清扫</DoCleanCompToggleDescInactive>
+  <advanced_inbetween_cleaning_gizmo_label>点选桌子后，显示清扫/不清扫的按钮</advanced_inbetween_cleaning_gizmo_label>
+  <advanced_inbetween_cleaning_gizmo_note>尽可能的不清扫该桌子周围区域</advanced_inbetween_cleaning_gizmo_note>
 </LanguageData>
