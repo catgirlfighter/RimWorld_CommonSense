@@ -1,4 +1,7 @@
-﻿1.1.36
+﻿1.1.37
+- so anyways 1.3;
+
+1.1.36
 - fixed an issue, due to which pawns wouldn't clean around benches that for some reason don't or can't have a gizmo when their use is active;
 
 1.1.35+
