@@ -47,6 +47,9 @@ namespace CommonSense
             viewRect.xMax *= 0.9f;
 
             //listing_Standard.BeginScrollView(inRect, ref ScrollPos, ref viewRect);
+            listing_Standard.Begin(viewRect);
+            GUI.EndGroup();
+            Widgets.BeginScrollView(inRect, ref ScrollPos, viewRect);
             listing_Standard.Label("fulfill_needs_head".Translate());
             listing_Standard.CheckboxLabeled("fulfill_outdoors_label".Translate(), ref fulfill_outdoors, "fulfill_outdoors_note".Translate());
             listing_Standard.CheckboxLabeled("drugs_use_potential_mood_label".Translate(), ref drugs_use_potential_mood, "drugs_use_potential_mood_note".Translate());
@@ -100,6 +103,8 @@ namespace CommonSense
             string doc_clean_num_str = doc_clean_num.ToString();
             listing_Standard.TextFieldNumericLabeled("doc_clean_number_label".Translate(), ref doc_clean_num, ref doc_clean_num_str);
             //listing_Standard.EndScrollView(ref viewRect);
+            Widgets.EndScrollView();
+            //listing_Standard.End();
         }
 
         public override void ExposeData()
