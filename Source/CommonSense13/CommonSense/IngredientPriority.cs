@@ -64,17 +64,21 @@ namespace CommonSense
             [HarmonyTranspiler]
             internal static IEnumerable<CodeInstruction> AddSort(IEnumerable<CodeInstruction> instrs)
             {
+                bool b0 = false;
+                //MethodInfo LSortBy = AccessTools.Method(typeof(GenCollection), "SortBy", new Type[] { typeof(List<Thing>), typeof(Func<Thing,Single>), typeof(Func<Thing,int>) });
                 foreach (var i in (instrs))
                 {
                     yield return i;
-
-                    if (i.opcode == OpCodes.Callvirt && (MethodInfo)i.operand == typeof(List<Thing>).GetMethod(nameof(List<Thing>.Sort), new Type[] { typeof(Comparison<Thing>) } ))
+                    //Log.Message($"{i.opcode}={i.operand}");
+                    if (i.opcode == OpCodes.Call && (MethodInfo)i.operand != null && ((MethodInfo)i.operand).Name == "SortBy")
                     {
                         yield return new CodeInstruction(OpCodes.Ldarg_0);
                         yield return new CodeInstruction(OpCodes.Ldarg_1);
                         yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch), nameof(WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch.doSort)));
+                        b0 = true;
                     }
                 }
+                if (!b0) Log.Warning("[Common Sense] TryFindBestBillIngredientsInSet_AllowMix patch 0 didn't work");
             }
         }
 
