@@ -85,6 +85,13 @@ namespace CommonSense
         [HarmonyPatch(typeof(FoodUtility), "FoodOptimality")]
         static class FoodUtility_FoodOptimality
         {
+            static FieldInfo LFoodOptimalityEffectFromMoodCurve = null;
+
+            static void Prepare()
+            {
+                LFoodOptimalityEffectFromMoodCurve = AccessTools.Field(typeof(FoodUtility), "FoodOptimalityEffectFromMoodCurve");
+            }
+
             static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
             {
 
@@ -97,10 +104,25 @@ namespace CommonSense
                 if (compRottable != null)
                 {
                     float t = compRottable.PropsRot.TicksToRotStart - compRottable.RotProgress;
+
+                    float num = 0;
+                    if (eater.needs != null && eater.needs.mood != null)
+                    {
+                        List<FoodUtility.ThoughtFromIngesting> list = FoodUtility.ThoughtsFromIngesting(eater, foodSource, foodDef);
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            num += ((SimpleCurve)LFoodOptimalityEffectFromMoodCurve.GetValue(null)).Evaluate(list[i].thought.stages[0].baseMoodEffect);
+                        }
+                    }
+                    //
+                    if (num < 6f)
+                        num = 6f;
+                    //
                     if (t > 0 && t < aday * 2f)
                     {
-                        __result += (float)Math.Truncate((1f + (aday * 2f - t) / qday) * 3f);
+                        __result += (float)Math.Truncate(num * (1f + (aday * 2f - t) / qday) * 0.5f);
                     }
+                    //Log.Message($"{foodSource}={__result}({Math.Truncate(num * (1f + (aday * 2f - t) / qday) * 0.4f)})");
                 }
             }
         }
