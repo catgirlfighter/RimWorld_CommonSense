@@ -18,16 +18,7 @@ namespace CommonSense
         static void Postfix(ref bool __result, IntVec3 c, IntVec3 root, Pawn pawn)
         {
             if (!__result) return;
-            //
-            //if (pawn.ShouldHideFromWeather()
-            //    && (pawn.Position.Roofed(pawn.Map) || root.Roofed(pawn.Map)) 
-            //    && !c.Roofed(pawn.Map))
-            //{
-            //    __result = false;
-            //    return;
-            //}
-            //
-            if (!Settings.polite_wander || pawn.Faction.HostileTo(Faction.OfPlayer)/* || !pawn.RaceProps.Humanlike*/) return;
+            if (!Settings.polite_wander || pawn.Faction.HostileTo(Faction.OfPlayer)) return;
             //
             RoomRoleDef def = c.GetRoom(pawn.Map)?.Role;
             if (def == RoomRoleDefOf.Bedroom && !pawn.GetRoom().Owners.Contains(pawn)
@@ -95,11 +86,13 @@ namespace CommonSense
                 || !pawn.ShouldHideFromWeather())
                 return;
 
-            __result.targetB = new IntVec3(UnityEngine.Random.Range(400, 800), 0, 0);
+            if (!pawn.Position.Roofed(pawn.Map))
+                __result.locomotionUrgency = LocomotionUrgency.Jog;
+            else
+                __result.targetC = new IntVec3(UnityEngine.Random.Range(400, 800), 0, 0);
         }
     }
 
-    //[HarmonyPatch(typeof(JobDriver_Goto), "MoveNext")]
     [HarmonyPatch]
     static class JobDriver_Goto_MoveNext_CommonSensePatch
     {
@@ -252,7 +245,6 @@ namespace CommonSense
             };
             toil.defaultCompleteMode = ToilCompleteMode.PatherArrival;
             return toil;
-            //return Toils_Goto.GotoCell(ind, peMode);
         }
         //
         [HarmonyTranspiler]
@@ -264,7 +256,7 @@ namespace CommonSense
             {
                 if (i.opcode == OpCodes.Call && i.operand == (object)LGotoCell)
                 {
-                    yield return new CodeInstruction(OpCodes.Ldc_I4_2);
+                    yield return new CodeInstruction(OpCodes.Ldc_I4_3);
                     i.operand = LGotoCellSafe;
                 }
 

@@ -146,9 +146,9 @@ namespace CommonSense
             return null;
         }
 
-        static bool ProperJob(Job job, Pawn pawn)
+        static bool ProperJob(Job job, Pawn pawn, JobDef def)
         {
-            return job != null && job.def == JobDefOf.TendPatient && job.targetA != null && job.targetA.Thing != null &&
+            return job != null && job.def == def && job.targetA != null && job.targetA.Thing != null &&
                 job.targetA.Thing != pawn;
         }
 
@@ -174,7 +174,7 @@ namespace CommonSense
                     if (!Settings.clean_before_work && !Settings.hauling_over_bills)
                         return true;
 
-                    if (!newJob.def.allowOpportunisticPrefix)
+                    if (!newJob.def.allowOpportunisticPrefix && newJob.def != JobDefOf.SpectateCeremony)
                         return true;
 
                     Job job = null;
@@ -194,13 +194,19 @@ namespace CommonSense
                         {
                             return true;
                         }
-
-                        if (Settings.clean_before_work && (newJob.def == JobDefOf.PrisonerAttemptRecruit
-                            || newJob.targetA.Thing != null
-                            && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) && newJob.def != JobDefOf.PlaceNoCostFrame && newJob.def != JobDefOf.FinishFrame
-                            || newJob.def.joyKind != null)
+                        if (Settings.clean_before_work
+                            && (
+                                newJob.def == JobDefOf.PrisonerAttemptRecruit
+                                || newJob.def == JobDefOf.PrisonerConvert
+                                || newJob.def == JobDefOf.PrisonerEnslave
+                                || newJob.def == JobDefOf.SpectateCeremony
+                                || newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) && newJob.def != JobDefOf.PlaceNoCostFrame && newJob.def != JobDefOf.FinishFrame
+                                || newJob.def.joyKind != null
+                            )
                             && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
+                        {
                             job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
+                        }
                     }
 
                     if (job != null)
@@ -237,23 +243,32 @@ namespace CommonSense
                         c.JoyToppedOff = true;
                 }
 
-                if (Settings.clean_after_tending && condition == JobCondition.Succeeded && __instance.jobQueue != null &&
-                    __instance.jobQueue.Count == 0 && ProperJob(__instance.curJob, __instance._pawn))
+                Job job = null;
+                if (Settings.clean_before_work && condition == JobCondition.Succeeded && __instance.jobQueue != null 
+                    && __instance.jobQueue.Count == 0 && __instance.curJob != null && ProperJob(__instance.curJob, __instance._pawn, JobDefOf.DeliverFood))
+                {
+                    job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, Settings.op_clean_num);
+                }
+
+                if (Settings.clean_after_tending && condition == JobCondition.Succeeded && __instance.jobQueue != null
+                    && __instance.jobQueue.Count == 0 && ProperJob(__instance.curJob, __instance._pawn, JobDefOf.TendPatient))
                 {
                     ThinkTreeDef thinkTree = null;
                     MethodInfo mi = AccessTools.Method(typeof(Pawn_JobTracker), "DetermineNextJob");
                     ThinkResult thinkResult = (ThinkResult)mi.Invoke(__instance, new object[] { thinkTree });
-                    if (ProperJob(thinkResult.Job, __instance._pawn))
+                    if (ProperJob(thinkResult.Job, __instance._pawn, JobDefOf.TendPatient))
                     {
                         Pawn pawn = (Pawn)thinkResult.Job.targetA.Thing;
                         if (pawn.GetRoom() == __instance.curJob.targetA.Thing.GetRoom() || ((float)HealthUtility.TicksUntilDeathDueToBloodLoss(pawn) / 2500f) < 6)
                             return true;
                     }
 
-                    Job job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, Settings.doc_clean_num);
-                    if (job != null)
-                        __instance.jobQueue.EnqueueFirst(job);
+                    job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, Settings.doc_clean_num);
                 }
+                //
+                if (job != null)
+                    __instance.jobQueue.EnqueueFirst(job);
+                //
                 return true;
             }
         }
