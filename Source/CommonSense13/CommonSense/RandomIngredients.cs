@@ -55,9 +55,10 @@ namespace CommonSense
                         return;
 
                     l = l.Where(
-                        x => x.IsIngestible && x.comps != null && !x.comps.Any(y => y.compClass == typeof(CompIngredients)) &&
-                        FoodUtility.GetMeatSourceCategory(x) != MeatSourceCategory.Humanlike && (x.ingestible.specialThoughtAsIngredient == null || x.ingestible.specialThoughtAsIngredient.stages == null
-                        || x.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect >= 0)
+                        x => x.IsIngestible && x.comps != null && !x.comps.Any(y => y.compClass == typeof(CompIngredients))
+                        && FoodUtility.GetMeatSourceCategory(x) != MeatSourceCategory.Humanlike 
+                        && (x.ingestible.specialThoughtAsIngredient == null || x.ingestible.specialThoughtAsIngredient.stages == null || x.ingestible.specialThoughtAsIngredient.stages[0].baseMoodEffect >= 0)
+                        && (x.ingredient == null || x.ingredient.mergeCompatibilityTags.NullOrEmpty())
                     );
 
                     ThingDef td = null;

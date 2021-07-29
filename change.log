@@ -1,4 +1,8 @@
-﻿1.1.40
+﻿1.1.41
+- removed unstackable ingredients from random pool;
+- added eating from dispenser to the advanced cleaning list;
+
+1.1.40
 - made ordering suggestions for andorid mods;
 - added PrisonerConvert to the cleaning list;
 - added PrisonerEnslave to the cleaning list;
