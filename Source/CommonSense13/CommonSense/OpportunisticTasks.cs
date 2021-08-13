@@ -164,7 +164,7 @@ namespace CommonSense
                     if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || newJob == null || newJob.def == null)
                         return true;
 
-                    if (Settings.fun_police && __instance._pawn.needs.joy != null && __instance._pawn.needs.joy.CurLevel < 0.8f)
+                    if (Settings.fun_police && __instance._pawn.needs?.joy != null && __instance._pawn.needs.joy.CurLevel < 0.8f)
                     {
                         CompJoyToppedOff c = __instance._pawn.TryGetComp<CompJoyToppedOff>();
                         if (c != null)
@@ -221,7 +221,8 @@ namespace CommonSense
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"CommonSense: opportunistic task skipped due to error ({e.Message})");
+                    Log.Warning($"CommonSense: opportunistic task skipped due to error ({e.Message}) ({__instance._pawn}, {newJob})");
+                    return false;
                 }
                 return true;
             }

@@ -1,4 +1,7 @@
-﻿1.1.41
+﻿1.1.42
+- changed "opportunistic task skipped" message from error to a warning, made so after that message action reverts to vanilla;
+
+1.1.41
 - removed unstackable ingredients from random pool;
 - added eating from dispenser to the advanced cleaning list;
 
