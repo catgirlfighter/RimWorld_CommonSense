@@ -222,7 +222,6 @@ namespace CommonSense
                 catch (Exception e)
                 {
                     Log.Warning($"CommonSense: opportunistic task skipped due to error ({e.Message}) ({__instance._pawn}, {newJob})");
-                    return false;
                 }
                 return true;
             }
