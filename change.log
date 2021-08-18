@@ -1,5 +1,9 @@
-﻿1.1.42
+﻿1.1.43
+- changed, how using drugs to cheer up patients works. Used to work through standard JoyGiver_TakeDrug, but since Chemical idiot pawns straight forward ignore everything when it comes to drugs, doctors would feed them every joy drug possible regardless of rules. I've made a new JoyGiver_TakeDrug_Patient that works only within the mod and doesn't let chemically stupid pawns to have their way;
+
+1.1.42
 - changed "opportunistic task skipped" message from error to a warning, made so after that message action reverts to vanilla;
+- took into account that pawns might not have "needs" at all;
 
 1.1.41
 - removed unstackable ingredients from random pool;
