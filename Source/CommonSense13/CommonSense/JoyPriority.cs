@@ -36,19 +36,6 @@ namespace CommonSense
                 return 0.8f;
         }
 
-        /*
-        static float PickUpMeal(Pawn pawn)
-        {
-            if (!Settings.fun_police)
-                return 20f;
-
-            if (pawn.GetTimeAssignment() == TimeAssignmentDefOf.Sleep && (pawn.needs == null || pawn.needs.rest == null || pawn.needs.rest.CurLevel > 0.3f) || pawn.GetTimeAssignment() == TimeAssignmentDefOf.Joy)
-                return 9999f;
-            else
-                return 20f;
-        }
-        */
-
         [HarmonyPatch(typeof(ThinkNode_Priority_GetJoy), "GetPriority")]
         static class ThinkNode_Priority_GetJoy_GetPriority_CommonSensePatch
         {
@@ -74,6 +61,8 @@ namespace CommonSense
             }
         }
 
+        /* I don't even remember what it was made for, it's a lot different now. Maybe some bug or bad behavior?
+         * that's why you make comments for each fix, you stupid!
         [HarmonyPatch(typeof(JobGiver_PackFood), "TryGiveJob")]
         static class JobGiver_PackFood_TryGiveJob_CommonSensePatch
         {
@@ -96,7 +85,7 @@ namespace CommonSense
             static bool Prefix(JobGiver_PackFood __instance, ref Job __result, Pawn pawn)
             {
                 if (!Settings.fun_police || pawn.timetable == null || pawn.timetable.CurrentAssignment != TimeAssignmentDefOf.Joy
-                    && (pawn.timetable.CurrentAssignment != TimeAssignmentDefOf.Sleep || pawn.needs != null && pawn.needs.rest != null && pawn.needs.rest.CurLevel <= 0.3f))
+                    && (pawn.timetable.CurrentAssignment != TimeAssignmentDefOf.Sleep || pawn.needs?.rest != null && pawn.needs.rest.CurLevel <= 0.3f))
                     return true;
 
                 if (pawn.inventory == null)
@@ -154,5 +143,6 @@ namespace CommonSense
                 return false;
             }
         }
+        */
     }
 }
