@@ -63,18 +63,18 @@
   <social_relax_economy_note>通常小人在吸毒前會先坐一兩個小時，這很浪費效果</social_relax_economy_note>
   <advanced_cleaning_ingest_label>殖民者會在用餐或進行社交活動前先打掃</advanced_cleaning_ingest_label>
   <advanced_cleaning_ingest_note>小人在坐下前會打掃桌子的周圍</advanced_cleaning_ingest_note>
-  <mood_regen_label>條件允許了話，在入睡前殖民者的心情會緩慢往50%靠近</mood_regen_label>
+  <mood_regen_label>若條件允許，在入睡前殖民者的心情會緩慢往50%靠近</mood_regen_label>
   <mood_regen_note>我想說睡一下一切都會沒事的...</mood_regen_note>
   <safe_wander_label>鼓勵殖民者別在壞天氣時出外遊蕩</safe_wander_label>
-  <safe_wander_note>別在走進毒氣裡面了，有事嗎？</safe_wander_note>
+  <safe_wander_note>別再走進毒氣裡面了，有事嗎？</safe_wander_note>
   <pathing_head>路徑規劃</pathing_head>
   <polite_wander_label>避免我方殖民者遊蕩到臥室或牢房</polite_wander_label>
   <polite_wander_note>沒禮貌+危險，是吧？</polite_wander_note>
   <ingest_any_drugs_label>允許使用身上運送的藥物</ingest_any_drugs_label>
-  <ingest_any_drugs_note>如果能吃，不應該丟在地方</ingest_any_drugs_note>
+  <ingest_any_drugs_note>如果能吃，不應該丟在地上</ingest_any_drugs_note>
   <DoCleanCompToggleLabel>打掃這張工作台</DoCleanCompToggleLabel>
   <DoCleanCompToggleDescActive>殖民者會打掃這張工作台周圍</DoCleanCompToggleDescActive>
   <DoCleanCompToggleDescInactive>殖民者"不會"打掃這張工作台周圍</DoCleanCompToggleDescInactive>
   <advanced_inbetween_cleaning_gizmo_label>顯示打掃/不打掃的開關</advanced_inbetween_cleaning_gizmo_label>
-  <advanced_inbetween_cleaning_gizmo_note>這可以禁止打掃某些工作台</advanced_inbetween_cleaning_gizmo_note>
+  <advanced_inbetween_cleaning_gizmo_note>這將禁止打掃某些工作台</advanced_inbetween_cleaning_gizmo_note>
 </LanguageData>
