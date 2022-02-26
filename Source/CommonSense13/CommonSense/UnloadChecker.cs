@@ -187,15 +187,20 @@ namespace CommonSense
                         return;
                     }
                     //
-                    if (pawn.equipment.Contains(MarkedThing))
+                    if (pawn.equipment != null && pawn.equipment.Contains(MarkedThing))
                     {
                         Equipment = (ThingWithComps)MarkedThing;
                         Apparel = null;
                     }
+                    else if (pawn.apparel != null && pawn.apparel.Contains(MarkedThing))
+                    {
+                        Apparel = (Apparel)MarkedThing;
+                        Equipment = null;
+                    }
                     else
                     {
-                        Apparel = pawn.apparel.Contains(MarkedThing) ? (Apparel)MarkedThing : null;
                         Equipment = null;
+                        Apparel = null;
                     }
 
                     ThingCount firstUnloadableThing = MarkedThing == null ? default(ThingCount) : new ThingCount(MarkedThing, MarkedThing.stackCount);
