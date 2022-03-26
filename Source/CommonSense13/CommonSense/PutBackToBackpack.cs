@@ -17,7 +17,7 @@ namespace CommonSense
             CompUnloadChecker cuc = CarriedThing.TryGetComp<CompUnloadChecker>();
             Thing r = null;
             bool b;
-            if (cuc == null || !cuc.WasInInventory)
+            if (!Settings.put_back_to_inv || cuc == null || !cuc.WasInInventory)
             {
                 b = TryDropCarriedThing(dropLoc, mode, out r, placedAction);
                 resultingThing = r;

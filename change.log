@@ -1,4 +1,7 @@
-﻿1.1.45
+﻿1.1.46
+- fixed put back to backpack option not disabling. I guess people never cared to return vanilla behavior until now;
+
+1.1.45
 - compatibility improvements for inventory management;
 
 1.1.44+
