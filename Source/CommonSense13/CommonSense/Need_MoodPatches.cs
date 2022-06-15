@@ -13,12 +13,12 @@ namespace CommonSense
 {
     [HarmonyPatch(typeof(Need_Mood), "NeedInterval")]
 
-    static class Need_NeedInterval_CommonSensePatch
+    public static class Need_NeedInterval_CommonSensePatch
     {
-        static FieldInfo LPawn = AccessTools.Field(typeof(Need), "pawn");
-        static PropertyInfo LIsFrozen = AccessTools.Property(typeof(Need), "IsFrozen");
+        private static readonly FieldInfo LPawn = AccessTools.Field(typeof(Need), "pawn");
+        private static readonly PropertyInfo LIsFrozen = AccessTools.Property(typeof(Need), "IsFrozen");
 
-        static void Postfix(Need_Mood __instance)
+        public static void Postfix(Need_Mood __instance)
         {
             if (!Settings.mood_regen) return;
             Pawn pawn = (Pawn)LPawn.GetValue(__instance);

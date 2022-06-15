@@ -9,12 +9,12 @@ using UnityEngine;
 
 namespace CommonSense
 {
-    class TextChanges
+    public class TextChanges
     {
         [HarmonyPatch(typeof(ThingFilter), "SetAllowAllWhoCanMake")]
-        public class ThingFilter_SetAllowAllWhoCanMake_CommonSensePatch
+        public static class ThingFilter_SetAllowAllWhoCanMake_CommonSensePatch
         {
-            static bool Prefix(ThingFilter __instance, ThingDef thing)
+            public static bool Prefix(ThingFilter __instance, ThingDef thing)
             {
                 List<ThingDef> allowAllWhoCanMake = Traverse.Create(__instance).Field("allowAllWhoCanMake").GetValue<List<ThingDef>>();
                 if (allowAllWhoCanMake == null)
@@ -27,7 +27,7 @@ namespace CommonSense
             }
         }
 
-        static string ShortCategory(ThingCategoryDef tcDef)
+        private static string ShortCategory(ThingCategoryDef tcDef)
         {
             if (tcDef.parent == null)
                 return "NoCategory".Translate().CapitalizeFirst();
@@ -35,7 +35,7 @@ namespace CommonSense
                 return tcDef.label.CapitalizeFirst();
         }
 
-        static string GetCategoryPath(ThingCategoryDef tcDef)
+        private static string GetCategoryPath(ThingCategoryDef tcDef)
         {
             if (tcDef.parent == null)
                 return "NoCategory".Translate().CapitalizeFirst();
@@ -43,7 +43,7 @@ namespace CommonSense
             {
                 string s = tcDef.label.CapitalizeFirst();
                 ThingCategoryDef def = tcDef.parent;
-
+        
                 while (def.parent != null)
                 {
                     s += " \\ " + def.label.CapitalizeFirst();
@@ -53,9 +53,8 @@ namespace CommonSense
             }
         }
 
-        static string GetCategList(List<ThingCategoryDef> list)
+        private static string GetCategList(List<ThingCategoryDef> list)
         {
-            //if (list.NullOrEmpty()) return "NoCategory".Translate().CapitalizeFirst();
             string s = "";
             foreach (var i in list)
                 s += GetCategoryPath(i) + "\n";
@@ -63,12 +62,12 @@ namespace CommonSense
             else return s;
         }
 
-        //public static StatDrawEntry CategoryEntry(ThingCategoryDef tcDef)
-        //{
-        //    return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), GetCategoryPath(tcDef), ShortCategory(tcDef), 1000);
-        //}
+        public static StatDrawEntry CategoryEntry(ThingCategoryDef tcDef)
+        {
+            return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), GetCategoryPath(tcDef), ShortCategory(tcDef), 1000);
+        }
 
-        static IEnumerable<StatDrawEntry> CategoryEntryRow(Thing thing)
+        public static IEnumerable<StatDrawEntry> CategoryEntryRow(Thing thing)
         {
             ThingCategoryDef d;
             if (thing == null || thing.def == null || (d = thing.def.FirstThingCategory) == null)
@@ -77,9 +76,8 @@ namespace CommonSense
             yield return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), GetCategoryPath(d), GetCategList(thing.def.thingCategories), 1000);
         }
 
-        //public static void DrawStatsReport(Rect rect, Thing thing)
         [HarmonyPatch(typeof(StatsReportUtility), "DrawStatsReport", new Type[] { typeof(Rect), typeof(Thing) })]
-        static class StatsReportUtility_DrawStatsReport_CommonSensePatch
+        public static class StatsReportUtility_DrawStatsReport_CommonSensePatch
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase mb)
             {
@@ -95,7 +93,7 @@ namespace CommonSense
                         b = true;
                         yield return new CodeInstruction(OpCodes.Ldsfld, LcachedDrawEntries);
                         yield return new CodeInstruction(OpCodes.Ldarg_1);
-                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(TextChanges), "CategoryEntryRow"));
+                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(TextChanges), nameof(TextChanges.CategoryEntryRow)));
                         yield return new CodeInstruction(OpCodes.Callvirt, LAddRange);
                     }
                 }
@@ -103,9 +101,9 @@ namespace CommonSense
         }
 
         [HarmonyPatch(typeof(ThingFilter), nameof(ThingFilter.Summary), MethodType.Getter)]
-        public class ThingFilter_Summary_CommonSensePatch
+        public static class ThingFilter_Summary_CommonSensePatch
         {
-            static bool Prefix(ThingFilter __instance, ref string __result)
+            public static bool Prefix(ThingFilter __instance, ref string __result)
             {
                 if (!Settings.gui_extended_recipe)
                     return true;

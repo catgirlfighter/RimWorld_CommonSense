@@ -9,13 +9,13 @@ using System.Reflection;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(JobDriver_Ingest), "PrepareToIngestToils_ToolUser")]
-    static class JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch
+    public static class JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch
     {
         static FieldInfo LeatingFromInventory = null;
         static MethodInfo LReserveFood = null;
         static MethodInfo LTakeExtraIngestibles = null;
 
-        static void Prepare()
+        public static void Prepare()
         {
             LeatingFromInventory = AccessTools.Field(typeof(JobDriver_Ingest), "eatingFromInventory");
             LReserveFood = AccessTools.Method(typeof(JobDriver_Ingest), "ReserveFood");
@@ -88,7 +88,7 @@ namespace CommonSense
             return toil;
         }
 
-        static IEnumerable<Toil> prepToils(JobDriver_Ingest driver, Toil chewToil)
+        private static IEnumerable<Toil> prepToils(JobDriver_Ingest driver, Toil chewToil)
         {
             if ((bool)LeatingFromInventory.GetValue(driver))
             {
@@ -151,7 +151,7 @@ namespace CommonSense
                 IntVec3 intVec = IntVec3.Invalid;
                 Thing thing = null;
                 Thing thing2 = actor.CurJob.GetTarget(ingestibleInd).Thing;
-                Predicate<Thing> baseChairValidator = delegate (Thing t)
+                bool baseChairValidator(Thing t)
                 {
                     if (t.def.building == null || !t.def.building.isSittable)
                     {
@@ -188,7 +188,8 @@ namespace CommonSense
                         }
                     }
                     return result;
-                };
+                }
+
                 if (thing2.def.ingestible.chairSearchRadius > 0f)
                 {
                     thing = GenClosest.ClosestThingReachable(actor.Position, actor.Map, ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial), PathEndMode.OnCell, TraverseParms.For(actor, Danger.Deadly, TraverseMode.ByPawn, false), thing2.def.ingestible.chairSearchRadius, (Thing t) => baseChairValidator(t) && t.Position.GetDangerFor(actor, t.Map) == Danger.None, null, 0, -1, false, RegionType.Set_Passable, false);
@@ -231,7 +232,7 @@ namespace CommonSense
             return toil;
         }
 
-        static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance, Toil chewToil)
+        public static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance, Toil chewToil)
         {
             if (!Settings.adv_cleaning_ingest)
                 return true;
@@ -243,10 +244,10 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(JobDriver_Ingest), "PrepareToIngestToils_Dispenser")]
-    static class JobDriver_PrepareToIngestToils_Dispenser_CommonSensePatch
+    public static class JobDriver_PrepareToIngestToils_Dispenser_CommonSensePatch
     {
 
-        static IEnumerable<Toil> prepToils(JobDriver_Ingest driver)
+       private static IEnumerable<Toil> prepToils(JobDriver_Ingest driver)
         {
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedNullOrForbidden(TargetIndex.A);
             yield return Toils_Ingest.TakeMealFromDispenser(TargetIndex.A, driver.pawn);
@@ -278,7 +279,7 @@ namespace CommonSense
             yield return Toils_Ingest.FindAdjacentEatSurface(TargetIndex.B, TargetIndex.A);
         }
 
-        static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance)
+        public static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance)
         {
             if (!Settings.adv_cleaning_ingest)
                 return true;

@@ -21,10 +21,10 @@ namespace CommonSense
         }
     }
 
-    class JoyPriority
+    [HarmonyPatch(typeof(ThinkNode_Priority_GetJoy), "GetPriority")]
+    public static class ThinkNode_Priority_GetJoy_GetPriority_CommonSensePatch
     {
-
-        static float JoyPolicePriority(Pawn pawn)
+        private static float JoyPolicePriority(Pawn pawn)
         {
             if (!Settings.fun_police)
                 return 0.8f;
@@ -36,113 +36,24 @@ namespace CommonSense
                 return 0.8f;
         }
 
-        [HarmonyPatch(typeof(ThinkNode_Priority_GetJoy), "GetPriority")]
-        static class ThinkNode_Priority_GetJoy_GetPriority_CommonSensePatch
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase mb)
         {
-
-            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase mb)
+            foreach (var i in (instructions))
             {
-                foreach (var i in (instructions))
+                if (i.opcode == OpCodes.Ldc_R4 && (float)i.operand == 0.95f)
                 {
-                    if (i.opcode == OpCodes.Ldc_R4 && (float)i.operand == 0.95f)
-                    {
-                        yield return new CodeInstruction(OpCodes.Ldarg_1);
-                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(JoyPriority), nameof(JoyPriority.JoyPolicePriority)));
-                    }
-                    else if (i.opcode == OpCodes.Ldc_R4 && (float)i.operand == 2f)
-                    {
-                        yield return new CodeInstruction(OpCodes.Ldc_R4, 4f);
-                    }
-                    else
-                    {
-                        yield return i;
-                    }
+                    yield return new CodeInstruction(OpCodes.Ldarg_1);
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ThinkNode_Priority_GetJoy_GetPriority_CommonSensePatch), nameof(JoyPolicePriority)));
+                }
+                else if (i.opcode == OpCodes.Ldc_R4 && (float)i.operand == 2f)
+                {
+                    yield return new CodeInstruction(OpCodes.Ldc_R4, 4f);
+                }
+                else
+                {
+                    yield return i;
                 }
             }
         }
-
-        /* I don't even remember what it was made for, it's a lot different now. Maybe some bug or bad behavior?
-         * that's why you make comments for each fix, you stupid!
-        [HarmonyPatch(typeof(JobGiver_PackFood), "TryGiveJob")]
-        static class JobGiver_PackFood_TryGiveJob_CommonSensePatch
-        {
-            static MethodInfo LGetInventoryPackableFoodNutrition = null;
-            static MethodInfo LIsGoodPackableFoodFor = null;
-            static bool Prepare()
-            {
-
-                LGetInventoryPackableFoodNutrition = AccessTools.Method(typeof(JobGiver_PackFood), "GetInventoryPackableFoodNutrition");
-                if (LGetInventoryPackableFoodNutrition == null)
-                    throw new Exception("Can't get method JobGiver_PackFood.GetInventoryPackableFoodNutrition");
-
-                LIsGoodPackableFoodFor = AccessTools.Method(typeof(JobGiver_PackFood), "IsGoodPackableFoodFor");
-                if (LIsGoodPackableFoodFor == null)
-                    throw new Exception("Can't get method JobGiver_PackFood.IsGoodPackableFoodFor");
-
-                return true;
-            }
-
-            static bool Prefix(JobGiver_PackFood __instance, ref Job __result, Pawn pawn)
-            {
-                if (!Settings.fun_police || pawn.timetable == null || pawn.timetable.CurrentAssignment != TimeAssignmentDefOf.Joy
-                    && (pawn.timetable.CurrentAssignment != TimeAssignmentDefOf.Sleep || pawn.needs?.rest != null && pawn.needs.rest.CurLevel <= 0.3f))
-                    return true;
-
-                if (pawn.inventory == null)
-                {
-                    __result = null;
-                    return false;
-                }
-
-                float invNutrition = (float)LGetInventoryPackableFoodNutrition.Invoke(__instance, new object[] { pawn });
-                if (invNutrition > 0.4f)
-                {
-                    __result = null;
-                    return false;
-                }
-
-                if (pawn.Map.resourceCounter.TotalHumanEdibleNutrition < pawn.Map.mapPawns.ColonistsSpawnedCount * 1.5f)
-                {
-                    __result = null;
-                    return false;
-                }
-
-                Thing thing = null;
-                ref Thing foodSource = ref thing;
-                ThingDef thingDef = null;
-                ref ThingDef foodDef = ref thingDef;
-
-                if (!FoodUtility.TryFindBestFoodSourceFor(pawn, pawn, false, out foodSource, out foodDef, false, false, false, false, false, false, true))
-                {
-                    __result = null;
-                    return false;
-                }
-
-                Building_NutrientPasteDispenser building_NutrientPasteDispenser = thing as Building_NutrientPasteDispenser;
-                if (building_NutrientPasteDispenser != null)
-                {
-                    __result = null;
-                    return false;
-                }
-
-                if (!(bool)LIsGoodPackableFoodFor.Invoke(__instance, new object[] { thing, pawn }))
-                {
-                    __result = null;
-                    return false;
-                }
-
-                float num = pawn.needs.food.MaxLevel - invNutrition;
-                int num2 = Mathf.FloorToInt(num / thing.GetStatValue(StatDefOf.Nutrition, true));
-                num2 = Mathf.Min(num2, thing.stackCount);
-                num2 = Mathf.Max(num2, 1);
-
-                __result = new Job(JobDefOf.TakeInventory, thing)
-                {
-                    count = num2
-                };
-                return false;
-            }
-        }
-        */
     }
 }

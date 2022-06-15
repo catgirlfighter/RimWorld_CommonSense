@@ -30,7 +30,7 @@ namespace CommonSense
             WasInInventory = AWasInInventory;
         }
 
-        static public CompUnloadChecker GetChecker(Thing thing, bool InitShouldUnload = false, bool InitWasInInventory = false)
+        public static CompUnloadChecker GetChecker(Thing thing, bool InitShouldUnload = false, bool InitWasInInventory = false)
         {
 
             if (!(thing is ThingWithComps) && !thing.GetType().IsSubclassOf(typeof(ThingWithComps)))
@@ -50,39 +50,22 @@ namespace CommonSense
             return thingComp;
         }
 
-        public static Thing getFirstMarked(Pawn pawn)
+        public static Thing GetFirstMarked(Pawn pawn)
         {
             Thing t = null;
-            if (pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            if (pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
             if (!Settings.gui_manual_unload) return t;
-            if (t == null && pawn.equipment != null) t = pawn.equipment.AllEquipmentListForReading.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
-            if (t == null && pawn.apparel != null) t = pawn.apparel.WornApparel.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>() != null && x.TryGetComp<CompUnloadChecker>().ShouldUnload);
+            if (t == null && pawn.equipment != null) t = pawn.equipment.AllEquipmentListForReading.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
+            if (t == null && pawn.apparel != null) t = pawn.apparel.WornApparel.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
             return t;
         }
     }
 
-    //obsolete now, but left in case
-    //[HarmonyPatch(typeof(GenDrop), nameof(GenDrop.TryDropSpawn))]
-    //static class GenPlace_TryDropSpawn_CommonSensePatch
-    //{
-
-    //    static void Postfix(Thing thing, IntVec3 dropCell, Map map, ThingPlaceMode mode, Thing resultingThing, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator)
-    //    {
-    //        CompUnloadChecker UChecker = resultingThing.TryGetComp<CompUnloadChecker>();
-    //        if (UChecker != null)
-    //        {
-    //            UChecker.WasInInventory = false;
-    //            UChecker.ShouldUnload = false;
-    //        }
-
-    //    }
-    //}
-
     [HarmonyPatch(typeof(GenDrop), nameof(GenDrop.TryDropSpawn))]
-    static class GenPlace_TryDropSpawn_NewTmp_CommonSensePatch
+    public static class GenPlace_TryDropSpawn_NewTmp_CommonSensePatch
     {
 
-        static void Postfix(Thing thing, IntVec3 dropCell, Map map, ThingPlaceMode mode, Thing resultingThing, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator)
+        public static void Postfix(Thing thing, IntVec3 dropCell, Map map, ThingPlaceMode mode, Thing resultingThing, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator)
         {
             CompUnloadChecker UChecker = resultingThing.TryGetComp<CompUnloadChecker>();
             if (UChecker != null)
@@ -95,9 +78,9 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(ThingWithComps), "ExposeData")]
-    static class ThingWithComps_ExposeData_CommonSensePatch
+    public static class ThingWithComps_ExposeData_CommonSensePatch
     {
-        static void Postfix(ThingWithComps __instance)
+        public static void Postfix(ThingWithComps __instance)
         {
             if (Scribe.mode == LoadSaveMode.LoadingVars)
             {
@@ -112,9 +95,9 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(ThingOwner<Thing>), "TryAdd", new Type[] { typeof(Thing), typeof(bool) })]
-    static class ThingOwnerThing_TryAdd_CommonSensePatch
+    public static class ThingOwnerThing_TryAdd_CommonSensePatch
     {
-        static void Postfix(ThingOwner<Thing> __instance, bool __result, Thing item)
+        public static void Postfix(ThingOwner<Thing> __instance, bool __result, Thing item)
         {
             if (!__result || item.Destroyed || item.stackCount == 0)
                 return;
@@ -127,11 +110,11 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(JobGiver_UnloadYourInventory), "TryGiveJob", new Type[] { typeof(Pawn) })]
-    static class JobGiver_UnloadYourInventory_TryGiveJob_CommonSensePatch
+    public static class JobGiver_UnloadYourInventory_TryGiveJob_CommonSensePatch
     {
-        static bool Prefix(ref Job __result, ref JobGiver_UnloadYourInventory __instance, ref Pawn pawn)
+        public static bool Prefix(ref Job __result, ref JobGiver_UnloadYourInventory __instance, ref Pawn pawn)
         {
-            Thing thing = CompUnloadChecker.getFirstMarked(pawn);
+            Thing thing = CompUnloadChecker.GetFirstMarked(pawn);
             if (thing != null)
             {
                 __result = new Job(CommonSenseJobDefOf.UnloadMarkedItems);
@@ -167,7 +150,7 @@ namespace CommonSense
         float duration = 0;
 
 
-        static bool stillUnloadable(Thing thing)
+        private static bool stillUnloadable(Thing thing)
         {
             CompUnloadChecker c = thing.TryGetComp<CompUnloadChecker>();
             return c != null && c.ShouldUnload;
@@ -180,7 +163,7 @@ namespace CommonSense
             {
                 initAction = delegate ()
                 {
-                    Thing MarkedThing = CompUnloadChecker.getFirstMarked(pawn);
+                    Thing MarkedThing = CompUnloadChecker.GetFirstMarked(pawn);
                     if (MarkedThing == null)
                     {
                         EndJobWith(JobCondition.Succeeded);
@@ -204,11 +187,10 @@ namespace CommonSense
                     }
 
                     ThingCount firstUnloadableThing = MarkedThing == null ? default(ThingCount) : new ThingCount(MarkedThing, MarkedThing.stackCount);
-                    IntVec3 c;
-                    if (!StoreUtility.TryFindStoreCellNearColonyDesperate(firstUnloadableThing.Thing, pawn, out c))
+                    //IntVec3 c;
+                    if (!StoreUtility.TryFindStoreCellNearColonyDesperate(firstUnloadableThing.Thing, pawn, out var c))
                     {
-                        Thing thing;
-                        pawn.inventory.innerContainer.TryDrop(firstUnloadableThing.Thing, ThingPlaceMode.Near, firstUnloadableThing.Count, out thing, null, null);
+                        pawn.inventory.innerContainer.TryDrop(firstUnloadableThing.Thing, ThingPlaceMode.Near, firstUnloadableThing.Count, out Thing thing, null, null);
                         EndJobWith(JobCondition.Succeeded);
                         return;
                     }
@@ -236,19 +218,21 @@ namespace CommonSense
                 }
             };
             //if equiped, wait unequipping time
-            Toil wait = new Toil();
-            wait.initAction = delegate ()
+            Toil wait = new Toil
             {
-                ticker = 0;
-                duration = Apparel != null ? Apparel.GetStatValue(StatDefOf.EquipDelay, true) * 60f : Equipment != null ? 30 : 0;
-                pawn.pather.StopDead();
+                initAction = delegate ()
+                {
+                    ticker = 0;
+                    duration = Apparel != null ? Apparel.GetStatValue(StatDefOf.EquipDelay, true) * 60f : Equipment != null ? 30 : 0;
+                    pawn.pather.StopDead();
+                },
+                tickAction = delegate ()
+                {
+                    if (ticker >= duration) ReadyForNextToil();
+                    ticker++;
+                },
+                defaultCompleteMode = ToilCompleteMode.Never
             };
-            wait.tickAction = delegate ()
-            {
-                if (ticker >= duration) ReadyForNextToil();
-                ticker++;
-            };
-            wait.defaultCompleteMode = ToilCompleteMode.Never;
             wait.WithProgressBar(TargetIndex.A, () => ticker / duration);
             //unequip to inventory
             yield return wait;
@@ -300,9 +284,6 @@ namespace CommonSense
         }
 
         private int countToDrop = -1;
-        private const TargetIndex ItemToHaulInd = TargetIndex.A;
-        private const TargetIndex StoreCellInd = TargetIndex.B;
-        private const int UnloadDuration = 10;
     }
 
     public static class ITab_Pawn_Gear_Utility
@@ -316,7 +297,7 @@ namespace CommonSense
     [HarmonyPatch(typeof(ITab_Pawn_Gear), "DrawThingRow")]
     public static class ITab_Pawn_Gear_DrawThingRow_CommonSensePatch
     {
-        static void Prepare()
+        public static void Prepare()
         {
             ITab_Pawn_Gear_Utility.LCanControl = AccessTools.Property(typeof(ITab_Pawn_Gear), "CanControl");
             ITab_Pawn_Gear_Utility.LSelPawnForGear = AccessTools.Property(typeof(ITab_Pawn_Gear), "SelPawnForGear");

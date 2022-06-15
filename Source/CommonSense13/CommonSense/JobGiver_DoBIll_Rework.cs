@@ -9,7 +9,7 @@ namespace CommonSense
 {
     //protected override IEnumerable<Toil> JobDriver_DoBill.MakeNewToils()
     [HarmonyPatch(typeof(JobDriver_DoBill), "MakeNewToils")]
-    static class JobDriver_DoBill_MakeNewToils_CommonSensePatch
+    public static class JobDriver_DoBill_MakeNewToils_CommonSensePatch
     {
         public class JobDriver_DoBill_Access: JobDriver_DoBill
         {
@@ -355,7 +355,7 @@ namespace CommonSense
             yield break;
         }
 
-        static bool Prefix(ref IEnumerable<Toil> __result, ref JobDriver_DoBill_Access __instance)
+        public static bool Prefix(ref IEnumerable<Toil> __result, ref JobDriver_DoBill_Access __instance)
         {
             if (!Settings.adv_cleaning && !Settings.adv_haul_all_ings)
                 return true;

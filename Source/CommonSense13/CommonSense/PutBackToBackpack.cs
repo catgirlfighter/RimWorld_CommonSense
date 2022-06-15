@@ -15,11 +15,11 @@ namespace CommonSense
         {
 
             CompUnloadChecker cuc = CarriedThing.TryGetComp<CompUnloadChecker>();
-            Thing r = null;
+            //Thing r = null;
             bool b;
             if (!Settings.put_back_to_inv || cuc == null || !cuc.WasInInventory)
             {
-                b = TryDropCarriedThing(dropLoc, mode, out r, placedAction);
+                b = TryDropCarriedThing(dropLoc, mode, out var r, placedAction);
                 resultingThing = r;
                 return b;
             }
@@ -30,7 +30,7 @@ namespace CommonSense
         }
     }
 
-    class PutBackToBackpack
+    public class PutBackToBackpack
     {
         //private void CleanupCurrentJob(JobCondition condition, bool releaseReservations, bool cancelBusyStancesSoft = true)
         [HarmonyPatch(typeof(Pawn_JobTracker), "CleanupCurrentJob")]
@@ -62,7 +62,7 @@ namespace CommonSense
 
                     }
                 }
-                if(m==null)
+                if(m == null)
                     throw new Exception("Couldn't find TryDropCarriedThing");
 
                 foreach (var i in instructions)

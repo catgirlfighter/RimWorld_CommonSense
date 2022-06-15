@@ -13,9 +13,9 @@ using System.Reflection.Emit;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(RCellFinder), "CanWanderToCell")]
-    static class RCellFinder_CanWanderToCell_CommonSensePatch
+    public static class RCellFinder_CanWanderToCell_CommonSensePatch
     {
-        static void Postfix(ref bool __result, IntVec3 c, IntVec3 root, Pawn pawn)
+        public static void Postfix(ref bool __result, IntVec3 c, IntVec3 root, Pawn pawn)
         {
             if (!__result) return;
             if (!Settings.polite_wander || pawn.Faction.HostileTo(Faction.OfPlayer)) return;
@@ -33,24 +33,18 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(JobGiver_Wander), "TryGiveJob")]
-    static class JobGiver_Wander_TryGiveJob_CommonSensePatch
+    public static class JobGiver_Wander_TryGiveJob_CommonSensePatch
     {
-        static IntVec3 FindRoofedInHomeArea(Pawn pawn)
+        private static IntVec3 FindRoofedInHomeArea(Pawn pawn)
         {
-            Predicate<IntVec3> cellValidator = (IntVec3 x) => pawn.Map.areaManager.Home[x] && !PawnUtility.KnownDangerAt(x, pawn.Map, pawn) && !x.GetTerrain(pawn.Map).avoidWander && x.Standable(pawn.Map) && x.Roofed(pawn.Map);
-            Predicate<Region> validator = delegate (Region x)
-            {
-                IntVec3 intVec;
-                return x.OverlapWith(pawn.Map.areaManager.Home) > AreaOverlap.None && !x.IsForbiddenEntirely(pawn) && x.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out intVec);
-            };
-            Region reg;
-            if (!CellFinder.TryFindClosestRegionWith(pawn.GetRegion(RegionType.Set_Passable), TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), validator, 100, out reg, RegionType.Set_Passable))
+            bool cellValidator(IntVec3 x) => pawn.Map.areaManager.Home[x] && !PawnUtility.KnownDangerAt(x, pawn.Map, pawn) && !x.GetTerrain(pawn.Map).avoidWander && x.Standable(pawn.Map) && x.Roofed(pawn.Map);
+            bool validator(Region x) => x.OverlapWith(pawn.Map.areaManager.Home) > AreaOverlap.None && !x.IsForbiddenEntirely(pawn) && x.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out var intVec);
+            if (!CellFinder.TryFindClosestRegionWith(pawn.GetRegion(RegionType.Set_Passable), TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), validator, 100, out var reg, RegionType.Set_Passable))
             {
                 return IntVec3.Invalid;
             }
             //
-            IntVec3 root;
-            if (!reg.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out root))
+            if (!reg.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out var root))
             {
                 return IntVec3.Invalid;
             }
@@ -58,7 +52,7 @@ namespace CommonSense
             return RCellFinder.RandomWanderDestFor(pawn, root, 7, ((Pawn p, IntVec3 v1, IntVec3 v2) => v1.Roofed(p.Map)), PawnUtility.ResolveMaxDanger(pawn, Danger.Deadly));
         }
 
-        static bool Prefix(Pawn pawn, ref Job __result, JobGiver_Wander __instance)
+        public static bool Prefix(Pawn pawn, ref Job __result, JobGiver_Wander __instance)
         {
             if (!pawn.ShouldHideFromWeather() || pawn.Position.Roofed(pawn.Map))
                 return true;
@@ -78,7 +72,7 @@ namespace CommonSense
             return true;
         }
 
-        static void Postfix(Pawn pawn, ref Job __result)
+        public static void Postfix(Pawn pawn, ref Job __result)
         {
             if (!Settings.safe_wander
                 || __result == null
@@ -94,15 +88,15 @@ namespace CommonSense
     }
 
     [HarmonyPatch]
-    static class JobDriver_Goto_MoveNext_CommonSensePatch
+    public static class JobDriver_Goto_MoveNext_CommonSensePatch
     {
-        static MethodBase TargetMethod()
+        internal static MethodBase TargetMethod()
         {
             Type inner = AccessTools.Inner(typeof(JobDriver_Goto), "<MakeNewToils>d__1");
             return AccessTools.Method(inner, "MoveNext");
         }
         //modified copy of Pawn_PathFollower.CostToMoveIntoCell
-        static int MoveCost(this Pawn pawn, IntVec3 from, IntVec3 to)
+        private static int MoveCost(this Pawn pawn, IntVec3 from, IntVec3 to)
         {
             int num;
             if (to.x == from.x || to.z == from.z)
@@ -153,10 +147,9 @@ namespace CommonSense
                             }
                             break;
                         case LocomotionUrgency.Jog:
-                            //num = num;
                             break;
                         case LocomotionUrgency.Sprint:
-                            num = Mathf.RoundToInt((float)num * 0.75f);
+                            num = Mathf.RoundToInt(num * 0.75f);
                             break;
                     }
                 }

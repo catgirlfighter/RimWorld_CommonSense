@@ -11,9 +11,9 @@ using Verse;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(Pawn_DrugPolicyTracker), "AllowedToTakeScheduledNow", new Type[] { typeof(ThingDef) })]
-    static class Pawn_DrugPolicyTracker_AllowedToTakeScheduledNow_CommonSensePatch
+    public static class Pawn_DrugPolicyTracker_AllowedToTakeScheduledNow_CommonSensePatch
     {
-        static bool Prefix(ref bool __result, ref Pawn_DrugPolicyTracker __instance, ref ThingDef thingDef)
+        public static bool Prefix(ref bool __result, ref Pawn_DrugPolicyTracker __instance, ref ThingDef thingDef)
         {
             if (!Settings.drugs_use_potential_mood)
                 return true;

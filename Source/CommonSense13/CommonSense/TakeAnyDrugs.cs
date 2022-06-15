@@ -8,9 +8,9 @@ using UnityEngine;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(FoodUtility), "WillIngestFromInventoryNow")]
-    static class FoodUtility_WillIngestFromInventoryNow_CommonSensePatch
+    public static class FoodUtility_WillIngestFromInventoryNow_CommonSensePatch
     {
-        static bool Prefix(ref bool __result, Pawn pawn, Thing inv)
+        public static bool Prefix(ref bool __result, Pawn pawn, Thing inv)
         {
             if (!Settings.ingest_any_drugs)
                 return true;

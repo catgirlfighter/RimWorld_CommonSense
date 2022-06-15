@@ -10,11 +10,11 @@ using System.Reflection;
 
 namespace CommonSense
 {
-    class OpportunisticTasks
+    public class OpportunisticTasks
     {
-        static private WorkGiverDef haulGeneral = null;
+        private static WorkGiverDef haulGeneral = null;
 
-        static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target, int Limit)
+        private static Job MakeCleaningJob(Pawn pawn, LocalTargetInfo target, int Limit)
         {
             if (Utility.IncapableOfCleaning(pawn))
                 return null;
@@ -38,16 +38,10 @@ namespace CommonSense
                 pawn = newPawn;
             }
 
-            public Pawn _pawn
-            {
-                get
-                {
-                    return this.pawn;
-                }
-            }
+            public Pawn _pawn => base.pawn;
         }
 
-        static Job Cleaning_Opportunity(Job currJob, IntVec3 cell, Pawn pawn, int Limit)
+        private static Job Cleaning_Opportunity(Job currJob, IntVec3 cell, Pawn pawn, int Limit)
         {
             if (Utility.IncapableOfCleaning(pawn))
                 return null;
@@ -66,10 +60,10 @@ namespace CommonSense
             }
             if (target != null)
             {
-                float stot = 0; //source to target
-                float stob = 0; //source to building
-                float btot = 0; //building to target
-                bool b = false;
+                float stot;// = 0; //source to target
+                float stob;// = 0; //source to building
+                float btot;// = 0; //building to target
+                bool b;// = false;
                 if (Settings.calculate_full_path)
                 {
                     PawnPath pawnPath = target.Map.pathFinder.FindPath(source, target, TraverseParms.For(TraverseMode.PassDoors, Danger.None), PathEndMode.Touch);
@@ -115,7 +109,7 @@ namespace CommonSense
             return MakeCleaningJob(pawn, currJob.targetA, Limit);
         }
 
-        static Job Hauling_Opportunity(Job billJob, Pawn pawn)
+        private static Job Hauling_Opportunity(Job billJob, Pawn pawn)
         {
             if (billJob.targetA != null && billJob.targetA.Thing != null && billJob.targetQueueB != null && billJob.targetQueueB.Count > 0)
             {
@@ -132,12 +126,11 @@ namespace CommonSense
                             haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulGeneral");
                     }
 
-                    Job job = null;
-
+                    //Job job = null;
                     foreach (var target in (billJob.targetQueueB))
                         if (target.Thing != null && target.Thing.def.stackLimit > 1 && target.Thing.Map != null && (outdoors || target.Thing.GetRoom() != room))
                         {
-                            job = ((WorkGiver_Scanner)haulGeneral.Worker).JobOnThing(pawn, target.Thing);
+                            var job = ((WorkGiver_Scanner)haulGeneral.Worker).JobOnThing(pawn, target.Thing);
                             if (job != null)
                                 return job;
                         }
@@ -146,22 +139,20 @@ namespace CommonSense
             return null;
         }
 
-        static bool ProperJob(Job job, Pawn pawn, JobDef def)
+        private static bool ProperJob(Job job, Pawn pawn, JobDef def)
         {
-            return job != null && job.def == def && job.targetA != null && job.targetA.Thing != null &&
+            return job?.def == def && job.targetA != null && job.targetA.Thing != null &&
                 job.targetA.Thing != pawn;
         }
 
-        //public void StartJob(Job newJob, JobCondition lastJobEndCondition = JobCondition.None, ThinkNode jobGiver = null, bool resumeCurJobAfterwards = false, bool cancelBusyStances = true, ThinkTreeDef thinkTree = null, JobTag? tag = default(JobTag?), bool fromQueue = false)
-        //[HarmonyPatch(typeof(Pawn_JobTracker), "StartJob", new Type[] { typeof(Job), typeof(JobCondition), typeof(ThinkNode), typeof(bool), typeof(bool), typeof(ThinkTreeDef), typeof(JobTag), typeof(bool) })]
         [HarmonyPatch(typeof(Pawn_JobTracker), "StartJob")]
-        static class Pawn_JobTracker_StartJob_CommonSensePatch
+        public static class Pawn_JobTracker_StartJob_CommonSensePatch
         {
-            static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, bool fromQueue)
+            public static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, bool fromQueue)
             {
                 try
                 {
-                    if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || newJob == null || newJob.def == null)
+                    if (__instance?._pawn == null || !__instance._pawn.IsColonistPlayerControlled || newJob?.def == null)
                         return true;
 
                     if (Settings.fun_police && __instance._pawn.needs?.joy != null && __instance._pawn.needs.joy.CurLevel < 0.8f)
@@ -174,7 +165,9 @@ namespace CommonSense
                     if (!Settings.clean_before_work && !Settings.hauling_over_bills)
                         return true;
 
-                    if (!newJob.def.allowOpportunisticPrefix && newJob.def != JobDefOf.SpectateCeremony)
+                    var oppClean = Settings.clean_before_work ? newJob.def.GetModExtension<CleanOnOpportunity>() : null;
+
+                    if (!newJob.def.allowOpportunisticPrefix && oppClean.doClean != true)
                         return true;
 
                     Job job = null;
@@ -195,15 +188,13 @@ namespace CommonSense
                             return true;
                         }
                         if (Settings.clean_before_work
-                            && (
-                                newJob.def == JobDefOf.PrisonerAttemptRecruit
-                                || newJob.def == JobDefOf.PrisonerConvert
-                                || newJob.def == JobDefOf.PrisonerEnslave
-                                || newJob.def == JobDefOf.SpectateCeremony
-                                || newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) && newJob.def != JobDefOf.PlaceNoCostFrame && newJob.def != JobDefOf.FinishFrame
+                        && (oppClean?.doClean != false)
+                        && (
+                                oppClean?.doClean == true
+                                || newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building))
                                 || newJob.def.joyKind != null
-                            )
-                            && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
+                        )
+                        && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
                         {
                             job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
                         }
@@ -212,9 +203,7 @@ namespace CommonSense
                     if (job != null)
                     {
                         if (Settings.add_to_que)
-                        {
                             __instance.jobQueue.EnqueueFirst(newJob);
-                        }
                         __instance.jobQueue.EnqueueFirst(job);
                         return false;
                     }
@@ -227,11 +216,10 @@ namespace CommonSense
             }
         }
 
-        //public void EndCurrentJob(JobCondition condition, bool startNewJob = true)
         [HarmonyPatch(typeof(Pawn_JobTracker), "EndCurrentJob")]
-        static class Pawn_JobTracker_EndCurrentJob_CommonSensePatch
+        public static class Pawn_JobTracker_EndCurrentJob_CommonSensePatch
         {
-            static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition)
+            public static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition)
             {
                 if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || __instance.curJob == null)
                     return true;
@@ -244,7 +232,7 @@ namespace CommonSense
                 }
 
                 Job job = null;
-                if (Settings.clean_before_work && condition == JobCondition.Succeeded && __instance.jobQueue != null 
+                if (Settings.clean_before_work && condition == JobCondition.Succeeded && __instance.jobQueue != null
                     && __instance.jobQueue.Count == 0 && __instance.curJob != null && ProperJob(__instance.curJob, __instance._pawn, JobDefOf.DeliverFood))
                 {
                     job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, Settings.op_clean_num);
@@ -259,7 +247,7 @@ namespace CommonSense
                     if (ProperJob(thinkResult.Job, __instance._pawn, JobDefOf.TendPatient))
                     {
                         Pawn pawn = (Pawn)thinkResult.Job.targetA.Thing;
-                        if (pawn.GetRoom() == __instance.curJob.targetA.Thing.GetRoom() || ((float)HealthUtility.TicksUntilDeathDueToBloodLoss(pawn) / 2500f) < 6)
+                        if (pawn.GetRoom() == __instance.curJob.targetA.Thing.GetRoom() || (HealthUtility.TicksUntilDeathDueToBloodLoss(pawn) / 2500f) < 6)
                             return true;
                     }
 
@@ -272,6 +260,5 @@ namespace CommonSense
                 return true;
             }
         }
-
     }
 }

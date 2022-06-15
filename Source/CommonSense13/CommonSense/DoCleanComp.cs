@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CommonSense
 {
-    class CleanCommand_Toggle : Command_Toggle
+    public class CleanCommand_Toggle : Command_Toggle
     {
         public override bool Visible
         {

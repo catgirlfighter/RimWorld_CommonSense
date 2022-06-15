@@ -7,10 +7,10 @@ using UnityEngine;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(JobDriver_SocialRelax), "MakeNewToils")]
-    static class JobDriver_SocialRelax_MakeNewToils_CommonSensePatch
+    public static class JobDriver_SocialRelax_MakeNewToils_CommonSensePatch
     {
         //basically the same thing as vanilla JoyTickCheckEnd, but also has an offset
-        public static void JoyTickCheckEndOffset(Pawn pawn, float joyoffset, JoyTickFullJoyAction fullJoyAction = JoyTickFullJoyAction.EndJob, float extraJoyGainFactor = 1f, Building joySource = null)
+        private static void JoyTickCheckEndOffset(Pawn pawn, float joyoffset, JoyTickFullJoyAction fullJoyAction = JoyTickFullJoyAction.EndJob, float extraJoyGainFactor = 1f, Building joySource = null)
         {
             Job curJob = pawn.CurJob;
             if (curJob.def.joyKind == null)
@@ -54,27 +54,27 @@ namespace CommonSense
             }
         }
 
-        static bool HasDrink(this JobDriver_SocialRelax driver)
+        private static bool HasDrink(this JobDriver_SocialRelax driver)
         {
             return driver.job.GetTarget(TargetIndex.C).HasThing;
         }
 
-        static bool HasChair(this JobDriver_SocialRelax driver)
+        private static bool HasChair(this JobDriver_SocialRelax driver)
         {
             return driver.job.GetTarget(TargetIndex.B).HasThing;
         }
 
-        static Thing GatherSpotParent(this JobDriver_SocialRelax driver)
+        private static Thing GatherSpotParent(this JobDriver_SocialRelax driver)
         {
             return driver.job.GetTarget(TargetIndex.A).Thing;
         }
 
-        static IntVec3 ClosestGatherSpotParentCell(this JobDriver_SocialRelax driver)
+        private static IntVec3 ClosestGatherSpotParentCell(this JobDriver_SocialRelax driver)
         {
             return driver.GatherSpotParent().OccupiedRect().ClosestCellTo(driver.pawn.Position);
         }
 
-        static IEnumerable<Toil> _MakeToils(this JobDriver_SocialRelax driver)
+        private static IEnumerable<Toil> _MakeToils(this JobDriver_SocialRelax driver)
         {
             //driver.EndOnDespawnedOrNull(TargetIndex.A, JobCondition.Incompletable);
             driver.AddEndCondition(delegate
@@ -221,7 +221,7 @@ namespace CommonSense
             yield break;
         }
 
-        static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_SocialRelax __instance)
+        public static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_SocialRelax __instance)
         {
             if (!Settings.social_relax_economy && !Settings.adv_cleaning_ingest)
                 return true;

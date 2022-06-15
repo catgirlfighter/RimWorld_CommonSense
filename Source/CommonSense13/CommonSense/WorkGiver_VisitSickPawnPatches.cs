@@ -10,7 +10,7 @@ namespace CommonSense
 {
     public class JoyGiver_TakeDrug_Patient : JoyGiver_Ingest
     {
-        private static List<ThingDef> takeableDrugs = new List<ThingDef>();
+        private static readonly List<ThingDef> takeableDrugs = new List<ThingDef>();
 
         protected override Thing BestIngestItem(Pawn pawn, Predicate<Thing> extraValidator)
         {
@@ -60,9 +60,9 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(WorkGiver_VisitSickPawn), "JobOnThing")]
-    static class WorkGiver_VisitSickPawn_JobOnThing_CommonSensePatch
+    public static class WorkGiver_VisitSickPawn_JobOnThing_CommonSensePatch
     {
-        static bool Prefix(ref Job __result, Pawn pawn, Thing t, bool forced)
+        public static bool Prefix(ref Job __result, Pawn pawn, Thing t, bool forced)
         {
             if (!Settings.give_sick_joy_drugs)
                 return true;
@@ -81,15 +81,15 @@ namespace CommonSense
                 else
                     chances[d] = 0f;
             }
-            JoyGiverDef def = null;
-            Job newJob = null;
+            //JoyGiverDef def = null;
+            //Job newJob = null;
             int counter = 0;
-            while (counter < defs.Count && defs.TryRandomElementByWeight(d => chances[d], out def))
+            while (counter < defs.Count && defs.TryRandomElementByWeight(d => chances[d], out var def))
             {
                 if (def.giverClass == typeof(JoyGiver_VisitSickPawn))
                     return true;
                 //
-                newJob = def.Worker.TryGiveJob(sick);
+                var newJob = def.Worker.TryGiveJob(sick);
                 if (newJob != null)
                 {
                     __result = JobMaker.MakeJob(JobDefOf.FeedPatient);

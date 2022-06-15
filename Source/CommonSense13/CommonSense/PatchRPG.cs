@@ -7,7 +7,7 @@ using System.Reflection;
 namespace CommonSense
 {
     [StaticConstructorOnStartup]
-    static class RPGStyleInventory_CommonSensePatch
+    public static class RPGStyleInventory_CommonSensePatch
     {
         static RPGStyleInventory_CommonSensePatch()
         {
@@ -23,9 +23,9 @@ namespace CommonSense
     }
 
     [StaticConstructorOnStartup]
-    static class AwesomeInventory_CommonSensePatch
+    public static class AwesomeInventory_CommonSensePatch
     {
-        static PropertyInfo LCanControl = null;
+        private static readonly PropertyInfo LCanControl = null;
         static AwesomeInventory_CommonSensePatch()
         {
             var harmonyInstance = new Harmony("net.avilmask.rimworld.mod.CommonSense.AwesomeInventory");
@@ -40,7 +40,7 @@ namespace CommonSense
             }
         }
 
-        static void Prefix(object __instance, Pawn selPawn, ref float y, ref float width, Thing thing, ref bool inventory)
+        public static void Prefix(object __instance, Pawn selPawn, ref float y, ref float width, Thing thing, ref bool inventory)
         {
             if (selPawn == null || thing == null) return;
             var val = Traverse.Create(__instance).Field("_gearTab").GetValue();

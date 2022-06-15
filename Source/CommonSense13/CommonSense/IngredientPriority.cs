@@ -14,7 +14,7 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredients")]
         public static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
         {
-            static void Postfix(WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen)
+            public static void Postfix(WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen)
             {
                 //return;
                 if (!__result || !Settings.adv_haul_all_ings)
@@ -28,7 +28,7 @@ namespace CommonSense
         public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
 
-            static void doSort(List<Thing> availableThings, Bill bill)
+            private static void doSort(List<Thing> availableThings, Bill bill)
             {
                 if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
                     return;
@@ -83,16 +83,16 @@ namespace CommonSense
         }
 
         [HarmonyPatch(typeof(FoodUtility), "FoodOptimality")]
-        static class FoodUtility_FoodOptimality
+        public static class FoodUtility_FoodOptimality
         {
-            static FieldInfo LFoodOptimalityEffectFromMoodCurve = null;
+            private static FieldInfo LFoodOptimalityEffectFromMoodCurve = null;
 
-            static void Prepare()
+            public static void Prepare()
             {
                 LFoodOptimalityEffectFromMoodCurve = AccessTools.Field(typeof(FoodUtility), "FoodOptimalityEffectFromMoodCurve");
             }
 
-            static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
+            public static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
             {
 
                 if (!Settings.prefer_spoiling_meals)

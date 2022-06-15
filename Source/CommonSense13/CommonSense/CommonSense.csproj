@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CleanOnOpportunity.cs" />
     <Compile Include="DoCleanComp.cs" />
     <Compile Include="JobDriver_IngestPatches.cs" />
     <Compile Include="JobDriver_SocialRelaxPatches.cs" />

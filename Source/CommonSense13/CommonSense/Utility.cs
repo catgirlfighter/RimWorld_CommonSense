@@ -10,13 +10,13 @@ using UnityEngine;
 
 namespace CommonSense
 {
-    static class Utility
+    public static class Utility
     {
-        static private WorkGiverDef cleanFilth = null;
+        private static WorkGiverDef cleanFilth = null;
         public const byte largeRoomSize = 160;
 
-        static private WorkTypeDef fCleaningDef = null;
-        static public WorkTypeDef CleaningDef
+        private static WorkTypeDef fCleaningDef = null;
+        public static WorkTypeDef CleaningDef
         {
             get
             {
@@ -102,14 +102,14 @@ namespace CommonSense
             OptimizePath(j.GetTargetQueue(ind), pawn);
         }
 
-        static public void OptimizePath(List<LocalTargetInfo> q, Thing Starter)
+        public static void OptimizePath(List<LocalTargetInfo> q, Thing Starter)
         {
             if (q.Count > 0)
             {
-                int x = 0;
+                int x;// = 0;
                 int idx = 0;
-                int n = 0;
-                LocalTargetInfo out_of_all_things_they_didnt_add_a_simple_swap = null;
+                int n;// = 0;
+                LocalTargetInfo out_of_all_things_they_didnt_add_a_simple_swap;// = null;
 
                 if (Starter != null)
                 {
@@ -168,27 +168,24 @@ namespace CommonSense
             }
         }
 
-        static public void OptimizePath(List<ThingCount> q, Thing Starter = null)
+        public static void OptimizePath(List<ThingCount> q, Thing Starter = null)
         {
             if (q.Count > 0)
             {
-                int x = 0;
-                int idx = 0;
-                int n = 0;
-                ThingCount out_of_all_things_they_didnt_add_a_simple_swap = default(ThingCount);
+                //int x;// = 0;
+                //int idx = 0;
+                //int n;// = 0;
+                ThingCount out_of_all_things_they_didnt_add_a_simple_swap;// = default(ThingCount);
 
                 if (Starter != null)
                 {
-                    if (q[0].Thing.Position == null)
-                        n = int.MaxValue;
-                    else
-                        n = q[0].Thing.Position.DistanceToSquared(Starter.Position);
-
+                    var n = q[0].Thing.Position == null ? int.MaxValue : q[0].Thing.Position.DistanceToSquared(Starter.Position);
+                    int idx = 0;
                     for (int i = 1; i < q.Count(); i++)
                     {
                         if (q[i].Thing.Position == null)
                             continue;
-                        x = q[i].Thing.Position.DistanceToSquared(Starter.Position);
+                        var x = q[i].Thing.Position.DistanceToSquared(Starter.Position);
                         if (Math.Abs(x) < Math.Abs(n))
                         {
                             n = x;
@@ -208,14 +205,14 @@ namespace CommonSense
                     if (q[i + 1].Thing.Position == null)
                         continue;
 
-                    n = q[i].Thing.Position.DistanceToSquared(q[i + 1].Thing.Position);
-                    idx = i + 1;
+                    var n = q[i].Thing.Position.DistanceToSquared(q[i + 1].Thing.Position);
+                    var idx = i + 1;
                     for (int c = i + 2; c < q.Count(); c++)
                     {
                         if (q[c].Thing.Position == null)
                             continue;
 
-                        x = q[i].Thing.Position.DistanceToSquared(q[c].Thing.Position);
+                        var x = q[i].Thing.Position.DistanceToSquared(q[c].Thing.Position);
                         if (Math.Abs(x) < Math.Abs(n))
                         {
                             n = x;
@@ -233,7 +230,7 @@ namespace CommonSense
             }
         }
 
-        public static bool ShouldHideFromWeather(this Pawn pawn, bool rightNow = false)
+        public static bool ShouldHideFromWeather(this Pawn pawn)
         {
             if (!Settings.safe_wander
                 || pawn.Faction != Faction.OfPlayer
@@ -253,12 +250,12 @@ namespace CommonSense
             return true;
         }
 
-        static bool IsBiocodedOrLinked(this Pawn pawn, Thing thing, bool? inventory = null)
+        private static bool IsBiocodedOrLinked(this Pawn pawn, Thing thing, bool? inventory = null)
         {
             return pawn.IsQuestLodger() && (inventory == true || !EquipmentUtility.QuestLodgerCanUnequip(thing, pawn));
         }
 
-        static bool IsLocked(this Pawn pawn, Thing thing)
+        private static bool IsLocked(this Pawn pawn, Thing thing)
         {
             Apparel apparel;
             return (apparel = (thing as Apparel)) != null && pawn.apparel != null && pawn.apparel.IsLocked(apparel);
@@ -305,7 +302,6 @@ namespace CommonSense
                 else
                 {
                     TooltipHandler.TipRegion(rect2, "UnloadThing".Translate());
-                    var cl = GUI.color;
                     if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing"), Color.white))
                     {
                         SoundDefOf.Tick_High.PlayOneShotOnCamera(null);

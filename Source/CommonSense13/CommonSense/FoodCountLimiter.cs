@@ -10,9 +10,9 @@ using UnityEngine;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(JoyGiver_Ingest), "CreateIngestJob")]
-    static class JobGiver_GetJoy_TryGiveJob_CommonSensePatch
+    public static class JoyGiver_Ingest_CreateIngestJob_CommonSensePatch
     {
-        static void Postfix(Job __result,Thing ingestible, Pawn pawn)
+        public static void Postfix(Job __result,Thing ingestible, Pawn pawn)
         {
             //used to be a prefix, but something prevented new job from being taken
             if (!Settings.pick_proper_amount)

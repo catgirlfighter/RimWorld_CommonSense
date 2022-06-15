@@ -10,14 +10,9 @@ using Verse;
 
 namespace CommonSense
 {
-    static class PatchBadHy
+    public static class PatchBadHy
     {
-        static MethodBase target;
-        static Type TNeed_Bladder;
-        static Type TNeed_Hygiene;
-        static Type TNeed_Thirst;
-
-        static Need TryGetNeed(this Pawn pawn, Type needType)
+        private static Need TryGetNeed(this Pawn pawn, Type needType)
         {
             if (pawn.needs == null)
                 return null;
@@ -32,20 +27,22 @@ namespace CommonSense
         }
 
         [HarmonyPatch]
-        static class JobGiver_UseToilet_GetPriority_CommonSensePatch
+        public static class JobGiver_UseToilet_GetPriority_CommonSensePatch
         {
-            static bool Prepare()
+            private static MethodBase target = null;
+            private static Type TNeed_Bladder = null;
+            public static bool Prepare()
             {
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_UseToilet")) != null)
                 {
-                    if ((target = AccessTools.Method(type, "GetPriority"))==null)
+                    if ((target = AccessTools.Method(type, "GetPriority")) == null)
                     {
                         Log.Error($"Couldn't get {type}.GetPriority");
                         return false;
                     }
                     TNeed_Bladder = AccessTools.TypeByName("Need_Bladder");
-                    if(TNeed_Bladder == null)
+                    if (TNeed_Bladder == null)
                     {
                         Log.Error($"Couldn't get class Need_Bladder");
                         return false;
@@ -54,12 +51,12 @@ namespace CommonSense
                 }
                 return false;
             }
-            static MethodBase TargetMethod()
+            public static MethodBase TargetMethod()
             {
                 return target;
             }
 
-            static bool Prefix(ref float __result, Pawn pawn)
+            public static bool Prefix(ref float __result, Pawn pawn)
             {
                 if (!Settings.fun_police)
                     return true;
@@ -107,9 +104,11 @@ namespace CommonSense
         }
 
         [HarmonyPatch]
-        static class JobGiver_HaveWash_GetPriority_CommonSensePatch
+        public static class JobGiver_HaveWash_GetPriority_CommonSensePatch
         {
-            static bool Prepare()
+            private static MethodBase target = null;
+            private static Type TNeed_Hygiene = null;
+            public static bool Prepare()
             {
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_HaveWash")) != null)
@@ -130,12 +129,12 @@ namespace CommonSense
                 return false;
             }
 
-            static MethodBase TargetMethod()
+            public static MethodBase TargetMethod()
             {
                 return target;
             }
 
-            static bool Prefix(ref float __result, Pawn pawn)
+            public static bool Prefix(ref float __result, Pawn pawn)
             {
                 if (!Settings.fun_police)
                     return true;
@@ -183,9 +182,11 @@ namespace CommonSense
         }
 
         [HarmonyPatch]
-        static class JobGiver_DrinkWater_GetPriority_CommonSensePatch
+        public static class JobGiver_DrinkWater_GetPriority_CommonSensePatch
         {
-            static bool Prepare()
+            private static MethodBase target = null;
+            private static Type TNeed_Thirst = null;
+            public static bool Prepare()
             {
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_DrinkWater")) != null)
@@ -206,12 +207,12 @@ namespace CommonSense
                 return false;
             }
 
-            static MethodBase TargetMethod()
+            public static MethodBase TargetMethod()
             {
                 return target;
             }
 
-            static bool Prefix(ref float __result, Pawn pawn)
+            public static bool Prefix(ref float __result, Pawn pawn)
             {
                 if (!Settings.fun_police)
                     return true;

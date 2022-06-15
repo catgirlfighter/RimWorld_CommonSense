@@ -1,4 +1,8 @@
-﻿1.1.46
+﻿1.1.47
+- did some pointless stuff that does nothing to the mod;
+- made so you could define which actions should always or never use opportunistic cleaning through xml patching (example included);
+
+1.1.46
 - fixed put back to backpack option not disabling. I guess people never cared to return vanilla behavior until now;
 
 1.1.45
