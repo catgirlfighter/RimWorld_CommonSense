@@ -278,8 +278,8 @@ namespace CommonSense
                     if (curJob.GetTargetQueue(TargetIndex.A).NullOrEmpty())
                     {
                         LocalTargetInfo A = curJob.GetTarget(TargetIndex.A);
-                        DoCleanComp comp;
-                        if (!Settings.clean_gizmo || (comp = A.Thing?.TryGetComp<DoCleanComp>()) == null || comp.Active)
+                        
+                        if (!Settings.clean_gizmo || A.Thing?.TryGetComp<DoCleanComp>()?.Active != false)
                         {
                             IEnumerable<Filth> l = Utility.SelectAllFilth(FilthList.actor, A, Settings.adv_clean_num);
                             Utility.AddFilthToQueue(curJob, TargetIndex.A, l, FilthList.actor);

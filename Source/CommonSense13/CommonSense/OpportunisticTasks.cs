@@ -167,7 +167,7 @@ namespace CommonSense
 
                     var oppClean = Settings.clean_before_work ? newJob.def.GetModExtension<CleanOnOpportunity>() : null;
 
-                    if (!newJob.def.allowOpportunisticPrefix && oppClean.doClean != true)
+                    if (!newJob.def.allowOpportunisticPrefix && oppClean?.doClean != true)
                         return true;
 
                     Job job = null;
@@ -191,7 +191,7 @@ namespace CommonSense
                         && (oppClean?.doClean != false)
                         && (
                                 oppClean?.doClean == true
-                                || newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building))
+                                || newJob.targetA.Thing != null && newJob.targetA.Thing.GetType().IsSubclassOf(typeof(Building)) && (!Settings.clean_gizmo || newJob.targetA.Thing.TryGetComp<DoCleanComp>()?.Active != false)
                                 || newJob.def.joyKind != null
                         )
                         && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))

@@ -1,4 +1,11 @@
-﻿1.1.47
+﻿1.1.48+
+- minor addition to make opportunistic cleaning ignore the gizmo toggle if gizmo is hidden;
+
+1.1.48
+- imagine doing something pointless without breaking anything in the process. Fixed the thing that wasn't supposed to be broken;
+- made so basic opportunistic cleaning also respects cleaning toggle for buildings. It's possible now to add cleaning gizmo to other buildings to influence the behavior;
+
+1.1.47
 - did some pointless stuff that does nothing to the mod;
 - made so you could define which actions should always or never use opportunistic cleaning through xml patching (example included);
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Patch>
+	<!-- clean/don't clean toggle for these buildings (in this case, which have "bills" tab) -->
 	<Operation Class="PatchOperationSequence">
 		<success>Always</success>
 		<operations>
