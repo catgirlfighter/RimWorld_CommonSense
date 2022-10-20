@@ -3,14 +3,22 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 using Verse.AI;
-using UnityEngine;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
+using System;
+
 
 namespace CommonSense
 {
     //protected override IEnumerable<Toil> JobDriver_DoBill.MakeNewToils()
     [HarmonyPatch(typeof(JobDriver_DoBill), "MakeNewToils")]
-    public static class JobDriver_DoBill_MakeNewToils_CommonSensePatch
+    static class JobDriver_DoBill_MakeNewToils_CommonSensePatch
     {
+        //static PropertyInfo LMap = AccessTools.Property(typeof(JobDriver_DoBill), "Map");
+        //static MethodInfo LJumpToCollectNextIntoHandsForBillCrutch = AccessTools.Method(typeof(JobDriver_DoBill), "JumpToCollectNextIntoHandsForBillCrutch");
+
+        /*
         public class JobDriver_DoBill_Access: JobDriver_DoBill
         {
             public Map MapCrutch()
@@ -74,8 +82,8 @@ namespace CommonSense
                 return toil;
             }
         }
-
-        static IEnumerable<Toil> DoMakeToils(JobDriver_DoBill_Access __instance)
+        */
+        static IEnumerable<Toil> DoMakeToils(JobDriver_DoBill __instance)
         {
             //normal scenario
             __instance.AddEndCondition(delegate
@@ -107,7 +115,23 @@ namespace CommonSense
                 }
                 return false;
             });
-
+            Toil gotoBillGiver = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
+            Toil toil = ToilMaker.MakeToil("MakeNewToils");
+            toil.initAction = delegate ()
+            {
+                if (__instance.job.targetQueueB != null && __instance.job.targetQueueB.Count == 1)
+                {
+                    UnfinishedThing unfinishedThing = __instance.job.targetQueueB[0].Thing as UnfinishedThing;
+                    if (unfinishedThing != null)
+                    {
+                        unfinishedThing.BoundBill = (Bill_ProductionWithUft)__instance.job.bill;
+                    }
+                }
+                __instance.job.bill.Notify_DoBillStarted(__instance.pawn);
+            };
+            yield return toil;
+            yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.B).NullOrEmpty<LocalTargetInfo>());
+            /*
             Toil gotoBillGiver = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
 
             yield return new Toil
@@ -125,6 +149,7 @@ namespace CommonSense
                 }
             };
             yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.B).NullOrEmpty());
+            */
 
             //hauling patch
             if (Settings.adv_haul_all_ings && __instance.pawn.Faction == Faction.OfPlayer)
@@ -257,7 +282,7 @@ namespace CommonSense
                 Toil getToHaulTarget = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.B).FailOnSomeonePhysicallyInteracting(TargetIndex.B);
                 yield return getToHaulTarget;
                 yield return Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true);
-                yield return JobDriver_DoBill_Access.JumpToCollectNextIntoHandsForBillCrutch(getToHaulTarget, TargetIndex.B);
+                yield return JobDriver_DoBill.JumpToCollectNextIntoHandsForBill(getToHaulTarget, TargetIndex.B);
                 yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDestroyedOrNull(TargetIndex.B);
                 Toil findPlaceTarget = Toils_JobTransforms.SetTargetToIngredientPlaceCell(TargetIndex.A, TargetIndex.B, TargetIndex.C);
                 yield return findPlaceTarget;
@@ -265,6 +290,11 @@ namespace CommonSense
                 yield return Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, extract);
             }
 
+            //nice try, Tynan, but that's not good enough
+            //foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, __instance.BillGiver is Building_MechGestator))
+            //{
+            //    yield return toil2;
+            //}
             yield return gotoBillGiver; //one line from normal scenario
                 
             //cleaning patch
@@ -332,7 +362,7 @@ namespace CommonSense
             }
 
             //continuation of normal scenario
-            yield return Toils_Recipe.MakeUnfinishedThingIfNeeded();
+            /*yield return Toils_Recipe.MakeUnfinishedThingIfNeeded();
             yield return Toils_Recipe.DoRecipeWork().FailOnDespawnedNullOrForbiddenPlacedThings().FailOnCannotTouch(TargetIndex.A, PathEndMode.InteractionCell);
             yield return Toils_Recipe.FinishRecipeAndStartStoringProduct();
             if (!__instance.job.RecipeDef.products.NullOrEmpty() || !__instance.job.RecipeDef.specialProducts.NullOrEmpty())
@@ -347,15 +377,39 @@ namespace CommonSense
                     Bill_Production bill_Production = recount.actor.jobs.curJob.bill as Bill_Production;
                     if (bill_Production != null && bill_Production.repeatMode == BillRepeatModeDefOf.TargetCount)
                     {
-                        __instance.MapCrutch().resourceCounter.UpdateResourceCounts();
+                        __instance.pawn.MapHeld.resourceCounter.UpdateResourceCounts();
                     }
                 };
                 yield return recount;
             }
+            */
+            yield return Toils_Recipe.MakeUnfinishedThingIfNeeded();
+            yield return Toils_Recipe.DoRecipeWork().FailOnDespawnedNullOrForbiddenPlacedThings(TargetIndex.A).FailOnCannotTouch(TargetIndex.A, PathEndMode.InteractionCell);
+            yield return Toils_Recipe.CheckIfRecipeCanFinishNow();
+            yield return Toils_Recipe.FinishRecipeAndStartStoringProduct(TargetIndex.None);
+            if (!__instance.job.RecipeDef.products.NullOrEmpty<ThingDefCountClass>() || !__instance.job.RecipeDef.specialProducts.NullOrEmpty<SpecialProductType>())
+            {
+                //JobDriver_DoBill.<> c__DisplayClass15_0 CS$<> 8__locals1 = new JobDriver_DoBill.<> c__DisplayClass15_0();
+                //CS$<> 8__locals1.__instance = this;
+                yield return Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
+                Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B, PathEndMode.ClosestTouch);
+                yield return carryToCell;
+                yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.B, carryToCell, true, true);
+                var t = ToilMaker.MakeToil("MakeNewToils");
+                t.initAction = delegate ()
+                {
+                    Bill_Production bill_Production = t.actor.jobs.curJob.bill as Bill_Production;
+                    if (bill_Production != null && bill_Production.repeatMode == BillRepeatModeDefOf.TargetCount)
+                    {
+                        __instance.pawn.MapHeld.resourceCounter.UpdateResourceCounts();
+                    }
+                };
+                yield return t;
+            }
             yield break;
         }
 
-        public static bool Prefix(ref IEnumerable<Toil> __result, ref JobDriver_DoBill_Access __instance)
+        public static bool Prefix(ref IEnumerable<Toil> __result, ref JobDriver_DoBill __instance)
         {
             if (!Settings.adv_cleaning && !Settings.adv_haul_all_ings)
                 return true;
