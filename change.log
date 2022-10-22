@@ -1,4 +1,9 @@
-﻿1.1.51
+﻿1.1.52
+- fixed an error when pawns tried to operate already filled gestator;
+- made so pawns start cleaning around bill station without going to it first;
+- fixed stacking/splitting warning;
+
+1.1.51
 - in my defense, I didn't even have a clue what's gestator when I was making fixes for the patch, lol;
 
 1.1.50

@@ -15,75 +15,8 @@ namespace CommonSense
     [HarmonyPatch(typeof(JobDriver_DoBill), "MakeNewToils")]
     static class JobDriver_DoBill_MakeNewToils_CommonSensePatch
     {
-        //static PropertyInfo LMap = AccessTools.Property(typeof(JobDriver_DoBill), "Map");
-        //static MethodInfo LJumpToCollectNextIntoHandsForBillCrutch = AccessTools.Method(typeof(JobDriver_DoBill), "JumpToCollectNextIntoHandsForBillCrutch");
-
-        /*
-        public class JobDriver_DoBill_Access: JobDriver_DoBill
-        {
-            public Map MapCrutch()
-            {
-                return Map;
-            }
-            //cloning private methods :T
-            public static Toil JumpToCollectNextIntoHandsForBillCrutch(Toil gotoGetTargetToil, TargetIndex ind)
-            {
-                Toil toil = new Toil();
-                toil.initAction = delegate ()
-                {
-                    Pawn actor = toil.actor;
-                    if (actor.carryTracker.CarriedThing == null)
-                    {
-                        Log.Error("JumpToAlsoCollectTargetInQueue run on " + actor + " who is not carrying something.");
-                        return;
-                    }
-                    if (actor.carryTracker.Full)
-                    {
-                        return;
-                    }
-                    Job curJob = actor.jobs.curJob;
-                    List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(ind);
-                    if (targetQueue.NullOrEmpty())
-                    {
-                        return;
-                    }
-                    for (int i = 0; i < targetQueue.Count; i++)
-                    {
-                        if (GenAI.CanUseItemForWork(actor, targetQueue[i].Thing))
-                        {
-                            if (targetQueue[i].Thing.CanStackWith(actor.carryTracker.CarriedThing))
-                            {
-                                if ((actor.Position - targetQueue[i].Thing.Position).LengthHorizontalSquared <= 64f)
-                                {
-                                    int num = (actor.carryTracker.CarriedThing != null) ? actor.carryTracker.CarriedThing.stackCount : 0;
-                                    int num2 = curJob.countQueue[i];
-                                    num2 = Mathf.Min(num2, targetQueue[i].Thing.def.stackLimit - num);
-                                    num2 = Mathf.Min(num2, actor.carryTracker.AvailableStackSpace(targetQueue[i].Thing.def));
-                                    if (num2 > 0)
-                                    {
-                                        curJob.count = num2;
-                                        curJob.SetTarget(ind, targetQueue[i].Thing);
-                                        List<int> countQueue;
-                                        int index;
-                                        (countQueue = curJob.countQueue)[index = i] = countQueue[index] - num2;
-                                        if (curJob.countQueue[i] <= 0)
-                                        {
-                                            curJob.countQueue.RemoveAt(i);
-                                            targetQueue.RemoveAt(i);
-                                        }
-                                        actor.jobs.curDriver.JumpToToil(gotoGetTargetToil);
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
-                return toil;
-            }
-        }
-        */
         static MethodInfo LJumpIfTargetInsideBillGiver = AccessTools.Method(typeof(JobDriver_DoBill), "JumpIfTargetInsideBillGiver");
+        
         static IEnumerable<Toil> DoMakeToils(JobDriver_DoBill __instance)
         {
             //normal scenario
@@ -133,25 +66,6 @@ namespace CommonSense
             };
             yield return toil;
             yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.B).NullOrEmpty<LocalTargetInfo>());
-            /*
-            Toil gotoBillGiver = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
-
-            yield return new Toil
-            {
-                initAction = delegate ()
-                {
-                    if (__instance.job.targetQueueB != null && __instance.job.targetQueueB.Count == 1)
-                    {
-                        UnfinishedThing unfinishedThing = __instance.job.targetQueueB[0].Thing as UnfinishedThing;
-                        if (unfinishedThing != null)
-                        {
-                            unfinishedThing.BoundBill = (Bill_ProductionWithUft)__instance.job.bill;
-                        }
-                    }
-                }
-            };
-            yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.B).NullOrEmpty());
-            */
 
             //hauling patch
             if (Settings.adv_haul_all_ings && __instance.pawn.Faction == Faction.OfPlayer)
@@ -175,35 +89,10 @@ namespace CommonSense
                         }
                 };
 
-                /*
-                Toil extract = new Toil();
-                extract.initAction = delegate ()
-                {
-                    Pawn actor = extract.actor;
-                    Job curJob = actor.jobs.curJob;
-                    List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
-                    if (!curJob.countQueue.NullOrEmpty())
-                    {                            
-                        if (curJob.countQueue[0] > targetQueue[0].Thing.stackCount)
-                        {
-                            actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
-                        }
-                        else
-                        {
-                            curJob.SetTarget(TargetIndex.B, targetQueue[0]);
-                            targetQueue.RemoveAt(0);
-                            curJob.count = curJob.countQueue[0];
-                            curJob.countQueue.RemoveAt(0);
-                        }
-                    }
-                };
-                */
-                Toil extract = Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.B, true);
-                Toil jumpIfHaveTargetInQueue = Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, extract);
                 Toil PickUpThing;
                 List<LocalTargetInfo> L = __instance.job.GetTargetQueue(TargetIndex.B);
                 if (L.Count < 2 && (L.Count == 0 || L[0].Thing.def.stackLimit < 2))
-                    PickUpThing = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true);
+                    PickUpThing = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true, false);
                 else
                 {
                     PickUpThing = ToilMaker.MakeToil("PickUpThing");
@@ -253,6 +142,7 @@ namespace CommonSense
                 Toil TakeToHands = ToilMaker.MakeToil("TakeToHands");
                 TakeToHands.initAction = delegate ()
                 {
+                    //Log.Message($"taketohands?");
                     Pawn actor = TakeToHands.actor;
                     Job curJob = actor.jobs.curJob;
                     List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
@@ -264,12 +154,15 @@ namespace CommonSense
                         targetQueue.RemoveAt(0);
                     }
                 };
-
+    
                 Toil getToHaulTarget = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.B).FailOnSomeonePhysicallyInteracting(TargetIndex.B);
+                Toil extract = Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.B, true);
+                Toil jumpIfHaveTargetInQueue = Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, extract);
 
                 yield return checklist;
-                yield return (Toil)LJumpIfTargetInsideBillGiver.Invoke(__instance, new object[] { jumpIfHaveTargetInQueue, TargetIndex.B, TargetIndex.A });
                 yield return extract;
+                yield return (Toil)LJumpIfTargetInsideBillGiver.Invoke(__instance, new object[] { jumpIfHaveTargetInQueue, TargetIndex.B, TargetIndex.A });
+
                 yield return Toils_Jump.JumpIf(PickUpThing, () => __instance.job.GetTarget(TargetIndex.B).Thing.ParentHolder == __instance.pawn.inventory);
                 yield return getToHaulTarget;
                 yield return PickUpThing;
@@ -292,19 +185,19 @@ namespace CommonSense
                     };
                     yield return physReserveToil;
                 }
-
-                yield return Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, TakeToHands);
+                yield return jumpIfHaveTargetInQueue;
             }
             else
             {
                 //regular scenario
+                /*
                 Toil extract = Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.B, true);
                 yield return extract;
                 Toil jumpIfHaveTargetInQueue = Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, extract);
                 yield return (Toil)LJumpIfTargetInsideBillGiver.Invoke(__instance, new object[] { jumpIfHaveTargetInQueue, TargetIndex.B, TargetIndex.A });
                 Toil getToHaulTarget = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.B).FailOnSomeonePhysicallyInteracting(TargetIndex.B);
                 yield return getToHaulTarget;
-                yield return Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true);
+                yield return Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true, false);
                 yield return JobDriver_DoBill.JumpToCollectNextIntoHandsForBill(getToHaulTarget, TargetIndex.B);
                 yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDestroyedOrNull(TargetIndex.B);
 
@@ -325,19 +218,18 @@ namespace CommonSense
                     yield return physReserveToil;
 
                 }
-                yield return Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, extract);
+                yield return jumpIfHaveTargetInQueue;
+                */
+                foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, __instance.BillGiver is Building_MechGestator))
+                {
+                    yield return toil2;
+                }
             }
-
-            foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, __instance.BillGiver is Building_MechGestator))
-            {
-                yield return toil2;
-            }
-            yield return gotoBillGiver; //one line from normal scenario
                 
             //cleaning patch
             if (Settings.adv_cleaning && !Utility.IncapableOfCleaning(__instance.pawn))
             {
-                Toil returnToBillGiver = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
+                //Toil returnToBillGiver = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
                 Toil FilthList = new Toil();
                 FilthList.initAction = delegate ()
                 {
@@ -356,11 +248,11 @@ namespace CommonSense
                     }
                 };
                 yield return FilthList;
-                yield return Toils_Jump.JumpIf(returnToBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.A).NullOrEmpty());
+                yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.A).NullOrEmpty());
                 Toil CleanFilthList = Toils_JobTransforms.ClearDespawnedNullOrForbiddenQueuedTargets(TargetIndex.A, null);
                 yield return CleanFilthList;
                 yield return Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.A, true);
-                yield return Toils_Jump.JumpIf(returnToBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.A).NullOrEmpty());
+                yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.A).NullOrEmpty());
                 yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList).JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
                 Toil clean = ToilMaker.MakeToil("CleanBillPlace");
                 clean.initAction = delegate ()
@@ -395,39 +287,16 @@ namespace CommonSense
                 clean.JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
                 yield return clean;
                 yield return Toils_Jump.Jump(CleanFilthList);
-                yield return returnToBillGiver;
             }
 
             //continuation of normal scenario
-            /*yield return Toils_Recipe.MakeUnfinishedThingIfNeeded();
-            yield return Toils_Recipe.DoRecipeWork().FailOnDespawnedNullOrForbiddenPlacedThings().FailOnCannotTouch(TargetIndex.A, PathEndMode.InteractionCell);
-            yield return Toils_Recipe.FinishRecipeAndStartStoringProduct();
-            if (!__instance.job.RecipeDef.products.NullOrEmpty() || !__instance.job.RecipeDef.specialProducts.NullOrEmpty())
-            {
-                yield return Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
-                Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B);
-                yield return carryToCell;
-                yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.B, carryToCell, true);
-                Toil recount = new Toil();
-                recount.initAction = delegate ()
-                {
-                    Bill_Production bill_Production = recount.actor.jobs.curJob.bill as Bill_Production;
-                    if (bill_Production != null && bill_Production.repeatMode == BillRepeatModeDefOf.TargetCount)
-                    {
-                        __instance.pawn.MapHeld.resourceCounter.UpdateResourceCounts();
-                    }
-                };
-                yield return recount;
-            }
-            */
+            yield return gotoBillGiver;
             yield return Toils_Recipe.MakeUnfinishedThingIfNeeded();
             yield return Toils_Recipe.DoRecipeWork().FailOnDespawnedNullOrForbiddenPlacedThings(TargetIndex.A).FailOnCannotTouch(TargetIndex.A, PathEndMode.InteractionCell);
             yield return Toils_Recipe.CheckIfRecipeCanFinishNow();
             yield return Toils_Recipe.FinishRecipeAndStartStoringProduct(TargetIndex.None);
             if (!__instance.job.RecipeDef.products.NullOrEmpty<ThingDefCountClass>() || !__instance.job.RecipeDef.specialProducts.NullOrEmpty<SpecialProductType>())
             {
-                //JobDriver_DoBill.<> c__DisplayClass15_0 CS$<> 8__locals1 = new JobDriver_DoBill.<> c__DisplayClass15_0();
-                //CS$<> 8__locals1.__instance = this;
                 yield return Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
                 Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B, PathEndMode.ClosestTouch);
                 yield return carryToCell;
