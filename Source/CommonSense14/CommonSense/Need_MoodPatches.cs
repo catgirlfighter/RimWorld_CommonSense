@@ -22,6 +22,8 @@ namespace CommonSense
         {
             if (!Settings.mood_regen) return;
             Pawn pawn = (Pawn)LPawn.GetValue(__instance);
+            //Log.Message($"pawn = {pawn}, {LIsFrozen.GetValue(__instance)}, {pawn.Suspended}, {pawn.health.capacities.CanBeAwake}, {pawn.Map}, {pawn.MapHeld}");
+            if (pawn.Map == null) return;
             if ((bool)LIsFrozen.GetValue(__instance) && !pawn.Suspended && pawn.health.capacities.CanBeAwake)
             {
                 float curInstantLevel = __instance.CurInstantLevel;

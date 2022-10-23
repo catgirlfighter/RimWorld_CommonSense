@@ -1,4 +1,8 @@
-﻿1.1.52
+﻿1.1.53
+- fixed some error when something is happening with some pawns mood that are also off map and also related to toxic fallout;
+- pawns now clean doorways in the rooms.
+
+1.1.52
 - fixed an error when pawns tried to operate already filled gestator;
 - made so pawns start cleaning around bill station without going to it first;
 - fixed stacking/splitting warning;
