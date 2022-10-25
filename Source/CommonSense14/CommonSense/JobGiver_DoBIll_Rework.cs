@@ -142,7 +142,6 @@ namespace CommonSense
                 Toil TakeToHands = ToilMaker.MakeToil("TakeToHands");
                 TakeToHands.initAction = delegate ()
                 {
-                    //Log.Message($"taketohands?");
                     Pawn actor = TakeToHands.actor;
                     Job curJob = actor.jobs.curJob;
                     List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
@@ -157,8 +156,9 @@ namespace CommonSense
     
                 Toil getToHaulTarget = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.B).FailOnSomeonePhysicallyInteracting(TargetIndex.B);
                 Toil extract = Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.B, true);
-                Toil jumpIfHaveTargetInQueue = Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, extract);
-
+                //Toil jumpIfHaveTargetInQueue = Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, extract);
+                Toil jumpIfHaveTargetInQueue = Toils_Jump.JumpIf(extract, () => !__instance.job.countQueue.NullOrEmpty());
+                Toil keepTakingToHands = Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, TakeToHands);
                 yield return checklist;
                 yield return extract;
                 yield return (Toil)LJumpIfTargetInsideBillGiver.Invoke(__instance, new object[] { jumpIfHaveTargetInQueue, TargetIndex.B, TargetIndex.A });
@@ -166,7 +166,7 @@ namespace CommonSense
                 yield return Toils_Jump.JumpIf(PickUpThing, () => __instance.job.GetTarget(TargetIndex.B).Thing.ParentHolder == __instance.pawn.inventory);
                 yield return getToHaulTarget;
                 yield return PickUpThing;
-                yield return Toils_Jump.JumpIf(extract, () => !__instance.job.countQueue.NullOrEmpty());
+                yield return jumpIfHaveTargetInQueue;
                 yield return TakeToHands;
                 yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDestroyedOrNull(TargetIndex.B);
                 if (placeInBillGiver)
@@ -185,7 +185,7 @@ namespace CommonSense
                     };
                     yield return physReserveToil;
                 }
-                yield return jumpIfHaveTargetInQueue;
+                yield return keepTakingToHands;
             }
             else
             {

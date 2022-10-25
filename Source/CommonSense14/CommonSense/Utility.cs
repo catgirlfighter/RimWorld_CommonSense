@@ -250,12 +250,12 @@ namespace CommonSense
             return true;
         }
 
-        private static bool IsBiocodedOrLinked(this Pawn pawn, Thing thing, bool? inventory = null)
+        public static bool IsBiocodedOrLinked(this Pawn pawn, Thing thing, bool? inventory = null)
         {
             return pawn.IsQuestLodger() && (inventory == true || !EquipmentUtility.QuestLodgerCanUnequip(thing, pawn));
         }
 
-        private static bool IsLocked(this Pawn pawn, Thing thing)
+        public static bool IsLocked(this Pawn pawn, Thing thing)
         {
             Apparel apparel;
             return (apparel = (thing as Apparel)) != null && pawn.apparel != null && pawn.apparel.IsLocked(apparel);

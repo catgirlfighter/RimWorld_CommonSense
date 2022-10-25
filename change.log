@@ -1,4 +1,8 @@
-﻿1.1.53
+﻿1.1.54
+- RPGInventory (revamped) integrity things;
+- fixed a problem with pawns moving ingredients to and from a bench on a loop. Thanks to @Des and his pawn Buggy for hooking me up with something substantial to work with!
+
+1.1.53
 - fixed some error when something is happening with some pawns mood that are also off map and also related to toxic fallout;
 - pawns now clean doorways in the rooms.
 
