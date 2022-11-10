@@ -7,7 +7,7 @@ namespace CommonSense
     {
         public static bool separate_meals = true;
         public static bool fulfill_outdoors = true;
-        public static bool odd_is_normal = false;
+        //public static bool odd_is_normal = false;
         public static bool clean_before_work = true;
         public static bool clean_after_tending = true;
         public static bool calculate_full_path = true;
@@ -38,7 +38,8 @@ namespace CommonSense
         public static bool polite_wander = false;
         public static bool ingest_any_drugs = true;
         public static bool clean_gizmo = false;
-
+        public static bool meditation_economy = true;
+        public static bool adv_respect_capacity = true;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
@@ -57,6 +58,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("fun_police_label".Translate(), ref fun_police, "fun_police_note".Translate());
             listing_Standard.CheckboxLabeled("give_sick_joy_drugs_label".Translate(), ref give_sick_joy_drugs, "give_sick_joy_drugs_note".Translate());
             listing_Standard.CheckboxLabeled("social_relax_economy_label".Translate(), ref social_relax_economy, "social_relax_economy_note".Translate());
+            listing_Standard.CheckboxLabeled("meditation_economy_label".Translate(), ref meditation_economy, "meditation_economy_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("clean_head".Translate());
@@ -68,10 +70,10 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("put_back_to_inv_label".Translate(), ref put_back_to_inv, "put_back_to_inv_note".Translate());
             listing_Standard.CheckboxLabeled("skip_snow_clean_label".Translate(), ref skip_snow_clean, "skip_snow_clean_note".Translate());
 
-            listing_Standard.GapLine();
-            listing_Standard.Label("meal_stacking_head".Translate());
-            listing_Standard.CheckboxLabeled("meal_stacking_label".Translate(), ref separate_meals, "meal_stacking_note".Translate());
-            listing_Standard.CheckboxLabeled("dont_count_odd_label".Translate(), ref odd_is_normal, "dont_count_odd_note".Translate());
+            //listing_Standard.GapLine();
+            //listing_Standard.Label("meal_stacking_head".Translate());
+            //listing_Standard.CheckboxLabeled("meal_stacking_label".Translate(), ref separate_meals, "meal_stacking_note".Translate());
+            //listing_Standard.CheckboxLabeled("dont_count_odd_label".Translate(), ref odd_is_normal, "dont_count_odd_note".Translate());
 
 
             listing_Standard.GapLine();
@@ -79,6 +81,8 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_label".Translate(), ref adv_cleaning, "advanced_inbetween_cleaning_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_inbetween_cleaning_gizmo_label".Translate(), ref clean_gizmo, "advanced_inbetween_cleaning_gizmo_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_haul_all_ings_label".Translate(), ref adv_haul_all_ings, "advanced_haul_all_ings_note".Translate());
+            if(adv_haul_all_ings)
+                listing_Standard.CheckboxLabeled("advanced_respect_capacity_label".Translate(), ref adv_respect_capacity, "advanced_respect_capacity_note".Translate());
             listing_Standard.CheckboxLabeled("advanced_cleaning_ingest_label".Translate(), ref adv_cleaning_ingest, "advanced_cleaning_ingest_note".Translate());
 
             listing_Standard.GapLine();
@@ -102,9 +106,7 @@ namespace CommonSense
             listing_Standard.TextFieldNumericLabeled("adv_clean_number_label".Translate(), ref adv_clean_num, ref adv_clean_num_str);
             string doc_clean_num_str = doc_clean_num.ToString();
             listing_Standard.TextFieldNumericLabeled("doc_clean_number_label".Translate(), ref doc_clean_num, ref doc_clean_num_str);
-            //listing_Standard.EndScrollView(ref viewRect);
             Widgets.EndScrollView();
-            //listing_Standard.End();
         }
 
         public override void ExposeData()
@@ -112,7 +114,7 @@ namespace CommonSense
             base.ExposeData();
             Scribe_Values.Look(ref separate_meals, "separate_meals", true, false);
             Scribe_Values.Look(ref fulfill_outdoors, "fulfill_outdoors", true, false);
-            Scribe_Values.Look(ref odd_is_normal, "odd_is_normal", false, false);
+            //Scribe_Values.Look(ref odd_is_normal, "odd_is_normal", false, false);
             Scribe_Values.Look(ref clean_before_work, "clean_before_work", true, false);
             Scribe_Values.Look(ref clean_after_tending, "clean_after_tending", true, false);
             Scribe_Values.Look(ref calculate_full_path, "calculate_full_path", true, false);

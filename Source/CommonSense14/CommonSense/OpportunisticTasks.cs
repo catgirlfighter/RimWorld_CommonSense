@@ -114,6 +114,7 @@ namespace CommonSense
             if (billJob.targetA != null && billJob.targetA.Thing != null && billJob.targetQueueB != null && billJob.targetQueueB.Count > 0)
             {
 
+                float ptos = pawn.Position.DistanceToSquared(billJob.targetA.Cell);
                 Room room = billJob.targetA.Thing.GetRoom();
                 if (room != null)
                 {
@@ -126,13 +127,20 @@ namespace CommonSense
                             haulGeneral = DefDatabase<WorkGiverDef>.GetNamed("HaulGeneral");
                     }
 
+                    foreach (var cap in haulGeneral.requiredCapacities)
+                        if (!pawn.health.capacities.CapableOf(cap))
+                            return null;
+
                     //Job job = null;
                     foreach (var target in (billJob.targetQueueB))
                         if (target.Thing != null && target.Thing.def.stackLimit > 1 && target.Thing.Map != null && (outdoors || target.Thing.GetRoom() != room))
                         {
+                            //if (pawn.Position.DistanceToSquared(target.Thing.Position) < ptos)
+                            //    continue;
                             var job = ((WorkGiver_Scanner)haulGeneral.Worker).JobOnThing(pawn, target.Thing);
                             if (job != null)
-                                return job;
+                                if(pawn.Position.DistanceToSquared(job.targetB.Cell) < ptos)
+                                    return job;
                         }
                 }
             }

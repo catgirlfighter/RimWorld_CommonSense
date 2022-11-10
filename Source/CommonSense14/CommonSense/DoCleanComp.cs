@@ -41,7 +41,7 @@ namespace CommonSense
             Command_Toggle command_Toggle = new CleanCommand_Toggle();
             //command_Toggle.hotKey = KeyBindingDefOf.Command_TogglePower;
             command_Toggle.defaultLabel = "DoCleanCompToggleLabel".Translate();
-            command_Toggle.icon = ContentFinder<Texture2D>.Get("Things/Mote/Clean");
+            command_Toggle.icon = Utility.texMoteClean;
             command_Toggle.isActive = (() => this.Active);
             command_Toggle.toggleAction = delegate ()
             {

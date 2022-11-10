@@ -10,8 +10,13 @@ using UnityEngine;
 
 namespace CommonSense
 {
+    [StaticConstructorOnStartup]
     public static class Utility
     {
+        public static readonly Texture2D texUnloadThing = ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing");
+        public static readonly Texture2D texUnloadThingCancel = ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing_Cancel");
+        public static readonly Texture2D texMoteClean = ContentFinder<Texture2D>.Get("Things/Mote/Clean");
+
         private static WorkGiverDef cleanFilth = null;
         public const byte largeRoomSize = 160;
 
@@ -285,7 +290,7 @@ namespace CommonSense
                     TooltipHandler.TipRegion(rect2, "UnloadThingCancel".Translate());
 
                     var cl = GUI.color;
-                    if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing_Cancel"), hColor))
+                    if (Widgets.ButtonImage(rect2, texUnloadThingCancel, hColor))
                     {
                         SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                         c.ShouldUnload = false;
@@ -302,7 +307,7 @@ namespace CommonSense
                 else
                 {
                     TooltipHandler.TipRegion(rect2, "UnloadThing".Translate());
-                    if (Widgets.ButtonImage(rect2, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing"), Color.white))
+                    if (Widgets.ButtonImage(rect2, texUnloadThing, Color.white))
                     {
                         SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                         c.ShouldUnload = true;

@@ -1,4 +1,15 @@
-﻿1.1.54
+﻿1.1.55
+- cached all (two and a half) textures for quick access;
+- removed meal stacking options because they don't make sense anymore. It's vanilla now;
+- added some visual when pawns load items to their backpack;
+- made a tiny adjustment to an option for pawns to carry stuff to stockpile before job. Now pawns should be reluctant to do that if overall ingredients are closer to work place than a stack;
+- pawns incapable of hauling don't use "haul to stockpile" option anymore;
+- pawns that can't use "unload inventory" logic can't use "carry all ingredients" option anymore (because when interrupted ingredients get stuck in inventory);
+- there is an option to make pawns respect inventory limitations for carrying stuff to the station. On by default;
+- added an option to prevent pawns from getting stuck meditating for no reason;
+- pawns need for joy priority under sleep assignment now the same as in vanilla when "fun_police" option is disabled;
+
+1.1.54
 - RPGInventory (revamped) integrity things;
 - fixed a problem with pawns moving ingredients to and from a bench on a loop. Thanks to @Des and his pawn Buggy for hooking me up with something substantial to work with!
 

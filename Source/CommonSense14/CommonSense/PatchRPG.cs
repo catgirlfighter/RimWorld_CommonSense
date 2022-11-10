@@ -10,8 +10,7 @@ using UnityEngine;
 namespace CommonSense
 {
 
-    //[HarmonyPatch]
-    static class RPGStyleInventory_PopupMenu_NonUnoPinataPatch
+    static class RPGStyleInventory_PopupMenu_CommonSensePatch
     {
         static readonly Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
 
@@ -41,7 +40,7 @@ namespace CommonSense
                         {
                             ITab_Pawn_Gear_Utility.LInterfaceDrop.Invoke(__instance, new object[] { thing });
                         }
-                    }, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing_Cancel"), hColor));
+                    }, Utility.texUnloadThingCancel, hColor));
                 }
                 else
                 {
@@ -49,8 +48,20 @@ namespace CommonSense
                     {
                         SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
                         c.ShouldUnload = true;
-                    }, ContentFinder<Texture2D>.Get("UI/Icons/Unload_Thing"), Color.white));
+                    }, Utility.texUnloadThing, Color.white));
                 }
+            }
+        }
+    }
+
+    static class RPGStyleInventory_DrawSlotIcons_CommonSensePatch
+    {
+        internal static void Postfix(object __instance, Thing thing, bool equipment, bool inventory, Rect slotRect, ref float x, ref float y)
+        {
+            var c = CompUnloadChecker.GetChecker(thing);
+            if (c?.ShouldUnload == true)
+            {
+                RPGStyleInventory_CommonSensePatch.LDrawSlotIcon.Invoke(__instance, new object[] { slotRect, x, y, Utility.texUnloadThing, (string)"UnloadThing".Translate() });
             }
         }
     }
@@ -58,20 +69,30 @@ namespace CommonSense
     [StaticConstructorOnStartup]
     public static class RPGStyleInventory_CommonSensePatch
     {
+        //public void DrawSlotIcon(Rect slotRect, ref float x, ref float y, Texture2D tex, string tip)
+        public static MethodInfo LDrawSlotIcon = null;
         static RPGStyleInventory_CommonSensePatch()
         {
             var harmonyInstance = new Harmony("net.avilmask.rimworld.mod.CommonSense.RPGInventory");
             Type type;
             if ((type = AccessTools.TypeByName("Sandy_Detailed_RPG_GearTab")) != null)
             {
-                var mi = AccessTools.Method(type, "DrawThingRow", null, null);
-                HarmonyMethod hm = new HarmonyMethod(typeof(ITab_Pawn_Gear_DrawThingRow_CommonSensePatch), nameof(ITab_Pawn_Gear_DrawThingRow_CommonSensePatch.Prefix), null);
+                LDrawSlotIcon = AccessTools.Method(type, "DrawSlotIcon");
+                var mi = AccessTools.Method(type, "DrawThingRow");
+                HarmonyMethod hm = new HarmonyMethod(typeof(ITab_Pawn_Gear_DrawThingRow_CommonSensePatch), nameof(ITab_Pawn_Gear_DrawThingRow_CommonSensePatch.Prefix));
                 harmonyInstance.Patch(mi, hm, null);
 
-                mi = AccessTools.Method(type, "PopupMenu", null, null);
+                mi = AccessTools.Method(type, "PopupMenu");
                 if (mi != null)
                 {
-                    hm = new HarmonyMethod(typeof(RPGStyleInventory_PopupMenu_NonUnoPinataPatch), nameof(RPGStyleInventory_PopupMenu_NonUnoPinataPatch.Postfix), null);
+                    hm = new HarmonyMethod(typeof(RPGStyleInventory_PopupMenu_CommonSensePatch), nameof(RPGStyleInventory_PopupMenu_CommonSensePatch.Postfix));
+                    harmonyInstance.Patch(mi, null, hm);
+                }
+
+                mi = AccessTools.Method(type, "DrawSlotIcons");
+                if (mi != null)
+                {
+                    hm = new HarmonyMethod(typeof(RPGStyleInventory_DrawSlotIcons_CommonSensePatch), nameof(RPGStyleInventory_DrawSlotIcons_CommonSensePatch.Postfix));
                     harmonyInstance.Patch(mi, null, hm);
                 }
             }

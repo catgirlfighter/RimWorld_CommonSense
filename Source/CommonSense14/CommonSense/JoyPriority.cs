@@ -36,6 +36,17 @@ namespace CommonSense
                 return 0.8f;
         }
 
+        private static float JoyPolicePriority2(Pawn pawn)
+        {
+            if (Settings.fun_police)
+            {
+                CompJoyToppedOff c = pawn.TryGetComp<CompJoyToppedOff>();
+                if(c?.JoyToppedOff == false)
+                    return 4f;
+            }
+            return 2f;
+        }
+
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase mb)
         {
             foreach (var i in (instructions))
@@ -47,7 +58,9 @@ namespace CommonSense
                 }
                 else if (i.opcode == OpCodes.Ldc_R4 && (float)i.operand == 2f)
                 {
-                    yield return new CodeInstruction(OpCodes.Ldc_R4, 4f);
+                    yield return new CodeInstruction(OpCodes.Ldarg_1);
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ThinkNode_Priority_GetJoy_GetPriority_CommonSensePatch), nameof(JoyPolicePriority2)));
+                    //yield return new CodeInstruction(OpCodes.Ldc_R4, 4f);
                 }
                 else
                 {

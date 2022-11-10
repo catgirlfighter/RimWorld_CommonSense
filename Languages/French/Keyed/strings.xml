@@ -77,4 +77,8 @@
 	<DoCleanCompToggleDescInactive>Les pions ne nettoieront PAS autour de ce banc</DoCleanCompToggleDescInactive>
 	<advanced_inbetween_cleaning_gizmo_label>Afficher une bascule pour pouvoir changer les bancs à nettoyer</advanced_inbetween_cleaning_gizmo_label>
 	<advanced_inbetween_cleaning_gizmo_note>Il sera possible de désactiver le nettoyage autour de certains bancs</advanced_inbetween_cleaning_gizmo_note>
+	<meditation_economy_label>Pawns will meditate as much as they need</meditation_economy_label>
+	<meditation_economy_note>Unless under meditation assignment, pawns will stop meditating if their psyfocus is full and they don't see meditation as a good source of joy (i. e. full or bored)</meditation_economy_note>
+	<advanced_respect_capacity_label>-- pawns will not exceed inventory capacity</advanced_respect_capacity_label>
+	<advanced_respect_capacity_note>For immersion reasons or whatever</advanced_respect_capacity_note>
 </LanguageData>

@@ -7,9 +7,10 @@ using Verse;
 using Verse.AI;
 
 namespace CommonSense
-{
+{   
     public class PCT: Pawn_CarryTracker
-    {
+    {        
+        
         public PCT(Pawn newPawn) : base(newPawn) { }
         public bool SneakyMoveToInventory(IntVec3 dropLoc, ThingPlaceMode mode, out Thing resultingThing, Action<Thing, int> placedAction = null)
         {
@@ -73,4 +74,14 @@ namespace CommonSense
             }
         }
     }
+    /*
+    [HarmonyPatch(typeof(ThingOwner), nameof(ThingOwner.TryTransferToContainer), new Type[] { typeof(Thing), typeof(ThingOwner), typeof(bool) })]
+    class ThingOwner_TryTransferToContainer_Patch
+    {
+        internal static void Postfix()
+        {
+            Log.Message("herere");
+        }
+    }
+    */
 }

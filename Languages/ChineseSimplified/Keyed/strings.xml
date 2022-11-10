@@ -77,4 +77,8 @@
   <DoCleanCompToggleDescInactive>入座前不会清扫该工作台周围区域</DoCleanCompToggleDescInactive>
   <advanced_inbetween_cleaning_gizmo_label>点选工作台后，显示清扫/不清扫的按钮</advanced_inbetween_cleaning_gizmo_label>
   <advanced_inbetween_cleaning_gizmo_note>可禁用已设置工作台周围的清扫</advanced_inbetween_cleaning_gizmo_note>
+  <meditation_economy_label>Pawns will meditate as much as they need</meditation_economy_label>
+  <meditation_economy_note>Unless under meditation assignment, pawns will stop meditating if their psyfocus is full and they don't see meditation as a good source of joy (i. e. full or bored)</meditation_economy_note>
+  <advanced_respect_capacity_label>-- pawns will not exceed inventory capacity</advanced_respect_capacity_label>
+  <advanced_respect_capacity_note>For immersion reasons or whatever</advanced_respect_capacity_note>
 </LanguageData>

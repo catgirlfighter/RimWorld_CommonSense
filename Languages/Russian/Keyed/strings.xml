@@ -75,4 +75,8 @@
 	<DoCleanCompToggleDescInactive>Пешки НЕ будут убирать возле этого места</DoCleanCompToggleDescInactive>
 	<advanced_inbetween_cleaning_gizmo_label>Показывать переключатель, какие места нуждаются в уборке</advanced_inbetween_cleaning_gizmo_label>
 	<advanced_inbetween_cleaning_gizmo_note>Будет возможным выключать уборку возле некоторых рабочих мест</advanced_inbetween_cleaning_gizmo_note>
+	<meditation_economy_label>Пешки будут медетировать только столко сколько необходимо</meditation_economy_label>
+	<meditation_economy_note>Если пешкам не требуется медитировать по расписанию, они будут прерывать медитацию когда псифокус заполнен и медитация не выглядит привлекательным источником радости (т. е. удовлетворено или наскучило)</meditation_economy_note>
+	<advanced_respect_capacity_label>-- пешки не будут превышать вместимость инвентаря</advanced_respect_capacity_label>
+	<advanced_respect_capacity_note>Из-за иммерсии или типа того</advanced_respect_capacity_note>
 </LanguageData>
