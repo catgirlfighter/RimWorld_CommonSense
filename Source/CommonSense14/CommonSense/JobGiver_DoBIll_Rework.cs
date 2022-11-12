@@ -76,14 +76,25 @@ namespace CommonSense
                 Pawn actor = DropTargetThingIfInInventory.actor;
                 Job curJob = actor.jobs.curJob;
                 Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
+
                 if (thing.holdingOwner != null)
                 {
-                    int count = Mathf.Min(curJob.count, actor.carryTracker.AvailableStackSpace(thing.def), thing.stackCount);
+                    int count = /*curJob.count == -1 ? thing.stackCount :*/ Mathf.Min(curJob.count, actor.carryTracker.AvailableStackSpace(thing.def), thing.stackCount);
+                    //Log.Message($"{actor}, {thing} ,count ({count}) = {curJob.count}, {actor.carryTracker.AvailableStackSpace(thing.def)}, {thing.stackCount}");
+                    if (count < 1)
+                        return;
 
                     var owner = thing.holdingOwner;
-
+                    Map rootMap = ThingOwnerUtility.GetRootMap(owner.Owner);
+                    IntVec3 rootPosition = ThingOwnerUtility.GetRootPosition(owner.Owner);
+                    if (rootMap == null || !rootPosition.IsValid)
+                        return;
+                    //Log.Message($"{actor} trying to drop {thing}");
                     if (owner.TryDrop(thing, ThingPlaceMode.Near, count, out var droppedThing))
+                    {
+                        //Log.Message($"{actor} dropped {thing}");
                         curJob.SetTarget(TargetIndex.B, droppedThing);
+                    }
                 }
             };
             DropTargetThingIfInInventory.defaultCompleteMode = ToilCompleteMode.Instant;
@@ -115,7 +126,7 @@ namespace CommonSense
                 Toil PickUpToInventory;
                 List<LocalTargetInfo> L = __instance.job.GetTargetQueue(TargetIndex.B);
                 //if (L.Count < 2 && (L.Count == 0 || L[0].Thing.def.stackLimit < 2 && L[0].Thing.ParentHolder != __instance.pawn.inventory))
-                if (L.Count == 0)
+                if (L.Count == 0 && __instance.job.targetB.Thing?.ParentHolder == null)
                 {
                     PickUpToInventory = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true, false);
                 }
@@ -127,7 +138,7 @@ namespace CommonSense
                     PickUpToInventory.handlingFacing = true;
                     PickUpToInventory.initAction = delegate ()
                     {
-                        Log.Message($"what now???");
+                        //Log.Message($"what now???");
                         Pawn actor = PickUpToInventory.actor;
                         Job curJob = actor.jobs.curJob;
                         Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
@@ -335,6 +346,8 @@ namespace CommonSense
             {
                 foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, __instance.BillGiver is Building_MechGestator))
                 {
+                    if (toil2.debugName == "GotoThing")
+                        yield return DropTargetThingIfInInventory;
                     yield return toil2;
                 }
             }

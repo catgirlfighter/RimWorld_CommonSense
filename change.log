@@ -1,4 +1,7 @@
-﻿1.1.55
+﻿1.1.56
+- potentially fixed a problem with pawns trying to use ingredients from their inventory;
+
+1.1.55
 - cached all (two and a half) textures for quick access;
 - removed meal stacking options because they don't make sense anymore. It's vanilla now;
 - added some visual when pawns load items to their backpack;
