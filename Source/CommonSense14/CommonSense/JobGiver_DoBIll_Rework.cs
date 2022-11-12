@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System;
+using UnityEngine;
 
 
 namespace CommonSense
@@ -89,6 +90,24 @@ namespace CommonSense
                             }
                         }
                 };
+
+                // "started 10 jobs in one tick" fix from SmartMedicine: "Drop the [thing] so that you can then pick it up. Ya really."
+                // https://github.com/alextd/RimWorld-SmartMedicine/blob/84e7ac3e84a7f68dd7c7ed493296c0f9d7103f8e/Source/InventorySurgery.cs#L72
+                Toil DropTargetThingIfInInventory = ToilMaker.MakeToil("DropTargetThingIfInInventory");
+                DropTargetThingIfInInventory.initAction = delegate
+                {
+                    Pawn actor = DropTargetThingIfInInventory.actor;
+                    Job curJob = actor.jobs.curJob;
+                    Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
+                    if (thing.ParentHolder == actor.inventory)
+                    {
+                        int count = Mathf.Min(curJob.count, actor.carryTracker.AvailableStackSpace(thing.def), thing.stackCount);
+
+                        if(actor.inventory.innerContainer.TryDrop(thing, actor.Position, actor.Map, ThingPlaceMode.Near, count, out var droppedThing))
+                            curJob.SetTarget(TargetIndex.B, droppedThing);
+                    }
+                };
+                DropTargetThingIfInInventory.defaultCompleteMode = ToilCompleteMode.Instant;
 
                 //Toil PickUpThing;
                 Toil PickUpToInventory;
@@ -255,8 +274,9 @@ namespace CommonSense
                 yield return extract;
                 yield return (Toil)LJumpIfTargetInsideBillGiver.Invoke(__instance, new object[] { keepTakingToInventory, TargetIndex.B, TargetIndex.A });
 
-                yield return Toils_Jump.JumpIf(PickUpToInventory, () => __instance.job.GetTarget(TargetIndex.B).Thing.ParentHolder == __instance.pawn.inventory);
+                yield return Toils_Jump.JumpIf(DropTargetThingIfInInventory, () => __instance.job.GetTarget(TargetIndex.B).Thing.ParentHolder == __instance.pawn.inventory);
                 yield return getToHaulTarget;
+                yield return DropTargetThingIfInInventory;
                 yield return PickUpToInventory;
                 yield return keepTakingToInventory;
                 yield return TakeToHands;
