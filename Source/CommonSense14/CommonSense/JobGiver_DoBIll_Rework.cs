@@ -68,6 +68,26 @@ namespace CommonSense
             yield return toil;
             yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.B).NullOrEmpty<LocalTargetInfo>());
 
+            // "started 10 jobs in one tick" fix from SmartMedicine: "Drop the [thing] so that you can then pick it up. Ya really."
+            // https://github.com/alextd/RimWorld-SmartMedicine/blob/84e7ac3e84a7f68dd7c7ed493296c0f9d7103f8e/Source/InventorySurgery.cs#L72
+            Toil DropTargetThingIfInInventory = ToilMaker.MakeToil("DropTargetThingIfInInventory");
+            DropTargetThingIfInInventory.initAction = delegate
+            {
+                Pawn actor = DropTargetThingIfInInventory.actor;
+                Job curJob = actor.jobs.curJob;
+                Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
+                if (thing.holdingOwner != null)
+                {
+                    int count = Mathf.Min(curJob.count, actor.carryTracker.AvailableStackSpace(thing.def), thing.stackCount);
+
+                    var owner = thing.holdingOwner;
+
+                    if (owner.TryDrop(thing, ThingPlaceMode.Near, count, out var droppedThing))
+                        curJob.SetTarget(TargetIndex.B, droppedThing);
+                }
+            };
+            DropTargetThingIfInInventory.defaultCompleteMode = ToilCompleteMode.Instant;
+
             //hauling patch
             if (Settings.adv_haul_all_ings && __instance.pawn.Faction == Faction.OfPlayer && __instance.pawn.RaceProps.Humanlike)
             {
@@ -91,29 +111,14 @@ namespace CommonSense
                         }
                 };
 
-                // "started 10 jobs in one tick" fix from SmartMedicine: "Drop the [thing] so that you can then pick it up. Ya really."
-                // https://github.com/alextd/RimWorld-SmartMedicine/blob/84e7ac3e84a7f68dd7c7ed493296c0f9d7103f8e/Source/InventorySurgery.cs#L72
-                Toil DropTargetThingIfInInventory = ToilMaker.MakeToil("DropTargetThingIfInInventory");
-                DropTargetThingIfInInventory.initAction = delegate
-                {
-                    Pawn actor = DropTargetThingIfInInventory.actor;
-                    Job curJob = actor.jobs.curJob;
-                    Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
-                    if (thing.ParentHolder == actor.inventory)
-                    {
-                        int count = Mathf.Min(curJob.count, actor.carryTracker.AvailableStackSpace(thing.def), thing.stackCount);
-
-                        if(actor.inventory.innerContainer.TryDrop(thing, actor.Position, actor.Map, ThingPlaceMode.Near, count, out var droppedThing))
-                            curJob.SetTarget(TargetIndex.B, droppedThing);
-                    }
-                };
-                DropTargetThingIfInInventory.defaultCompleteMode = ToilCompleteMode.Instant;
-
                 //Toil PickUpThing;
                 Toil PickUpToInventory;
                 List<LocalTargetInfo> L = __instance.job.GetTargetQueue(TargetIndex.B);
-                if (L.Count < 2 && (L.Count == 0 || L[0].Thing.def.stackLimit < 2))
+                //if (L.Count < 2 && (L.Count == 0 || L[0].Thing.def.stackLimit < 2 && L[0].Thing.ParentHolder != __instance.pawn.inventory))
+                if (L.Count == 0)
+                {
                     PickUpToInventory = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true, false);
+                }
                 else
                 {
                     //Toil PickUpToCarry = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true, false); ;
@@ -122,14 +127,14 @@ namespace CommonSense
                     PickUpToInventory.handlingFacing = true;
                     PickUpToInventory.initAction = delegate ()
                     {
+                        Log.Message($"what now???");
                         Pawn actor = PickUpToInventory.actor;
                         Job curJob = actor.jobs.curJob;
                         Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
-                        //Log.Message($"{actor} picking up {thing}");
                         PickUpToInventory.actor.rotationTracker.FaceTarget(thing);
                         bool InventorySpawned = thing.ParentHolder == actor.inventory;
-
-                        if (InventorySpawned || !Toils_Haul.ErrorCheckForCarry(actor, thing))
+                        bool checkforcarry = !InventorySpawned && Toils_Haul.ErrorCheckForCarry(actor, thing);
+                        if (InventorySpawned || !checkforcarry)
                         {
                             if (thing.stackCount < curJob.count)
                             {
@@ -138,15 +143,35 @@ namespace CommonSense
                             }
 
                             //take some into hands and wait to transfer to backpack
-                            Thing splitThing = thing.SplitOff(curJob.count);
-                            if (splitThing.ParentHolder != actor.inventory 
-                            && !actor.carryTracker.GetDirectlyHeldThings().TryAdd(splitThing, false))
+                            Thing splitThing;
+                            if (curJob.count < 0)
                             {
-                                actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
-                                return;
+                                splitThing = thing;
+                            }
+                            else
+                            {
+                                splitThing = thing.SplitOff(curJob.count);
                             }
 
-                            actor.Reserve(splitThing, curJob);
+                            if (splitThing.ParentHolder != actor.inventory)
+                            {
+                                if (InventorySpawned)
+                                {
+                                    if (!actor.inventory.GetDirectlyHeldThings().TryAdd(splitThing, false))
+                                    {
+                                        actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
+                                        return;
+                                    }
+                                }
+                                else if (!actor.carryTracker.GetDirectlyHeldThings().TryAdd(splitThing, false))
+                                {
+                                    actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
+                                    return;
+                                }
+                            }
+
+                            if (!actor.Map.reservationManager.ReservedBy(splitThing, actor))
+                                actor.Reserve(splitThing, curJob);
                             curJob.SetTarget(TargetIndex.B, splitThing);
                             //add to que to move it to the bottom of haul list later, important for thing material
                             curJob.GetTargetQueue(TargetIndex.B).Add(splitThing);
@@ -156,10 +181,9 @@ namespace CommonSense
                                 actor.Map.reservationManager.Release(thing, actor, curJob);
                             }
 
-                            //float num = MassUtility.GearAndInventoryMass(SelPawnForGear);
-                            //float num2 = MassUtility.Capacity(this.SelPawnForGear, null);
-                            if (curJob.countQueue.Count < 1 
-                            || Settings.adv_respect_capacity 
+                            if (InventorySpawned
+                            || curJob.countQueue.Count < 1
+                            || Settings.adv_respect_capacity
                             && (MassUtility.GearAndInventoryMass(actor) + splitThing.stackCount * splitThing.GetStatValue(StatDefOf.Mass)) / MassUtility.Capacity(actor) > 1f)
                             {
                                 __instance.ReadyForNextToil();
@@ -229,9 +253,13 @@ namespace CommonSense
                 Toil TakeToHands = ToilMaker.MakeToil("TakeToHands");
                 TakeToHands.initAction = delegate ()
                 {
+
                     Pawn actor = TakeToHands.actor;
-                    if (actor.carryTracker.innerContainer.Count > 0)
+                    if (actor.IsCarrying())
+                    {
+
                         return;
+                    }
                     Job curJob = actor.jobs.curJob;
                     List<LocalTargetInfo> targetQueue = curJob.GetTargetQueue(TargetIndex.B);
                     //if capacity is respected, list can has more items to carry later
@@ -244,6 +272,7 @@ namespace CommonSense
                     }
 
                     curJob.SetTarget(TargetIndex.B, targetQueue[i]);
+
                     targetQueue.RemoveAt(i);
                     
                 };
@@ -274,9 +303,9 @@ namespace CommonSense
                 yield return extract;
                 yield return (Toil)LJumpIfTargetInsideBillGiver.Invoke(__instance, new object[] { keepTakingToInventory, TargetIndex.B, TargetIndex.A });
 
-                yield return Toils_Jump.JumpIf(DropTargetThingIfInInventory, () => __instance.job.GetTarget(TargetIndex.B).Thing.ParentHolder == __instance.pawn.inventory);
+                yield return Toils_Jump.JumpIf(PickUpToInventory, () => __instance.job.targetB.Thing.ParentHolder == __instance.pawn.inventory);
+                //yield return DropTargetThingIfInInventory;
                 yield return getToHaulTarget;
-                yield return DropTargetThingIfInInventory;
                 yield return PickUpToInventory;
                 yield return keepTakingToInventory;
                 yield return TakeToHands;
