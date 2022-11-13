@@ -346,9 +346,9 @@ namespace CommonSense
             {
                 foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, __instance.BillGiver is Building_MechGestator))
                 {
-                    if (toil2.debugName == "GotoThing")
-                        yield return DropTargetThingIfInInventory;
                     yield return toil2;
+                    if (toil2.debugName == "JumpIfTargetInsideBillGiver")
+                        yield return DropTargetThingIfInInventory;
                 }
             }
 
