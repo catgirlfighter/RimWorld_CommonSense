@@ -310,6 +310,7 @@ namespace CommonSense
                 Toil extract = Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.B, true);
                 Toil keepTakingToInventory = Toils_Jump.JumpIf(extract, () => !__instance.job.countQueue.NullOrEmpty() && !__instance.pawn.IsCarrying());
                 Toil keepTakingToHands = Toils_Jump.JumpIf(TakeToHands, () => __instance.job.countQueue.Count < __instance.job.targetQueueB.Count);
+                Toil JumpToKeepTakingToInventory = Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, keepTakingToInventory);
                 yield return checklist;
                 yield return extract;
                 yield return (Toil)LJumpIfTargetInsideBillGiver.Invoke(__instance, new object[] { keepTakingToInventory, TargetIndex.B, TargetIndex.A });
@@ -319,6 +320,7 @@ namespace CommonSense
                 yield return getToHaulTarget;
                 yield return PickUpToInventory;
                 yield return keepTakingToInventory;
+                yield return Toils_Jump.JumpIf(JumpToKeepTakingToInventory, () => __instance.job.targetQueueB.Count <= __instance.job.countQueue.Count);
                 yield return TakeToHands;
                 yield return ImitateHaulIfNeeded;
                 yield return Toils_Jump.JumpIf(keepTakingToHands, () => !__instance.pawn.IsCarrying());
@@ -340,7 +342,7 @@ namespace CommonSense
                     yield return physReserveToil;
                 }
                 yield return keepTakingToHands;
-                yield return Toils_Jump.JumpIfHaveTargetInQueue(TargetIndex.B, keepTakingToInventory);
+                yield return JumpToKeepTakingToInventory;
             }
             else
             {

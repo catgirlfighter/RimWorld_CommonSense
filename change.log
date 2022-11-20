@@ -1,4 +1,7 @@
-﻿1.1.56 and a half
+﻿1.1.57
+- fixed a problem with pawns getting stuck when gestator already has all ingredients inside. Thanks, @Kulfyr3.
+
+1.1.56 and a half
 - seems to be fixed a problem causing items to disappear or make crafting items almost free;
 
 1.1.56
