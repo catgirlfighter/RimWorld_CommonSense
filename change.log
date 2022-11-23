@@ -1,4 +1,7 @@
-﻿1.1.57
+﻿1.1.58
+- possibly fixed an issue when pawn already had some ingredients in inventory, and picking up more would combine them, causing pawn to not use it in recipe as result;
+
+1.1.57
 - fixed a problem with pawns getting stuck when gestator already has all ingredients inside. Thanks, @Kulfyr3.
 
 1.1.56 and a half

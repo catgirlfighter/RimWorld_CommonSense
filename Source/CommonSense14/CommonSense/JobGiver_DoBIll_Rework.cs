@@ -230,7 +230,7 @@ namespace CommonSense
                                 //from hands to backpack
                                 if (thing.ParentHolder == actor.carryTracker)
                                 {
-                                    if (!actor.carryTracker.innerContainer.TryTransferToContainer(thing, actor.inventory.innerContainer))
+                                    if (!actor.carryTracker.innerContainer.TryTransferToContainer(thing, actor.inventory.innerContainer, false))
                                     {
                                         actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
                                         return;
@@ -278,7 +278,7 @@ namespace CommonSense
                     //only pick items from invetory, in normal case it's possible that item is already in hands
                     if (!targetQueue.NullOrEmpty() && targetQueue[i].Thing.ParentHolder == actor.inventory)
                     {
-                        actor.inventory.innerContainer.TryTransferToContainer(targetQueue[i].Thing, actor.carryTracker.innerContainer);
+                        actor.inventory.innerContainer.TryTransferToContainer(targetQueue[i].Thing, actor.carryTracker.innerContainer, false);
                         actor.Reserve(targetQueue[i], curJob);
                     }
 
