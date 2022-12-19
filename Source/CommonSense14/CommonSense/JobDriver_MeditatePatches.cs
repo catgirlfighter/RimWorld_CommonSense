@@ -18,7 +18,8 @@ namespace CommonSense
             var joy = __instance.pawn.needs?.joy;
             var joyKind = __instance.pawn.CurJob.def.joyKind;
             //Log.Message($"{__instance.pawn} => {joy?.CurLevel}, {joyKind}, {entropy.NeedsPsyfocus}, {entropy.CurrentPsyfocus}");
-            if (!meditating
+            if (Settings.meditation_economy
+                && !meditating
                 && (joy?.CurLevel >= 0.98f || joyKind != null && joy?.tolerances?.BoredOf(joyKind) == true)
                 && (!entropy.NeedsPsyfocus || entropy.CurrentPsyfocus == 1f))
             {
