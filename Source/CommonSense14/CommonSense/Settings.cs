@@ -112,7 +112,7 @@ namespace CommonSense
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref separate_meals, "separate_meals", true, false);
+            //Scribe_Values.Look(ref separate_meals, "separate_meals", true, false);
             Scribe_Values.Look(ref fulfill_outdoors, "fulfill_outdoors", true, false);
             //Scribe_Values.Look(ref odd_is_normal, "odd_is_normal", false, false);
             Scribe_Values.Look(ref clean_before_work, "clean_before_work", true, false);
@@ -142,6 +142,7 @@ namespace CommonSense
             Scribe_Values.Look(ref polite_wander, "polite_wander", safe_wander, false);
             Scribe_Values.Look(ref ingest_any_drugs, "ingest_any_drugs", true, false);
             Scribe_Values.Look(ref clean_gizmo, "clean_gizmo", false, false);
+            Scribe_Values.Look(ref meditation_economy, "meditation_economy", true, false);
         }
     }
 }
