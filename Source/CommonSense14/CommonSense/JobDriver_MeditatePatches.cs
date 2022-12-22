@@ -11,15 +11,15 @@ namespace CommonSense
     {
         internal static void Postfix(JobDriver_Meditate __instance)
         {
+            if (!Settings.meditation_economy)
+                return;
+            //
             bool meditating = __instance.pawn.GetTimeAssignment() == TimeAssignmentDefOf.Meditate;
-            //bool recreating = __instance.pawn.GetTimeAssignment() == TimeAssignmentDefOf.Joy;
-
+            //
             var entropy = __instance.pawn.psychicEntropy;
             var joy = __instance.pawn.needs?.joy;
             var joyKind = __instance.pawn.CurJob.def.joyKind;
-            //Log.Message($"{__instance.pawn} => {joy?.CurLevel}, {joyKind}, {entropy.NeedsPsyfocus}, {entropy.CurrentPsyfocus}");
-            if (Settings.meditation_economy
-                && !meditating
+            if (!meditating
                 && (joy?.CurLevel >= 0.98f || joyKind != null && joy?.tolerances?.BoredOf(joyKind) == true)
                 && (!entropy.NeedsPsyfocus || entropy.CurrentPsyfocus == 1f))
             {

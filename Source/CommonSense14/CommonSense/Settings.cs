@@ -6,8 +6,8 @@ namespace CommonSense
     public class Settings : ModSettings
     {
         public static bool separate_meals = true;
+        public static bool odd_is_normal = false;
         public static bool fulfill_outdoors = true;
-        //public static bool odd_is_normal = false;
         public static bool clean_before_work = true;
         public static bool clean_after_tending = true;
         public static bool calculate_full_path = true;
@@ -70,10 +70,10 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("put_back_to_inv_label".Translate(), ref put_back_to_inv, "put_back_to_inv_note".Translate());
             listing_Standard.CheckboxLabeled("skip_snow_clean_label".Translate(), ref skip_snow_clean, "skip_snow_clean_note".Translate());
 
-            //listing_Standard.GapLine();
-            //listing_Standard.Label("meal_stacking_head".Translate());
-            //listing_Standard.CheckboxLabeled("meal_stacking_label".Translate(), ref separate_meals, "meal_stacking_note".Translate());
-            //listing_Standard.CheckboxLabeled("dont_count_odd_label".Translate(), ref odd_is_normal, "dont_count_odd_note".Translate());
+            listing_Standard.GapLine();
+            listing_Standard.Label("meal_stacking_head".Translate());
+            listing_Standard.CheckboxLabeled("meal_stacking_label".Translate(), ref separate_meals, "meal_stacking_note".Translate());
+            listing_Standard.CheckboxLabeled("dont_count_odd_label".Translate(), ref odd_is_normal, "dont_count_odd_note".Translate());
 
 
             listing_Standard.GapLine();
@@ -112,9 +112,9 @@ namespace CommonSense
         public override void ExposeData()
         {
             base.ExposeData();
-            //Scribe_Values.Look(ref separate_meals, "separate_meals", true, false);
+            Scribe_Values.Look(ref separate_meals, "separate_meals", true, false);
+            Scribe_Values.Look(ref odd_is_normal, "odd_is_normal", false, false);
             Scribe_Values.Look(ref fulfill_outdoors, "fulfill_outdoors", true, false);
-            //Scribe_Values.Look(ref odd_is_normal, "odd_is_normal", false, false);
             Scribe_Values.Look(ref clean_before_work, "clean_before_work", true, false);
             Scribe_Values.Look(ref clean_after_tending, "clean_after_tending", true, false);
             Scribe_Values.Look(ref calculate_full_path, "calculate_full_path", true, false);

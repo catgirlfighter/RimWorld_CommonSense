@@ -1,4 +1,12 @@
-﻿1.1.58
+﻿1.1.60
+- fixed "ingest any drugs" option. Vanilla still doesn't allow to ingest "medical" drugs (like luciferum) from inventory;
+- fixed meditation_economy flag. @fyaunen reminded me that I forgot to make it work;
+- reverted changes regarding meal stacking. Non-ideology still needs it. Sorry for ever removing it and taking so long to revert it;
+
+1.1.59
+- added clean gizmo to brewery and other buildings like it;
+
+1.1.58
 - possibly fixed an issue when pawn already had some ingredients in inventory, and picking up more would combine them, causing pawn to not use it in recipe as result;
 
 1.1.57

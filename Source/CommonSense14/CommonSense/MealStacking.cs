@@ -8,7 +8,6 @@ using Verse;
 
 namespace CommonSense
 {
-    /*
     [HarmonyPatch(typeof(Thing), "CanStackWith", new Type[] { typeof(Thing) })]
     public static class CompIngredients_CanStackWith_CommonSensePatch
     {
@@ -54,5 +53,4 @@ namespace CommonSense
             __result = getflags(ings) == getflags(otherings);
         }
     }
-    */
 }

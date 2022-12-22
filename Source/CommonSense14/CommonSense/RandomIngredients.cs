@@ -22,6 +22,9 @@ namespace CommonSense
                 return;
 
             CompIngredients ings = __result.TryGetComp<CompIngredients>();
+
+            if (ings != null)
+            Log.Message($"{__result} x{__result.stackCount}, {def}, {stuff}");
             if (ings == null || ings.ingredients.Count > 0)
                 return;
 

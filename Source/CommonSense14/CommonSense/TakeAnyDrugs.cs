@@ -16,8 +16,8 @@ namespace CommonSense
                 return true;
 
             //Log.Message($"{pawn}+{inv.def},nutr={inv.def.IsNutritionGivingIngestible},drug={inv.def.IsDrug},ing={inv.IngestibleNow},willeat={pawn.WillEat(inv, null, true)}");
-            __result = (inv.def.IsNutritionGivingIngestible || inv.def.IsDrug) && inv.IngestibleNow && pawn.WillEat(inv, null, true);
-
+            //__result = (inv.def.IsNutritionGivingIngestible || inv.def.IsDrug) && inv.IngestibleNow && pawn.WillEat_NewTemp(inv);
+            __result = ((inv.def.IsNutritionGivingIngestible && pawn.WillEat_NewTemp(inv, null, true, false)) || (/*inv.def.IsNonMedicalDrug && */pawn.CanTakeDrug(inv.def))) && inv.IngestibleNow;
             return false;
         }
     }
