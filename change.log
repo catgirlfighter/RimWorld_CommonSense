@@ -1,4 +1,8 @@
-﻿1.1.60
+﻿1.1.61
+- added paranoid checks to summary generation;
+- changed prefix to posfix in summary generation, since game now has its own custom summaries for a lot of things;
+
+1.1.60
 - fixed "ingest any drugs" option. Vanilla still doesn't allow to ingest "medical" drugs (like luciferum) from inventory;
 - fixed meditation_economy flag. @fyaunen reminded me that I forgot to make it work;
 - reverted changes regarding meal stacking. Non-ideology still needs it. Sorry for ever removing it and taking so long to revert it;

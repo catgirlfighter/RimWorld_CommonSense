@@ -103,18 +103,21 @@ namespace CommonSense
         [HarmonyPatch(typeof(ThingFilter), nameof(ThingFilter.Summary), MethodType.Getter)]
         public static class ThingFilter_Summary_CommonSensePatch
         {
-            public static bool Prefix(ThingFilter __instance, ref string __result)
+            public static void Postfix(ThingFilter __instance, ref string __result)
             {
-                if (!Settings.gui_extended_recipe)
-                    return true;
+                if (__instance == null || !Settings.gui_extended_recipe)
+                    return;
 
-                if (!__instance.customSummary.NullOrEmpty())
+                if (!__instance.customSummary.NullOrEmpty() && __instance.customSummary != "UsableIngredients".Translate())
                 {
-                    __result = __instance.customSummary;
+                    return;
+                    //__result = __instance.customSummary;
                 }
 
-                List<ThingDef> thingDefs = Traverse.Create(__instance).Field("thingDefs").GetValue<List<ThingDef>>();
-                List<string> categories = Traverse.Create(__instance).Field("categories").GetValue<List<string>>();
+                var thingDefs = Traverse.Create(__instance).Field("thingDefs").GetValue() as List<ThingDef>;
+                var categories = Traverse.Create(__instance).Field("categories").GetValue() as List<string>;
+                var allowAllWhoCanMake = Traverse.Create(__instance).Field("allowAllWhoCanMake").GetValue() as List<ThingDef>;
+                var allowedDefs = Traverse.Create(__instance).Field("allowedDefs").GetValue() as HashSet<ThingDef>;
                 //List<string> tradeTagsToAllow = Traverse.Create(__instance).Field("tradeTagsToAllow").GetValue<List<string>>();
                 //List<string> tradeTagsToDisallow = Traverse.Create(__instance).Field("tradeTagsToDisallow").GetValue<List<string>>();
                 //List<string> thingSetMakerTagsToAllow = Traverse.Create(__instance).Field("thingSetMakerTagsToAllow").GetValue<List<string>>();
@@ -123,46 +126,45 @@ namespace CommonSense
                 //List<string> specialFiltersToAllow = Traverse.Create(__instance).Field("specialFiltersToAllow").GetValue<List<string>>();
                 //List<string> specialFiltersToDisallow = Traverse.Create(__instance).Field("specialFiltersToDisallow").GetValue<List<string>>();
                 //List<StuffCategoryDef> stuffCategoriesToAllow = Traverse.Create(__instance).Field("stuffCategoriesToAllow").GetValue<List<StuffCategoryDef>>();
-                List<ThingDef> allowAllWhoCanMake = Traverse.Create(__instance).Field("allowAllWhoCanMake").GetValue<List<ThingDef>>();
                 //FoodPreferability disallowWorsePreferability = Traverse.Create(__instance).Field("disallowWorsePreferability").GetValue<FoodPreferability>();
                 //bool disallowInedibleByHuman = Traverse.Create(__instance).Field("disallowInedibleByHuman").GetValue<bool>();
                 //Type allowWithComp = Traverse.Create(__instance).Field("allowWithComp").GetValue<Type>();
                 //Type disallowWithComp = Traverse.Create(__instance).Field("disallowWithComp").GetValue<Type>();
                 //float disallowCheaperThan = Traverse.Create(__instance).Field("disallowCheaperThan").GetValue<float>();
                 //List<ThingDef> disallowedThingDefs = Traverse.Create(__instance).Field("disallowedThingDefs").GetValue<List<ThingDef>>();
-                HashSet<ThingDef> allowedDefs = Traverse.Create(__instance).Field("allowedDefs").GetValue<HashSet<ThingDef>>();
-
 
                 if (!categories.NullOrEmpty())
                 {
-                    __result = DefDatabase<ThingCategoryDef>.GetNamed(categories[0]).label;
+                    __result = DefDatabase<ThingCategoryDef>.GetNamed(categories[0])?.label ?? "";
                     for (int i = 1; i < categories.Count; i++)
-                        __result += ", " + DefDatabase<ThingCategoryDef>.GetNamed(categories[i]).label;
+                        __result += ", " + DefDatabase<ThingCategoryDef>.GetNamed(categories[i])?.label ?? "";
                 }
                 else if (!allowAllWhoCanMake.NullOrEmpty())
                 {
                     HashSet<StuffCategoryDef> l = new HashSet<StuffCategoryDef>();
-                    foreach (var c in (allowAllWhoCanMake)) l.AddRange(c.stuffCategories);
+                    foreach (var c in (allowAllWhoCanMake)) 
+                        if(c != null) 
+                            l.AddRange(c.stuffCategories);
                     __result = "";
                     foreach (var def in l)
-                        __result += __result == "" ? def.label.CapitalizeFirst() : ", " + def.label.CapitalizeFirst();
+                        __result += __result == "" ? def?.label?.CapitalizeFirst() ?? "" : ", " + def?.label?.CapitalizeFirst() ?? "";
                 }
                 else if (allowedDefs != null && allowedDefs.Count > 0)
                 {
                     __result = "";
                     foreach (var thing in allowedDefs)
-                        __result += __result == "" ? thing.label : ", " + thing.label;
+                        __result += __result == "" ? thing?.label ?? "" : ", " + thing?.label ?? "";
 
                 }
                 else if (!thingDefs.NullOrEmpty())
                 {
-                    __result = thingDefs[0].label;
+                    __result = thingDefs[0]?.label ?? "";
                     for (int i = 1; i < thingDefs.Count; i++)
-                        __result += ", " + thingDefs[i].label;
+                        __result += ", " + thingDefs[i]?.label ?? "";
                 }
                 else __result = "UsableIngredients".Translate();
                 __instance.customSummary = __result;
-                return false;
+                return;// false;
                 
             }
         }
