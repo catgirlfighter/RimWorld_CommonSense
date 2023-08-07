@@ -143,7 +143,7 @@ namespace CommonSense
                 {
                     HashSet<StuffCategoryDef> l = new HashSet<StuffCategoryDef>();
                     foreach (var c in (allowAllWhoCanMake)) 
-                        if(c != null && c.stuffCategories != null) 
+                        if(c?.stuffCategories != null) 
                             l.AddRange(c.stuffCategories);
                     __result = "";
                     foreach (var def in l)

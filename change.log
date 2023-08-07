@@ -1,4 +1,7 @@
-﻿1.1.61
+﻿1.1.62
+- Fix NREs breaking bill menu window contributed by @Thorbane;
+
+1.1.61
 - added paranoid checks to summary generation;
 - changed prefix to posfix in summary generation, since game now has its own custom summaries for a lot of things;
 
