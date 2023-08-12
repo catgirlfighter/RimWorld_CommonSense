@@ -39,7 +39,8 @@ namespace CommonSense
                 (int)pawn.def.race.intelligence < 2 ||
                 pawn.Faction != Faction.OfPlayer ||
                 (int)pawn.RaceProps.intelligence < 2 ||
-                pawn.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
+                //pawn.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
+                pawn.WorkTypeIsDisabled(CleaningDef) ||
                 pawn.InMentalState || pawn.IsBurning() ||
                 pawn.workSettings == null || !pawn.workSettings.WorkIsActive(CleaningDef);
         }

@@ -1,4 +1,7 @@
-﻿1.1.62
+﻿1.1.63
+- fixed slaves not cleaning opportunistically;
+
+1.1.62
 - Fix NREs breaking bill menu window contributed by @Thorbane;
 
 1.1.61
