@@ -15,7 +15,7 @@
 	<meal_stacking_label>Пешки будут избегать смешивать негативные мысли при складывании обедов</meal_stacking_label>
 	<meal_stacking_note>Таким образом отвратительные блюда никогда не перемешаются с простыми</meal_stacking_note>
 	<dont_count_odd_label>Считать странное мясо (напр.: насекомых) нормальным, позволяя складывать его с обычными блюдами</dont_count_odd_label>
-	<dont_count_odd_note>Меся насекомых не на столько уж и плохое...</dont_count_odd_note>
+	<dont_count_odd_note>Мясо насекомых не на столько уж и плохое...</dont_count_odd_note>
 	<gen_ingredients_head>Генерация блюд</gen_ingredients_head>
 	<gen_ingredients_label>Добавлять случайные ингредиенты в случайно сгенерированные обеды</gen_ingredients_label>
 	<gen_ingredients_note>Прим.: подаренные рассказчиком, проданные торговцем, взятые с трупа. Используются только нейтральные ингредиенты. После включения этой опции, игра никогда не станет прежней</gen_ingredients_note>
