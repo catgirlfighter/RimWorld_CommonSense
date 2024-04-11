@@ -34,7 +34,7 @@ namespace CommonSense
         }
 
         public static bool IncapableOfCleaning(Pawn pawn)
-        {
+        {/*
             return pawn.def.race == null ||
                 (int)pawn.def.race.intelligence < 2 ||
                 pawn.Faction != Faction.OfPlayer ||
@@ -43,6 +43,14 @@ namespace CommonSense
                 pawn.WorkTypeIsDisabled(CleaningDef) ||
                 pawn.InMentalState || pawn.IsBurning() ||
                 pawn.workSettings == null || !pawn.workSettings.WorkIsActive(CleaningDef);
+        */
+            return pawn.def.race == null ||
+            pawn.def.race.intelligence < Intelligence.ToolUser ||
+            pawn.Faction != Faction.OfPlayer ||
+            pawn.RaceProps.intelligence < Intelligence.ToolUser ||
+            pawn.WorkTypeIsDisabled(CleaningDef) ||
+            pawn.InMentalState || pawn.IsBurning() ||
+            pawn.workSettings == null || !pawn.workSettings.WorkIsActive(CleaningDef);
         }
 
         public static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target, int Limit = int.MaxValue)
@@ -77,8 +85,15 @@ namespace CommonSense
                 {
                     IntVec3 intVec = target.Cell + GenRadial.RadialPattern[i];
                     if (intVec.InBounds(pawn.Map) && intVec.InAllowedArea(pawn) && (intVec.GetRoom(pawn.Map) == room || intVec.GetDoor(pawn.Map) != null))
-                        ((List<Filth>)enumerable).AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>().Where(f => !f.Destroyed
-                            && ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)).Take(Limit == 0 ? int.MaxValue : Limit));
+                    {
+                        ((List<Filth>)enumerable)
+                        .AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>()
+                            .Where(
+                                f => !f.Destroyed
+                                && ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)
+                            ).Take(Limit == 0 ? int.MaxValue : Limit)
+                        );
+                    }
                     if (Limit > 0 && enumerable.Count() >= Limit)
                         break;
                 }
