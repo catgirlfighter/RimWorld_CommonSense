@@ -34,23 +34,14 @@ namespace CommonSense
         }
 
         public static bool IncapableOfCleaning(Pawn pawn)
-        {/*
+        {
             return pawn.def.race == null ||
-                (int)pawn.def.race.intelligence < 2 ||
-                pawn.Faction != Faction.OfPlayer ||
-                (int)pawn.RaceProps.intelligence < 2 ||
-                //pawn.WorkTagIsDisabled(WorkTags.ManualDumb | WorkTags.Cleaning) ||
-                pawn.WorkTypeIsDisabled(CleaningDef) ||
-                pawn.InMentalState || pawn.IsBurning() ||
-                pawn.workSettings == null || !pawn.workSettings.WorkIsActive(CleaningDef);
-        */
-            return pawn.def.race == null ||
-            pawn.def.race.intelligence < Intelligence.ToolUser ||
             pawn.Faction != Faction.OfPlayer ||
+            pawn.def.race.intelligence < Intelligence.ToolUser ||
             pawn.RaceProps.intelligence < Intelligence.ToolUser ||
-            pawn.WorkTypeIsDisabled(CleaningDef) ||
             pawn.InMentalState || pawn.IsBurning() ||
-            pawn.workSettings == null || !pawn.workSettings.WorkIsActive(CleaningDef);
+            pawn.WorkTypeIsDisabled(CleaningDef) ||
+            pawn.workSettings == null || !pawn.workSettings.Initialized || !pawn.workSettings.WorkIsActive(CleaningDef);
         }
 
         public static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target, int Limit = int.MaxValue)
