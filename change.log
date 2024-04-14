@@ -1,4 +1,7 @@
-﻿1.2.1
+﻿1.2.2
+- supposedly fixed queuing issue;
+
+1.2.1
 - handled a situation in which "{} did not have work settings initialized" error could accure.
 
 1.2.0

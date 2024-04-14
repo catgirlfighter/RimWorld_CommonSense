@@ -160,7 +160,8 @@ namespace CommonSense
             {
                 try
                 {
-                    if (__instance?._pawn == null || !__instance._pawn.IsColonistPlayerControlled || newJob?.def == null)
+                    if (__instance?._pawn == null || !__instance._pawn.IsColonistPlayerControlled || newJob?.def == null 
+                        || __instance.jobQueue == null || __instance.jobQueue.Count > 0)
                         return true;
 
                     if (Settings.fun_police && __instance._pawn.needs?.joy != null && __instance._pawn.needs.joy.CurLevel < 0.8f)
