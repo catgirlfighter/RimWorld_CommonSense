@@ -1,4 +1,8 @@
-﻿1.2.2
+﻿1.2.3
+- made it so "put it back to inventory" option only works for player faction pawns;
+- fixed and error "number of parameters specified does not match the expected number" when trying to cleant after tending to the patient. Fix by @tk421storm.
+
+1.2.2
 - supposedly fixed queuing issue;
 
 1.2.1

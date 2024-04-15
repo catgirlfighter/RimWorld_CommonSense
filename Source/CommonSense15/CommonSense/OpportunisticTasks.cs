@@ -135,8 +135,6 @@ namespace CommonSense
                     foreach (var target in (billJob.targetQueueB))
                         if (target.Thing != null && target.Thing.def.stackLimit > 1 && target.Thing.Map != null && (outdoors || target.Thing.GetRoom() != room))
                         {
-                            //if (pawn.Position.DistanceToSquared(target.Thing.Position) < ptos)
-                            //    continue;
                             var job = ((WorkGiver_Scanner)haulGeneral.Worker).JobOnThing(pawn, target.Thing);
                             if (job != null)
                                 if(pawn.Position.DistanceToSquared(job.targetB.Cell) < ptos)
@@ -233,16 +231,12 @@ namespace CommonSense
                 if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || __instance.curJob == null)
                     return true;
 
-                //Log.Message("beginning endCurrentJob common sense for " + __instance.curJob);
-
                 if (Settings.fun_police && __instance._pawn.needs.joy != null && __instance._pawn.needs.joy.CurLevel > 0.95f)
                 {
                     CompJoyToppedOff c = __instance._pawn.TryGetComp<CompJoyToppedOff>();
                     if (c != null)
                         c.JoyToppedOff = true;
                 }
-
-                //Log.Message("did fun bit");
 
                 Job job = null;
                 if (Settings.clean_before_work && condition == JobCondition.Succeeded && __instance.jobQueue != null
@@ -251,29 +245,23 @@ namespace CommonSense
                     job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, Settings.op_clean_num);
                 }
 
-                //Log.Message("did before work bit");
-
                 if (Settings.clean_after_tending && condition == JobCondition.Succeeded && __instance.jobQueue != null
                     && __instance.jobQueue.Count == 0 && ProperJob(__instance.curJob, __instance._pawn, JobDefOf.TendPatient))
                 {
-                    //Log.Message("creating post tend clean job");
                     ThinkTreeDef thinkTree = null;
                     MethodInfo mi = AccessTools.Method(typeof(Pawn_JobTracker), "DetermineNextJob");
                     ThinkResult thinkResult = (ThinkResult)mi.Invoke(__instance, new object[] { thinkTree, false });
-                    //Log.Message("using think result: "+thinkResult);
                     if (ProperJob(thinkResult.Job, __instance._pawn, JobDefOf.TendPatient))
                     {
                         Pawn pawn = (Pawn)thinkResult.Job.targetA.Thing;
                         if (pawn.GetRoom() == __instance.curJob.targetA.Thing.GetRoom() || (HealthUtility.TicksUntilDeathDueToBloodLoss(pawn) / 2500f) < 6)
                             return true;
                     }
-                    //Log.Message("making job");
                     job = MakeCleaningJob(__instance._pawn, __instance.curJob.targetA, Settings.doc_clean_num);
                 }
                 //
                 if (job != null)
                 {
-                    //Log.Message("queing job");
                     __instance.jobQueue.EnqueueFirst(job);
                 }
                 //

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
+using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -18,7 +19,7 @@ namespace CommonSense
             CompUnloadChecker cuc = CarriedThing.TryGetComp<CompUnloadChecker>();
             //Thing r = null;
             bool b;
-            if (!Settings.put_back_to_inv || cuc == null || !cuc.WasInInventory)
+            if (pawn.Faction != Faction.OfPlayer || !Settings.put_back_to_inv || cuc == null || !cuc.WasInInventory)
             {
                 b = TryDropCarriedThing(dropLoc, mode, out var r, placedAction);
                 resultingThing = r;
@@ -39,7 +40,6 @@ namespace CommonSense
         {
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase mb)
             {
-                //couldn't figure out, why I can't get a method using AccessTools.Method()
                 MethodInfo m = null;
                 bool b;
                 foreach (var mm in typeof(Pawn_CarryTracker).GetMethods())
@@ -74,14 +74,4 @@ namespace CommonSense
             }
         }
     }
-    /*
-    [HarmonyPatch(typeof(ThingOwner), nameof(ThingOwner.TryTransferToContainer), new Type[] { typeof(Thing), typeof(ThingOwner), typeof(bool) })]
-    class ThingOwner_TryTransferToContainer_Patch
-    {
-        internal static void Postfix()
-        {
-            Log.Message("herere");
-        }
-    }
-    */
 }
