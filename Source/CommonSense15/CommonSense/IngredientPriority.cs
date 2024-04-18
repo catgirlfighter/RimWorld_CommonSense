@@ -14,7 +14,7 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredients")]
         public static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
         {
-            public static void Postfix(WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen)
+            internal static void Postfix(WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen)
             {
                 //return;
                 if (!__result || !Settings.adv_haul_all_ings)
@@ -28,10 +28,29 @@ namespace CommonSense
         public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
 
-            private static void doSort(List<Thing> availableThings, Bill bill)
+            private static void DoSort(List<Thing> availableThings, Bill bill)
             {
                 if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
                     return;
+
+                var stores = new HashSet<ISlotGroup>();
+                foreach (var thing in availableThings)
+                {
+                    if (thing.TryGetComp<CompRottable>() == null) continue;
+                    ISlotGroup slotGroup = thing.GetSlotGroup();
+                    if (slotGroup == null) continue;
+                    ISlotGroup storGroup = thing.GetSlotGroup()?.StorageGroup;
+                    slotGroup = (storGroup ?? slotGroup);
+                    stores.Add(slotGroup);
+                }
+
+                availableThings.RemoveAll(thing => thing.GetSlotGroup() != null && thing.TryGetComp<CompRottable>() != null);
+                foreach (var store in stores)
+                {
+                    foreach (var thing in store.HeldThings)
+                        if (bill.recipe.IsIngredient(thing.def))
+                            availableThings.Add(thing);
+                }
 
                 availableThings.Sort(
                     delegate (Thing a, Thing b)
@@ -74,7 +93,7 @@ namespace CommonSense
                     {
                         yield return new CodeInstruction(OpCodes.Ldarg_0);
                         yield return new CodeInstruction(OpCodes.Ldarg_1);
-                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch), nameof(WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch.doSort)));
+                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch), nameof(WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch.DoSort)));
                         b0 = true;
                     }
                 }

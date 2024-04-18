@@ -7,7 +7,7 @@ namespace CommonSense
 {
     //[HarmonyPatch(typeof(JobDriver_Meditate), "<MakeNewToils>b__15_3")]
     [HarmonyPatch(typeof(JobDriver_Meditate), "MeditationTick")]
-    public static class JobDriver_Meditate_MakeNewToils_b__15_3_CommonSensePatch
+    public static class JobDriver_MeditationTick_CommonSensePatch
     {
         internal static void Postfix(JobDriver_Meditate __instance)
         {
