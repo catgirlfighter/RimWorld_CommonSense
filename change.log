@@ -1,4 +1,7 @@
-﻿1.2.4
+﻿1.2.5
+- further changes to previous update, it didn't do all the checks required. Not sure if it fixes anything though.
+
+1.2.4
 - made some changes to how ingredients are looked for. I dislike that pawns usually consider only a heap of things close to each other and disregard other items that are on the same stack or in the same shelf group. I've added an experimental feature to check ALL items in the same stockpile as the starter ones. It should improve how pawns look for "about to spoil" ingredients.
 
 1.2.3

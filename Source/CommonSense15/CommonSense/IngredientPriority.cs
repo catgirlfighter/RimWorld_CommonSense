@@ -27,8 +27,26 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
         public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
+            private static bool IsUsableIngredient(Thing t, Bill bill)
+            { //copy paste from WorkGiver_DoBill.IsUsableIngredient
+                if (!bill.IsFixedOrAllowedIngredient(t))
+                {
+                    return false;
+                }
+                using (List<IngredientCount>.Enumerator enumerator = bill.recipe.ingredients.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (enumerator.Current.filter.Allows(t))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
 
-            private static void DoSort(List<Thing> availableThings, Bill bill)
+            internal static void Prefix(List<Thing> availableThings, Bill bill)
             {
                 if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
                     return;
@@ -48,9 +66,15 @@ namespace CommonSense
                 foreach (var store in stores)
                 {
                     foreach (var thing in store.HeldThings)
-                        if (bill.recipe.IsIngredient(thing.def))
+                        if (bill.IsFixedOrAllowedIngredient(thing))
                             availableThings.Add(thing);
                 }
+            }
+
+            private static void DoSort(List<Thing> availableThings, Bill bill)
+            {
+                if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
+                    return;
 
                 availableThings.Sort(
                     delegate (Thing a, Thing b)

@@ -36,8 +36,7 @@ namespace CommonSense
                 if (__instance.job.GetTarget(TargetIndex.A).Thing is Filth)
                     return false;
 
-                IBillGiver billGiver = __instance.job.GetTarget(TargetIndex.A).Thing as IBillGiver;
-                if (billGiver != null)
+                if (__instance.job.GetTarget(TargetIndex.A).Thing is IBillGiver billGiver)
                 {
                     if (__instance.job.bill.DeletedOrDereferenced)
                     {
@@ -57,8 +56,7 @@ namespace CommonSense
             {
                 if (__instance.job.targetQueueB != null && __instance.job.targetQueueB.Count == 1)
                 {
-                    UnfinishedThing unfinishedThing = __instance.job.targetQueueB[0].Thing as UnfinishedThing;
-                    if (unfinishedThing != null)
+                    if (__instance.job.targetQueueB[0].Thing is UnfinishedThing unfinishedThing)
                     {
                         unfinishedThing.BoundBill = (Bill_ProductionWithUft)__instance.job.bill;
                     }
@@ -431,8 +429,7 @@ namespace CommonSense
                 var t = ToilMaker.MakeToil("MakeNewToils");
                 t.initAction = delegate ()
                 {
-                    Bill_Production bill_Production = t.actor.jobs.curJob.bill as Bill_Production;
-                    if (bill_Production != null && bill_Production.repeatMode == BillRepeatModeDefOf.TargetCount)
+                    if (t.actor.jobs.curJob.bill is Bill_Production bill_Production && bill_Production.repeatMode == BillRepeatModeDefOf.TargetCount)
                     {
                         __instance.pawn.MapHeld.resourceCounter.UpdateResourceCounts();
                     }
