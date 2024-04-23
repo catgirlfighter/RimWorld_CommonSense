@@ -11,6 +11,7 @@ namespace CommonSense
 {
     public static class IngredientPriority
     {
+        //optimazing the path to pick up items
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredients")]
         public static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
         {
@@ -24,35 +25,18 @@ namespace CommonSense
             }
         }
 
-        [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
-        public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
+        //want to add all items in the same stockpile or a group as items picked for comparison
+        [HarmonyPatch]
+        public static class WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch
         {
-            private static bool IsUsableIngredient(Thing t, Bill bill)
-            { //copy paste from WorkGiver_DoBill.IsUsableIngredient
-                if (!bill.IsFixedOrAllowedIngredient(t))
-                {
-                    return false;
-                }
-                using (List<IngredientCount>.Enumerator enumerator = bill.recipe.ingredients.GetEnumerator())
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        if (enumerator.Current.filter.Allows(t))
-                        {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
-            internal static void Prefix(List<Thing> availableThings, Bill bill)
+            private static Type dc24_0;
+            private static void PreProcess(Predicate<Thing> baseValidator, bool billGiverIsPawn, Predicate<List<Thing>> foundAllIngredientsAndChoose, List<Thing> newRelevantThings, List<Thing> processedThings)
             {
-                if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
+                if (!Settings.prefer_spoiling_ingredients || billGiverIsPawn)
                     return;
-
+                //
                 var stores = new HashSet<ISlotGroup>();
-                foreach (var thing in availableThings)
+                foreach (var thing in newRelevantThings)
                 {
                     if (thing.TryGetComp<CompRottable>() == null) continue;
                     ISlotGroup slotGroup = thing.GetSlotGroup();
@@ -62,15 +46,63 @@ namespace CommonSense
                     stores.Add(slotGroup);
                 }
 
-                availableThings.RemoveAll(thing => thing.GetSlotGroup() != null && thing.TryGetComp<CompRottable>() != null);
+                HashSet<Thing> unique = new HashSet<Thing>();
+                unique.AddRange(newRelevantThings);
                 foreach (var store in stores)
                 {
                     foreach (var thing in store.HeldThings)
-                        if (bill.IsFixedOrAllowedIngredient(thing))
-                            availableThings.Add(thing);
+                        if (!unique.Contains(thing) && baseValidator(thing))
+                        {
+                            unique.Add(thing);
+                            newRelevantThings.Add(thing);
+                            processedThings.Add(thing);
+                        }
                 }
+
+
+            }
+            internal static MethodBase TargetMethod()
+            {
+                dc24_0 = AccessTools.Inner(typeof(WorkGiver_DoBill), "<>c__DisplayClass24_0");
+                MethodInfo b_4 = AccessTools.Method(dc24_0, "<TryFindBestIngredientsHelper>b__4");
+                return b_4;
             }
 
+            [HarmonyTranspiler]
+            internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instrs)
+            {
+                bool b0 = false;
+                FieldInfo baseValidator  = AccessTools.Field(dc24_0, "baseValidator");
+                FieldInfo billGiverIsPawn = AccessTools.Field(dc24_0, "billGiverIsPawn");
+                FieldInfo foundAllIngredientsAndChoose = AccessTools.Field(dc24_0, "foundAllIngredientsAndChoose");
+                FieldInfo newRelevantThings = AccessTools.Field(typeof(WorkGiver_DoBill), "newRelevantThings");
+                FieldInfo processedThings = AccessTools.Field(typeof(WorkGiver_DoBill), "processedThings");
+                foreach (var i in (instrs))
+                {
+                    yield return i;
+                    if (i.opcode == OpCodes.Stloc_3)
+                    {
+                        yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        yield return new CodeInstruction(OpCodes.Ldfld, baseValidator);
+                        yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        yield return new CodeInstruction(OpCodes.Ldfld, billGiverIsPawn);
+                        yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        yield return new CodeInstruction(OpCodes.Ldfld, foundAllIngredientsAndChoose);
+                        yield return new CodeInstruction(OpCodes.Ldsfld, newRelevantThings);
+                        yield return new CodeInstruction(OpCodes.Ldsfld, processedThings);
+                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch), nameof(WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch.PreProcess)));
+                        b0 = true;
+                    }
+                    //Log.Message($"{i.opcode}={i.operand}");
+                }
+                if (!b0) Log.Warning("[Common Sense] TryFindBestIngredientsHelper patch 0 didn't work");
+            }
+        }
+
+        //sorting ingredients by how close they're to rot
+        [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
+        public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
+        {
             private static void DoSort(List<Thing> availableThings, Bill bill)
             {
                 if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
@@ -108,11 +140,9 @@ namespace CommonSense
             internal static IEnumerable<CodeInstruction> AddSort(IEnumerable<CodeInstruction> instrs)
             {
                 bool b0 = false;
-                //MethodInfo LSortBy = AccessTools.Method(typeof(GenCollection), "SortBy", new Type[] { typeof(List<Thing>), typeof(Func<Thing,Single>), typeof(Func<Thing,int>) });
                 foreach (var i in (instrs))
                 {
                     yield return i;
-                    //Log.Message($"{i.opcode}={i.operand}");
                     if (i.opcode == OpCodes.Call && (MethodInfo)i.operand != null && ((MethodInfo)i.operand).Name == "SortBy")
                     {
                         yield return new CodeInstruction(OpCodes.Ldarg_0);
@@ -125,17 +155,18 @@ namespace CommonSense
             }
         }
 
+        //trying to make so pawns would prefer to finish off meals that are close to spoiling
         [HarmonyPatch(typeof(FoodUtility), "FoodOptimality")]
         public static class FoodUtility_FoodOptimality
         {
             private static FieldInfo LFoodOptimalityEffectFromMoodCurve = null;
 
-            public static void Prepare()
+            internal static void Prepare()
             {
                 LFoodOptimalityEffectFromMoodCurve = AccessTools.Field(typeof(FoodUtility), "FoodOptimalityEffectFromMoodCurve");
             }
 
-            public static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
+            internal static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
             {
 
                 if (!Settings.prefer_spoiling_meals)
@@ -165,7 +196,6 @@ namespace CommonSense
                     {
                         __result += (float)Math.Truncate(num * (1f + (aday * 2f - t) / qday) * 0.5f);
                     }
-                    //Log.Message($"{foodSource}={__result}({Math.Truncate(num * (1f + (aday * 2f - t) / qday) * 0.4f)})");
                 }
             }
         }

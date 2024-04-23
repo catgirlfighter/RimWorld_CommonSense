@@ -16,7 +16,7 @@ namespace CommonSense
     [HarmonyPatch(typeof(JobDriver_DoBill), "MakeNewToils")]
     static class JobDriver_DoBill_MakeNewToils_CommonSensePatch
     {
-        static MethodInfo LJumpIfTargetInsideBillGiver = AccessTools.Method(typeof(JobDriver_DoBill), "JumpIfTargetInsideBillGiver");
+        private static readonly MethodInfo LJumpIfTargetInsideBillGiver = AccessTools.Method(typeof(JobDriver_DoBill), "JumpIfTargetInsideBillGiver");
 
         static IEnumerable<Toil> DoMakeToils(JobDriver_DoBill __instance)
         {
@@ -33,7 +33,7 @@ namespace CommonSense
             __instance.FailOnBurningImmobile(TargetIndex.A);
             __instance.FailOn(delegate ()
             {
-                if (__instance.job.GetTarget(TargetIndex.A).Thing is Filth)
+                if (__instance.job.GetTarget(TargetIndex.A).Thing is Filth) //mod
                     return false;
 
                 if (__instance.job.GetTarget(TargetIndex.A).Thing is IBillGiver billGiver)
@@ -77,20 +77,16 @@ namespace CommonSense
 
                 if (thing.holdingOwner != null)
                 {
-                    int count = /*curJob.count == -1 ? thing.stackCount :*/ Mathf.Min(curJob.count, actor.carryTracker.AvailableStackSpace(thing.def), thing.stackCount);
-                    //Log.Message($"{actor}, {thing} ,count ({count}) = {curJob.count}, {actor.carryTracker.AvailableStackSpace(thing.def)}, {thing.stackCount}");
-                    if (count < 1)
-                        return;
+                    int count = Mathf.Min(curJob.count, actor.carryTracker.AvailableStackSpace(thing.def), thing.stackCount);
+                    if (count < 1) return;
 
                     var owner = thing.holdingOwner;
                     Map rootMap = ThingOwnerUtility.GetRootMap(owner.Owner);
                     IntVec3 rootPosition = ThingOwnerUtility.GetRootPosition(owner.Owner);
                     if (rootMap == null || !rootPosition.IsValid)
                         return;
-                    //Log.Message($"{actor} trying to drop {thing}");
                     if (owner.TryDrop(thing, ThingPlaceMode.Near, count, out var droppedThing))
                     {
-                        //Log.Message($"{actor} dropped {thing}");
                         curJob.SetTarget(TargetIndex.B, droppedThing);
                     }
                 }
@@ -100,7 +96,6 @@ namespace CommonSense
             //hauling patch
             if (Settings.adv_haul_all_ings && __instance.pawn.Faction == Faction.OfPlayer && __instance.pawn.RaceProps.Humanlike)
             {
-                //Log.Message($"{__instance.pawn} allowed to carry => {MassUtility.CanEverCarryAnything(__instance.pawn)}");
                 Toil checklist = ToilMaker.MakeToil("checklist");
                 checklist.initAction = delegate ()
                 {
@@ -120,23 +115,19 @@ namespace CommonSense
                         }
                 };
 
-                //Toil PickUpThing;
                 Toil PickUpToInventory;
                 List<LocalTargetInfo> L = __instance.job.GetTargetQueue(TargetIndex.B);
-                //if (L.Count < 2 && (L.Count == 0 || L[0].Thing.def.stackLimit < 2 && L[0].Thing.ParentHolder != __instance.pawn.inventory))
                 if (L.Count == 0 && __instance.job.targetB.Thing?.ParentHolder == null)
                 {
                     PickUpToInventory = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true, false);
                 }
                 else
                 {
-                    //Toil PickUpToCarry = Toils_Haul.StartCarryThing(TargetIndex.B, true, false, true, false); ;
                     PickUpToInventory = ToilMaker.MakeToil("PickUpToInventory");
                     PickUpToInventory.defaultCompleteMode = ToilCompleteMode.Never;
                     PickUpToInventory.handlingFacing = true;
                     PickUpToInventory.initAction = delegate ()
                     {
-                        //Log.Message($"what now???");
                         Pawn actor = PickUpToInventory.actor;
                         Job curJob = actor.jobs.curJob;
                         Thing thing = curJob.GetTarget(TargetIndex.B).Thing;
@@ -151,7 +142,7 @@ namespace CommonSense
                                 return;
                             }
 
-                            //take some into hands and wait to transfer to backpack
+                            //take some to hands and wait to transfer to backpack
                             Thing splitThing;
                             if (curJob.count < 0)
                             {
@@ -314,7 +305,6 @@ namespace CommonSense
                 yield return (Toil)LJumpIfTargetInsideBillGiver.Invoke(__instance, new object[] { keepTakingToInventory, TargetIndex.B, TargetIndex.A });
 
                 yield return Toils_Jump.JumpIf(PickUpToInventory, () => __instance.job.targetB.Thing.ParentHolder == __instance.pawn.inventory);
-                //yield return DropTargetThingIfInInventory;
                 yield return getToHaulTarget;
                 yield return PickUpToInventory;
                 yield return keepTakingToInventory;
@@ -344,7 +334,7 @@ namespace CommonSense
             }
             else
             {
-                foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, __instance.BillGiver is Building_MechGestator))
+                foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, __instance.BillGiver is Building_WorkTableAutonomous))
                 {
                     yield return toil2;
                     if (toil2.debugName == "JumpIfTargetInsideBillGiver")
@@ -420,6 +410,8 @@ namespace CommonSense
             yield return Toils_Recipe.DoRecipeWork().FailOnDespawnedNullOrForbiddenPlacedThings(TargetIndex.A).FailOnCannotTouch(TargetIndex.A, PathEndMode.InteractionCell);
             yield return Toils_Recipe.CheckIfRecipeCanFinishNow();
             yield return Toils_Recipe.FinishRecipeAndStartStoringProduct(TargetIndex.None);
+
+            /* I don't remember this one, what it does again?
             if (!__instance.job.RecipeDef.products.NullOrEmpty<ThingDefCountClass>() || !__instance.job.RecipeDef.specialProducts.NullOrEmpty<SpecialProductType>())
             {
                 yield return Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
@@ -436,6 +428,8 @@ namespace CommonSense
                 };
                 yield return t;
             }
+            */
+            //
             yield break;
         }
 
