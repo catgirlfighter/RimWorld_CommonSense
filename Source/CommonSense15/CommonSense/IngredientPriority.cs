@@ -30,11 +30,13 @@ namespace CommonSense
         public static class WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch
         {
             private static Type dc24_0;
-            private static void PreProcess(Predicate<Thing> baseValidator, bool billGiverIsPawn, Predicate<List<Thing>> foundAllIngredientsAndChoose, List<Thing> newRelevantThings, List<Thing> processedThings)
+            private static void PreProcess(Pawn pawn, Predicate<Thing> baseValidator, bool billGiverIsPawn, List<Thing> newRelevantThings, HashSet<Thing> processedThings)
             {
                 if (!Settings.prefer_spoiling_ingredients || billGiverIsPawn)
                     return;
                 //
+
+                //Log.Message($"{baseValidator}, {billGiverIsPawn}, {newRelevantThings}, {processedThings}");
                 var stores = new HashSet<ISlotGroup>();
                 foreach (var thing in newRelevantThings)
                 {
@@ -46,21 +48,20 @@ namespace CommonSense
                     stores.Add(slotGroup);
                 }
 
-                HashSet<Thing> unique = new HashSet<Thing>();
-                unique.AddRange(newRelevantThings);
                 foreach (var store in stores)
                 {
                     foreach (var thing in store.HeldThings)
-                        if (!unique.Contains(thing) && baseValidator(thing))
+                        if (!thing.def.IsMedicine && !processedThings.Contains(thing) && baseValidator(thing) 
+                            && pawn.CanReach(thing, PathEndMode.OnCell, Danger.Deadly))
                         {
-                            unique.Add(thing);
                             newRelevantThings.Add(thing);
                             processedThings.Add(thing);
+                            //Log.Message($"added {thing} -> {newRelevantThings.Count}, {processedThings.Count}");
                         }
                 }
-
-
+                //Log.Message("done");
             }
+
             internal static MethodBase TargetMethod()
             {
                 dc24_0 = AccessTools.Inner(typeof(WorkGiver_DoBill), "<>c__DisplayClass24_0");
@@ -72,9 +73,10 @@ namespace CommonSense
             internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instrs)
             {
                 bool b0 = false;
+                FieldInfo pawn = AccessTools.Field(dc24_0, "pawn");
                 FieldInfo baseValidator  = AccessTools.Field(dc24_0, "baseValidator");
                 FieldInfo billGiverIsPawn = AccessTools.Field(dc24_0, "billGiverIsPawn");
-                FieldInfo foundAllIngredientsAndChoose = AccessTools.Field(dc24_0, "foundAllIngredientsAndChoose");
+                //FieldInfo foundAllIngredientsAndChoose = AccessTools.Field(dc24_0, "foundAllIngredientsAndChoose");
                 FieldInfo newRelevantThings = AccessTools.Field(typeof(WorkGiver_DoBill), "newRelevantThings");
                 FieldInfo processedThings = AccessTools.Field(typeof(WorkGiver_DoBill), "processedThings");
                 foreach (var i in (instrs))
@@ -83,11 +85,11 @@ namespace CommonSense
                     if (i.opcode == OpCodes.Stloc_3)
                     {
                         yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        yield return new CodeInstruction(OpCodes.Ldfld, pawn);
+                        yield return new CodeInstruction(OpCodes.Ldarg_0);
                         yield return new CodeInstruction(OpCodes.Ldfld, baseValidator);
                         yield return new CodeInstruction(OpCodes.Ldarg_0);
                         yield return new CodeInstruction(OpCodes.Ldfld, billGiverIsPawn);
-                        yield return new CodeInstruction(OpCodes.Ldarg_0);
-                        yield return new CodeInstruction(OpCodes.Ldfld, foundAllIngredientsAndChoose);
                         yield return new CodeInstruction(OpCodes.Ldsfld, newRelevantThings);
                         yield return new CodeInstruction(OpCodes.Ldsfld, processedThings);
                         yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch), nameof(WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch.PreProcess)));
