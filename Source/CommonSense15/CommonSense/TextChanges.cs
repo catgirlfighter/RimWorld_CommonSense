@@ -12,9 +12,9 @@ namespace CommonSense
     public class TextChanges
     {
         [HarmonyPatch(typeof(ThingFilter), "SetAllowAllWhoCanMake")]
-        public static class ThingFilter_SetAllowAllWhoCanMake_CommonSensePatch
+        static class ThingFilter_SetAllowAllWhoCanMake_CommonSensePatch
         {
-            public static bool Prefix(ThingFilter __instance, ThingDef thing)
+            internal static bool Prefix(ThingFilter __instance, ThingDef thing)
             {
                 List<ThingDef> allowAllWhoCanMake = Traverse.Create(__instance).Field("allowAllWhoCanMake").GetValue<List<ThingDef>>();
                 if (allowAllWhoCanMake == null)
@@ -77,9 +77,9 @@ namespace CommonSense
         }
 
         [HarmonyPatch(typeof(StatsReportUtility), "DrawStatsReport", new Type[] { typeof(Rect), typeof(Thing) })]
-        public static class StatsReportUtility_DrawStatsReport_CommonSensePatch
+        static class StatsReportUtility_DrawStatsReport_CommonSensePatch
         {
-            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase mb)
+            internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 FieldInfo LcachedDrawEntries = AccessTools.Field(typeof(StatsReportUtility), "cachedDrawEntries");
                 MethodInfo LAddRange = AccessTools.Method(typeof(List<StatDrawEntry>), "AddRange");
@@ -101,9 +101,9 @@ namespace CommonSense
         }
 
         [HarmonyPatch(typeof(ThingFilter), nameof(ThingFilter.Summary), MethodType.Getter)]
-        public static class ThingFilter_Summary_CommonSensePatch
+        static class ThingFilter_Summary_CommonSensePatch
         {
-            public static void Postfix(ThingFilter __instance, ref string __result)
+            internal static void Postfix(ThingFilter __instance, ref string __result)
             {
                 if (__instance == null || !Settings.gui_extended_recipe)
                     return;
@@ -164,7 +164,7 @@ namespace CommonSense
                 }
                 else __result = "UsableIngredients".Translate();
                 __instance.customSummary = __result;
-                return;// false;
+                return;
                 
             }
         }

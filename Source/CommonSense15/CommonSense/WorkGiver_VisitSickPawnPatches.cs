@@ -18,7 +18,7 @@ namespace CommonSense
             {
                 return null;
             }
-            Predicate<Thing> predicate = (Thing t) => CanIngestForJoy(pawn, t) && (extraValidator == null || extraValidator(t)) && t.def.ingestible != null && t.def.ingestible.drugCategory != DrugCategory.None;
+            bool predicate(Thing t) => CanIngestForJoy(pawn, t) && (extraValidator == null || extraValidator(t)) && t.def.ingestible != null && t.def.ingestible.drugCategory != DrugCategory.None;
             ThingOwner<Thing> innerContainer = pawn.inventory.innerContainer;
             for (int i = 0; i < innerContainer.Count; i++)
             {
@@ -27,11 +27,7 @@ namespace CommonSense
                     return innerContainer[i];
                 }
             }
-            //bool flag = false;
-            //if (pawn.story != null && (pawn.story.traits.DegreeOfTrait(TraitDefOf.DrugDesire) > 0 || pawn.InMentalState))
-            //{
-            //    flag = true;
-            //}
+
             takeableDrugs.Clear();
             DrugPolicy currentPolicy = pawn.drugs.CurrentPolicy;
             for (int j = 0; j < currentPolicy.Count; j++)
@@ -62,7 +58,7 @@ namespace CommonSense
     [HarmonyPatch(typeof(WorkGiver_VisitSickPawn), "JobOnThing")]
     public static class WorkGiver_VisitSickPawn_JobOnThing_CommonSensePatch
     {
-        public static bool Prefix(ref Job __result, Pawn pawn, Thing t, bool forced)
+        public static bool Prefix(ref Job __result, Pawn pawn, Thing t)
         {
             if (!Settings.give_sick_joy_drugs)
                 return true;
@@ -81,8 +77,6 @@ namespace CommonSense
                 else
                     chances[d] = 0f;
             }
-            //JoyGiverDef def = null;
-            //Job newJob = null;
             int counter = 0;
             while (counter < defs.Count && defs.TryRandomElementByWeight(d => chances[d], out var def))
             {

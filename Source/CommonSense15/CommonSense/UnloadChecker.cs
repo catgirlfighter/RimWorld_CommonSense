@@ -65,7 +65,7 @@ namespace CommonSense
     public static class GenPlace_TryDropSpawn_NewTmp_CommonSensePatch
     {
 
-        public static void Postfix(Thing thing, IntVec3 dropCell, Map map, ThingPlaceMode mode, Thing resultingThing, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator)
+        public static void Postfix(Thing resultingThing)
         {
             CompUnloadChecker UChecker = resultingThing.TryGetComp<CompUnloadChecker>();
             if (UChecker != null)
@@ -112,7 +112,7 @@ namespace CommonSense
     [HarmonyPatch(typeof(JobGiver_UnloadYourInventory), "TryGiveJob", new Type[] { typeof(Pawn) })]
     public static class JobGiver_UnloadYourInventory_TryGiveJob_CommonSensePatch
     {
-        public static bool Prefix(ref Job __result, ref JobGiver_UnloadYourInventory __instance, ref Pawn pawn)
+        public static bool Prefix(ref Job __result, ref Pawn pawn)
         {
             Thing thing = CompUnloadChecker.GetFirstMarked(pawn);
             if (thing != null)

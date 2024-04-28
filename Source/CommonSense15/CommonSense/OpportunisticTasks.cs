@@ -41,7 +41,7 @@ namespace CommonSense
             public Pawn _pawn => base.pawn;
         }
 
-        private static Job Cleaning_Opportunity(Job currJob, IntVec3 cell, Pawn pawn, int Limit)
+        private static Job Cleaning_Opportunity(Job currJob, Pawn pawn, int Limit)
         {
             if (Utility.IncapableOfCleaning(pawn))
                 return null;
@@ -203,7 +203,7 @@ namespace CommonSense
                         )
                         && !HealthAIUtility.ShouldBeTendedNowByPlayer(__instance._pawn))
                         {
-                            job = Cleaning_Opportunity(newJob, cell, __instance._pawn, Settings.op_clean_num);
+                            job = Cleaning_Opportunity(newJob, __instance._pawn, Settings.op_clean_num);
                         }
                     }
 

@@ -197,16 +197,18 @@ namespace CommonSense
             else
                 joyoffset = 0f;
 
-            Toil toil = new Toil();
-            toil.tickAction = delegate ()
+            Toil toil = new Toil
+            {
+                tickAction = delegate ()
             {
                 driver.pawn.rotationTracker.FaceCell(driver.ClosestGatherSpotParentCell());
                 driver.pawn.GainComfortFromCellIfPossible(false);
                 JoyTickCheckEndOffset(driver.pawn, joyoffset, JoyTickFullJoyAction.GoToNextToil);
+            },
+                handlingFacing = true,
+                defaultCompleteMode = ToilCompleteMode.Delay,
+                defaultDuration = driver.job.def.joyDuration
             };
-            toil.handlingFacing = true;
-            toil.defaultCompleteMode = ToilCompleteMode.Delay;
-            toil.defaultDuration = driver.job.def.joyDuration;
             toil.AddFinishAction(delegate
             {
                 JoyUtility.TryGainRecRoomThought(driver.pawn);

@@ -1,4 +1,7 @@
-﻿1.2.6
+﻿1.2.7
+- fixed an option "to respect inventory capacity" not saving;
+
+1.2.6
 - thanks to contributor named 无声飞雪 I've managed to get an insight into issue related to "staning still" when an option to prefer spoiling ingredients is enabled. Made a fix, should work?
 
 1.2.5

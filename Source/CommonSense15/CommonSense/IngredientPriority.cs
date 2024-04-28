@@ -13,11 +13,10 @@ namespace CommonSense
     {
         //optimazing the path to pick up items
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredients")]
-        public static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
+        static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
         {
-            internal static void Postfix(WorkGiver_DoBill __instance, bool __result, Pawn pawn, List<ThingCount> chosen)
+            internal static void Postfix(bool __result, List<ThingCount> chosen)
             {
-                //return;
                 if (!__result || !Settings.adv_haul_all_ings)
                     return;
 
@@ -27,7 +26,7 @@ namespace CommonSense
 
         //want to add all items in the same stockpile or a group as items picked for comparison
         [HarmonyPatch]
-        public static class WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch
+        static class WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch
         {
             private static Type dc24_0;
             private static void PreProcess(Pawn pawn, Predicate<Thing> baseValidator, bool billGiverIsPawn, List<Thing> newRelevantThings, HashSet<Thing> processedThings)
@@ -36,7 +35,6 @@ namespace CommonSense
                     return;
                 //
 
-                //Log.Message($"{baseValidator}, {billGiverIsPawn}, {newRelevantThings}, {processedThings}");
                 var stores = new HashSet<ISlotGroup>();
                 foreach (var thing in newRelevantThings)
                 {
@@ -56,10 +54,8 @@ namespace CommonSense
                         {
                             newRelevantThings.Add(thing);
                             processedThings.Add(thing);
-                            //Log.Message($"added {thing} -> {newRelevantThings.Count}, {processedThings.Count}");
                         }
                 }
-                //Log.Message("done");
             }
 
             internal static MethodBase TargetMethod()
@@ -103,7 +99,7 @@ namespace CommonSense
 
         //sorting ingredients by how close they're to rot
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
-        public static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
+        static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
             private static void DoSort(List<Thing> availableThings, Bill bill)
             {
@@ -159,7 +155,7 @@ namespace CommonSense
 
         //trying to make so pawns would prefer to finish off meals that are close to spoiling
         [HarmonyPatch(typeof(FoodUtility), "FoodOptimality")]
-        public static class FoodUtility_FoodOptimality
+        static class FoodUtility_FoodOptimality
         {
             private static FieldInfo LFoodOptimalityEffectFromMoodCurve = null;
 
@@ -168,7 +164,7 @@ namespace CommonSense
                 LFoodOptimalityEffectFromMoodCurve = AccessTools.Field(typeof(FoodUtility), "FoodOptimalityEffectFromMoodCurve");
             }
 
-            internal static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef, float dist, bool takingToInventory = false)
+            internal static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef)
             {
 
                 if (!Settings.prefer_spoiling_meals)

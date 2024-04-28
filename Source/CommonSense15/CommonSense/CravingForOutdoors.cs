@@ -10,9 +10,7 @@ using UnityEngine;
 
 namespace CommonSense
 {
-    //RimWorld.JobGiver_GetJoy.TryGiveJob
-    //protected override Job TryGiveJob(Pawn pawn)
-    [HarmonyPatch(typeof(RimWorld.JobGiver_GetJoy), "TryGiveJob", new Type[] { typeof(Pawn) })]
+    [HarmonyPatch(typeof(JobGiver_GetJoy), "TryGiveJob", new Type[] { typeof(Pawn) })]
     public static class JobGiver_GetJoy_TryGiveJob_CommonSensePatch
     {
         public class JobCrutch : JobGiver_GetJoy

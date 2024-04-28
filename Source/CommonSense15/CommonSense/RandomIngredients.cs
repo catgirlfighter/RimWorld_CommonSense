@@ -12,11 +12,11 @@ namespace CommonSense
 
     //public static Thing MakeThing(ThingDef def, ThingDef stuff = null)
     [HarmonyPatch(typeof(ThingMaker), "MakeThing", new Type[] { typeof(ThingDef), typeof(ThingDef) })]
-    public static class ThingMaker_MakeThing_CommonSensePatch
+    static class ThingMaker_MakeThing_CommonSensePatch
     {
         private static readonly Dictionary<ThingDef, RecipeDef> hTable = new Dictionary<ThingDef, RecipeDef>();
 
-        public static void Postfix(Thing __result, ThingDef def, ThingDef stuff)
+        internal static void Postfix(Thing __result, ThingDef def)
         {
             if (!Settings.add_meal_ingredients || __result == null || !__result.def.IsIngestible)
                 return;
@@ -73,14 +73,13 @@ namespace CommonSense
 
     //public static IEnumerable<Thing> MakeRecipeProducts(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
     [HarmonyPatch]
-    public static class GenRecipe_MakeRecipeProducts_CommonSensePatch
+    static class GenRecipe_MakeRecipeProducts_CommonSensePatch
     {
         //private static FieldInfo ingredientsCompField;
 
         private static void ClearIngs(CompIngredients ings)
         {
-            if (ings != null)
-                ings.ingredients.Clear();
+            ings?.ingredients.Clear();
         }
 
         internal static MethodBase TargetMethod()
@@ -97,9 +96,7 @@ namespace CommonSense
 
             var result = AccessTools.Method(nestedTypeResult, "MoveNext");
 
-            if (result == null) throw new Exception($"Could not find MoveNext in {nestedTypeResult.FullName}");
-
-            return result;
+            return result == null ? throw new Exception($"Could not find MoveNext in {nestedTypeResult.FullName}") : (MethodBase)result;
         }
 
         [HarmonyTranspiler]
@@ -110,7 +107,7 @@ namespace CommonSense
             {
                 yield return i;
 
-                if (i.opcode == OpCodes.Stloc_S && i.operand is LocalBuilder && ((LocalBuilder)i.operand).LocalType == typeof(CompIngredients))
+                if (i.opcode == OpCodes.Stloc_S && i.operand is LocalBuilder builder && builder.LocalType == typeof(CompIngredients))
                 {
                     yield return new CodeInstruction(OpCodes.Ldloc_S, i.operand);
                     yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GenRecipe_MakeRecipeProducts_CommonSensePatch), nameof(ClearIngs), new Type[] { typeof(CompIngredients) }));
@@ -121,7 +118,7 @@ namespace CommonSense
 
     //public virtual Thing TryDispenseFood()
     [HarmonyPatch(typeof(Building_NutrientPasteDispenser), "TryDispenseFood")]
-    public class GenRecipe_TryDispenseFood_CommonSensePatch
+    class GenRecipe_TryDispenseFood_CommonSensePatch
     {
         private static void ClearIngs(CompIngredients ings)
         {
@@ -134,7 +131,7 @@ namespace CommonSense
             foreach (CodeInstruction i in instrs)
             {
                 yield return i;
-                if (i.opcode == OpCodes.Stloc_S && i.operand is LocalBuilder && ((LocalBuilder)i.operand).LocalType == typeof(CompIngredients))
+                if (i.opcode == OpCodes.Stloc_S && i.operand is LocalBuilder builder && builder.LocalType == typeof(CompIngredients))
                 {
                     yield return new CodeInstruction(OpCodes.Ldloc_S, i.operand);
                     yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GenRecipe_MakeRecipeProducts_CommonSensePatch), nameof(ClearIngs), new Type[] { typeof(CompIngredients) }));
@@ -143,15 +140,13 @@ namespace CommonSense
         }
     }
 
-    //[HarmonyPatch(typeof(CompIngredients), "PostSplitOff", new Type[] {typeof(Thing)})]
     [HarmonyPatch(typeof(Thing), "SplitOff", new Type[] { typeof(int) })]
-    public static class Thing_SplitOff_CommonSensePatch
+    static class Thing_SplitOff_CommonSensePatch
     {
         private static void ClearIngs(Thing thing)
         {
             CompIngredients comp = thing.TryGetComp<CompIngredients>();
-            if (comp != null)
-                comp.ingredients.Clear();
+            comp?.ingredients.Clear();
         }
 
         [HarmonyTranspiler]
