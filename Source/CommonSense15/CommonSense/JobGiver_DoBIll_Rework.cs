@@ -16,9 +16,14 @@ namespace CommonSense
     [HarmonyPatch(typeof(JobDriver_DoBill), "MakeNewToils")]
     static class JobDriver_DoBill_MakeNewToils_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.adv_cleaning || Settings.adv_haul_all_ings;
+        }
+
         private static readonly MethodInfo LJumpIfTargetInsideBillGiver = AccessTools.Method(typeof(JobDriver_DoBill), "JumpIfTargetInsideBillGiver");
 
-        static IEnumerable<Toil> DoMakeToils(JobDriver_DoBill __instance)
+        private static IEnumerable<Toil> DoMakeToils(JobDriver_DoBill __instance)
         {
             //normal scenario
             __instance.AddEndCondition(delegate
@@ -433,7 +438,7 @@ namespace CommonSense
             yield break;
         }
 
-        public static bool Prefix(ref IEnumerable<Toil> __result, ref JobDriver_DoBill __instance)
+        internal static bool Prefix(ref IEnumerable<Toil> __result, ref JobDriver_DoBill __instance)
         {
             if (!Settings.adv_cleaning && !Settings.adv_haul_all_ings)
                 return true;

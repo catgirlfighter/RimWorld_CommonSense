@@ -22,8 +22,12 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(ThinkNode_Priority_GetJoy), "GetPriority")]
-    public static class ThinkNode_Priority_GetJoy_GetPriority_CommonSensePatch
+    static class ThinkNode_Priority_GetJoy_GetPriority_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.fun_police;
+        }
         private static float JoyPolicePriority(Pawn pawn)
         {
             if (!Settings.fun_police)
@@ -47,7 +51,7 @@ namespace CommonSense
             return 2f;
         }
 
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             foreach (var i in (instructions))
             {

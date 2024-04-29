@@ -9,20 +9,27 @@ using System.Reflection;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(JobDriver_Ingest), "PrepareToIngestToils_ToolUser")]
-    public static class JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch
+    static class JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch
     {
         static FieldInfo LeatingFromInventory = null;
         static MethodInfo LReserveFood = null;
         static MethodInfo LTakeExtraIngestibles = null;
 
-        public static void Prepare()
+        internal static bool Prepare()
         {
             LeatingFromInventory = AccessTools.Field(typeof(JobDriver_Ingest), "eatingFromInventory");
+            if (LeatingFromInventory == null) Log.Message("couldn't find field JobDriver_Ingest.eatingFromInventory");
             LReserveFood = AccessTools.Method(typeof(JobDriver_Ingest), "ReserveFood");
+            if (LReserveFood == null) Log.Message("couldn't find method JobDriver_Ingest.ReserveFood");
             LTakeExtraIngestibles = AccessTools.Method(typeof(JobDriver_Ingest), "TakeExtraIngestibles");
+            if (LTakeExtraIngestibles == null) Log.Message("couldn't find method JobDriver_Ingest.TakeExtraIngestibles");
+            return LeatingFromInventory != null
+                && LReserveFood != null
+                && LTakeExtraIngestibles != null
+                && (!Settings.optimal_patching_in_use || Settings.adv_cleaning_ingest);
         }
 
-        public static Toil makeFilthListToil(TargetIndex targetIndex)
+        public static Toil MakeFilthListToil(TargetIndex targetIndex)
         {
             Toil toil = new Toil();
             toil.initAction = delegate ()
@@ -42,7 +49,7 @@ namespace CommonSense
             return toil;
         }
 
-        public static Toil makeCleanToil(TargetIndex progListIndex, TargetIndex filthListIndex, Toil nextTarget)
+        public static Toil MakeCleanToil(TargetIndex progListIndex, TargetIndex filthListIndex, Toil nextTarget)
         {
             Toil toil = new Toil();
             toil.initAction = delegate ()
@@ -88,7 +95,7 @@ namespace CommonSense
             return toil;
         }
 
-        private static IEnumerable<Toil> prepToils(JobDriver_Ingest driver, Toil chewToil)
+        private static IEnumerable<Toil> PrepToils(JobDriver_Ingest driver, Toil chewToil)
         {
             if ((bool)LeatingFromInventory.GetValue(driver))
             {
@@ -114,14 +121,14 @@ namespace CommonSense
             }
             if (!driver.pawn.Drafted)
             {
-                yield return reserveChewSpot(TargetIndex.A, TargetIndex.B);
-                Toil gotospot = gotoSpot(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A);
+                yield return ReserveChewSpot(TargetIndex.A, TargetIndex.B);
+                Toil gotospot = GotoSpot(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A);
 
                 if (!Utility.IncapableOfCleaning(driver.pawn))
                 {
                     TargetIndex filthListIndex = TargetIndex.B;
                     TargetIndex progListIndex = TargetIndex.A;
-                    Toil FilthList = makeFilthListToil(filthListIndex);
+                    Toil FilthList = MakeFilthListToil(filthListIndex);
                     yield return FilthList;
                     yield return Toils_Jump.JumpIf(gotospot, () => driver.job.GetTargetQueue(filthListIndex).NullOrEmpty());
                     Toil nextTarget = Toils_JobTransforms.ExtractNextTargetFromQueue(filthListIndex, true);
@@ -132,7 +139,7 @@ namespace CommonSense
                     if (driver.job.GetTargetQueue(progListIndex).Count == 0)
                         driver.job.GetTargetQueue(progListIndex).Add(new IntVec3(0, 0, 0));
                     //
-                    Toil clean = makeCleanToil(progListIndex, filthListIndex, nextTarget);
+                    Toil clean = MakeCleanToil(progListIndex, filthListIndex, nextTarget);
                     yield return clean;
                     yield return Toils_Jump.Jump(nextTarget);
                 }
@@ -142,7 +149,7 @@ namespace CommonSense
             yield break;
         }
 
-        public static Toil reserveChewSpot(TargetIndex ingestibleInd, TargetIndex StoreToInd)
+        public static Toil ReserveChewSpot(TargetIndex ingestibleInd, TargetIndex StoreToInd)
         {
             Toil toil = new Toil();
             toil.initAction = delegate ()
@@ -220,7 +227,7 @@ namespace CommonSense
             return toil;
         }
 
-        public static Toil gotoSpot(TargetIndex gotoInd)
+        public static Toil GotoSpot(TargetIndex gotoInd)
         {
             Toil toil = new Toil();
             toil.initAction = delegate ()
@@ -232,34 +239,38 @@ namespace CommonSense
             return toil;
         }
 
-        public static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance, Toil chewToil)
+        internal static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance, Toil chewToil)
         {
             if (!Settings.adv_cleaning_ingest)
                 return true;
             //
-            __result = prepToils(__instance, chewToil);
+            __result = PrepToils(__instance, chewToil);
 
             return false;
         }
     }
 
     [HarmonyPatch(typeof(JobDriver_Ingest), "PrepareToIngestToils_Dispenser")]
-    public static class JobDriver_PrepareToIngestToils_Dispenser_CommonSensePatch
+    static class JobDriver_PrepareToIngestToils_Dispenser_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.adv_cleaning_ingest;
+        }
 
-       private static IEnumerable<Toil> prepToils(JobDriver_Ingest driver)
+        private static IEnumerable<Toil> PrepToils(JobDriver_Ingest driver)
         {
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedNullOrForbidden(TargetIndex.A);
             yield return Toils_Ingest.TakeMealFromDispenser(TargetIndex.A, driver.pawn);
             if (!driver.pawn.Drafted)
-                yield return JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.reserveChewSpot(TargetIndex.A, TargetIndex.B);
-                Toil gotospot = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.gotoSpot(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A);
+                yield return JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.ReserveChewSpot(TargetIndex.A, TargetIndex.B);
+                Toil gotospot = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.GotoSpot(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A);
 
                 if (!Utility.IncapableOfCleaning(driver.pawn))
                 {
                     TargetIndex filthListIndex = TargetIndex.B;
                     TargetIndex progListIndex = TargetIndex.A;
-                    Toil FilthList = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.makeFilthListToil(filthListIndex);
+                    Toil FilthList = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.MakeFilthListToil(filthListIndex);
                     yield return FilthList;
                     yield return Toils_Jump.JumpIf(gotospot, () => driver.job.GetTargetQueue(filthListIndex).NullOrEmpty());
                     Toil nextTarget = Toils_JobTransforms.ExtractNextTargetFromQueue(filthListIndex, true);
@@ -270,7 +281,7 @@ namespace CommonSense
                     if (driver.job.GetTargetQueue(progListIndex).Count == 0)
                         driver.job.GetTargetQueue(progListIndex).Add(new IntVec3(0, 0, 0));
                     //
-                    Toil clean = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.makeCleanToil(progListIndex, filthListIndex, nextTarget);
+                    Toil clean = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.MakeCleanToil(progListIndex, filthListIndex, nextTarget);
                     yield return clean;
                     yield return Toils_Jump.Jump(nextTarget);
                 }
@@ -279,12 +290,12 @@ namespace CommonSense
             yield return Toils_Ingest.FindAdjacentEatSurface(TargetIndex.B, TargetIndex.A);
         }
 
-        public static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance)
+        internal static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance)
         {
             if (!Settings.adv_cleaning_ingest)
                 return true;
             //
-            __result = prepToils(__instance);
+            __result = PrepToils(__instance);
 
             return false;
         }

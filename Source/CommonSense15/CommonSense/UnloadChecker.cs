@@ -150,7 +150,7 @@ namespace CommonSense
         float duration = 0;
 
 
-        private static bool stillUnloadable(Thing thing)
+        private static bool StillUnloadable(Thing thing)
         {
             CompUnloadChecker c = thing.TryGetComp<CompUnloadChecker>();
             return c != null && c.ShouldUnload;
@@ -186,7 +186,7 @@ namespace CommonSense
                         Apparel = null;
                     }
 
-                    ThingCount firstUnloadableThing = MarkedThing == null ? default(ThingCount) : new ThingCount(MarkedThing, MarkedThing.stackCount);
+                    ThingCount firstUnloadableThing = MarkedThing == null ? default : new ThingCount(MarkedThing, MarkedThing.stackCount);
                     //IntVec3 c;
                     if (!StoreUtility.TryFindStoreCellNearColonyDesperate(firstUnloadableThing.Thing, pawn, out var c))
                     {
@@ -201,7 +201,7 @@ namespace CommonSense
                 }
             };
             yield return Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
-            yield return Toils_Goto.GotoCell(TargetIndex.B, PathEndMode.Touch).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate () { return !stillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing); });
+            yield return Toils_Goto.GotoCell(TargetIndex.B, PathEndMode.Touch).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate () { return !StillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing); });
 
             //preintiating unequip-delay
             Toil unequip = new Toil
@@ -268,7 +268,7 @@ namespace CommonSense
                     thing.SetForbidden(false, false);
                 }
             };
-            Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate () { return !stillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing); });
+            Toil carryToCell = Toils_Haul.CarryHauledThingToCell(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A).FailOn(delegate () { return !StillUnloadable(pawn.CurJob.GetTarget(TargetIndex.A).Thing); });
             yield return carryToCell;
             yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.B, carryToCell, true);
             if (Sidearms_Utility.Active)
@@ -297,13 +297,14 @@ namespace CommonSense
     [HarmonyPatch(typeof(ITab_Pawn_Gear), "DrawThingRow")]
     public static class ITab_Pawn_Gear_DrawThingRow_CommonSensePatch
     {
-        public static void Prepare()
+        internal static bool Prepare()
         {
-            ITab_Pawn_Gear_Utility.LCanControl = AccessTools.Property(typeof(ITab_Pawn_Gear), "CanControl");
-            ITab_Pawn_Gear_Utility.LSelPawnForGear = AccessTools.Property(typeof(ITab_Pawn_Gear), "SelPawnForGear");
-            ITab_Pawn_Gear_Utility.LInterfaceDrop = AccessTools.Method(typeof(ITab_Pawn_Gear), "InterfaceDrop", new Type[] { typeof(Thing) });
+            if((ITab_Pawn_Gear_Utility.LCanControl = AccessTools.Property(typeof(ITab_Pawn_Gear), "CanControl")) == null) Log.Message("Couldn't find ITab_Pawn_Gear.CanControl");
+            if ((ITab_Pawn_Gear_Utility.LSelPawnForGear = AccessTools.Property(typeof(ITab_Pawn_Gear), "SelPawnForGear")) == null) Log.Message("Couldn't find ITab_Pawn_Gear.SelPawnForGear");
+            if ((ITab_Pawn_Gear_Utility.LInterfaceDrop = AccessTools.Method(typeof(ITab_Pawn_Gear), "InterfaceDrop", new Type[] { typeof(Thing) })) == null) Log.Message("Couldn't find ITab_Pawn_Gear.InterfaceDrop");
+            return !Settings.optimal_patching_in_use || Settings.gui_manual_unload;
         }
-        public static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory)
+        internal static bool Prefix(ITab_Pawn_Gear __instance, ref float y, ref float width, Thing thing, bool inventory)
         {
             return Utility.DrawThingRow(__instance, ref y, ref width, thing, inventory);
         }

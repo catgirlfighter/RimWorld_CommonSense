@@ -38,14 +38,15 @@ namespace CommonSense
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            Command_Toggle command_Toggle = new CleanCommand_Toggle();
-            //command_Toggle.hotKey = KeyBindingDefOf.Command_TogglePower;
-            command_Toggle.defaultLabel = "DoCleanCompToggleLabel".Translate();
-            command_Toggle.icon = Utility.texMoteClean;
-            command_Toggle.isActive = (() => this.Active);
-            command_Toggle.toggleAction = delegate ()
+            Command_Toggle command_Toggle = new CleanCommand_Toggle
             {
-                this.Active = !this.Active;
+                defaultLabel = "DoCleanCompToggleLabel".Translate(),
+                icon = Utility.texMoteClean,
+                isActive = (() => this.Active),
+                toggleAction = delegate ()
+                {
+                    this.Active = !this.Active;
+                }
             };
             if (this.Active)
             {

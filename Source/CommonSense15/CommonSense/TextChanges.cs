@@ -14,6 +14,10 @@ namespace CommonSense
         [HarmonyPatch(typeof(ThingFilter), "SetAllowAllWhoCanMake")]
         static class ThingFilter_SetAllowAllWhoCanMake_CommonSensePatch
         {
+            internal static bool Prepare()
+            {
+                return !Settings.optimal_patching_in_use || Settings.gui_extended_recipe;
+            }
             internal static bool Prefix(ThingFilter __instance, ThingDef thing)
             {
                 List<ThingDef> allowAllWhoCanMake = Traverse.Create(__instance).Field("allowAllWhoCanMake").GetValue<List<ThingDef>>();
@@ -27,13 +31,13 @@ namespace CommonSense
             }
         }
 
-        private static string ShortCategory(ThingCategoryDef tcDef)
-        {
-            if (tcDef.parent == null)
-                return "NoCategory".Translate().CapitalizeFirst();
-            else
-                return tcDef.label.CapitalizeFirst();
-        }
+        //private static string ShortCategory(ThingCategoryDef tcDef)
+        //{
+        //    if (tcDef.parent == null)
+        //        return "NoCategory".Translate().CapitalizeFirst();
+        //    else
+        //        return tcDef.label.CapitalizeFirst();
+        //}
 
         private static string GetCategoryPath(ThingCategoryDef tcDef)
         {
@@ -62,12 +66,12 @@ namespace CommonSense
             else return s;
         }
 
-        public static StatDrawEntry CategoryEntry(ThingCategoryDef tcDef)
-        {
-            return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), GetCategoryPath(tcDef), ShortCategory(tcDef), 1000);
-        }
+        //private static StatDrawEntry CategoryEntry(ThingCategoryDef tcDef)
+        //{
+        //    return new StatDrawEntry(StatCategoryDefOf.Basics, "Category".Translate(), GetCategoryPath(tcDef), ShortCategory(tcDef), 1000);
+        //}
 
-        public static IEnumerable<StatDrawEntry> CategoryEntryRow(Thing thing)
+        private static IEnumerable<StatDrawEntry> CategoryEntryRow(Thing thing)
         {
             ThingCategoryDef d;
             if (thing == null || thing.def == null || (d = thing.def.FirstThingCategory) == null)
@@ -79,6 +83,13 @@ namespace CommonSense
         [HarmonyPatch(typeof(StatsReportUtility), "DrawStatsReport", new Type[] { typeof(Rect), typeof(Thing) })]
         static class StatsReportUtility_DrawStatsReport_CommonSensePatch
         {
+            //it just always patches in... supposed to show item category in item info
+            internal static bool Prepare()
+            {
+                
+                return true; // !Settings.optimal_patching_in_use || Settings.gui_extended_recipe;
+            }
+
             internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 FieldInfo LcachedDrawEntries = AccessTools.Field(typeof(StatsReportUtility), "cachedDrawEntries");
@@ -88,7 +99,7 @@ namespace CommonSense
                 foreach (var i in (instructions))
                 {
                     yield return i;
-                    if (!b && i.opcode == OpCodes.Brfalse)
+                    if (!b && i.opcode == OpCodes.Brfalse_S)
                     {
                         b = true;
                         yield return new CodeInstruction(OpCodes.Ldsfld, LcachedDrawEntries);
@@ -97,22 +108,25 @@ namespace CommonSense
                         yield return new CodeInstruction(OpCodes.Callvirt, LAddRange);
                     }
                 }
+                if (!b) Log.Message("[CommonSense] StatsReportUtility.DrawStatsReport patch 0 didn't work");
             }
         }
 
         [HarmonyPatch(typeof(ThingFilter), nameof(ThingFilter.Summary), MethodType.Getter)]
         static class ThingFilter_Summary_CommonSensePatch
         {
+            internal static bool Prepare()
+            {
+
+                return !Settings.optimal_patching_in_use || Settings.gui_extended_recipe;
+            }
             internal static void Postfix(ThingFilter __instance, ref string __result)
             {
-                if (__instance == null || !Settings.gui_extended_recipe)
+                if (!Settings.gui_extended_recipe || __instance == null)
                     return;
 
                 if (!__instance.customSummary.NullOrEmpty() && __instance.customSummary != "UsableIngredients".Translate())
-                {
                     return;
-                    //__result = __instance.customSummary;
-                }
 
                 var thingDefs = Traverse.Create(__instance).Field("thingDefs").GetValue() as List<ThingDef>;
                 var categories = Traverse.Create(__instance).Field("categories").GetValue() as List<string>;

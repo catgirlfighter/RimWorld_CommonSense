@@ -14,6 +14,11 @@ namespace CommonSense
     [HarmonyPatch(typeof(ThingMaker), "MakeThing", new Type[] { typeof(ThingDef), typeof(ThingDef) })]
     static class ThingMaker_MakeThing_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.add_meal_ingredients;
+        }
+
         private static readonly Dictionary<ThingDef, RecipeDef> hTable = new Dictionary<ThingDef, RecipeDef>();
 
         internal static void Postfix(Thing __result, ThingDef def)
@@ -75,8 +80,10 @@ namespace CommonSense
     [HarmonyPatch]
     static class GenRecipe_MakeRecipeProducts_CommonSensePatch
     {
-        //private static FieldInfo ingredientsCompField;
-
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.add_meal_ingredients;
+        }
         private static void ClearIngs(CompIngredients ings)
         {
             ings?.ingredients.Clear();
@@ -120,6 +127,10 @@ namespace CommonSense
     [HarmonyPatch(typeof(Building_NutrientPasteDispenser), "TryDispenseFood")]
     class GenRecipe_TryDispenseFood_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.add_meal_ingredients;
+        }
         private static void ClearIngs(CompIngredients ings)
         {
             ings.ingredients.Clear();
@@ -143,6 +154,10 @@ namespace CommonSense
     [HarmonyPatch(typeof(Thing), "SplitOff", new Type[] { typeof(int) })]
     static class Thing_SplitOff_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.add_meal_ingredients;
+        }
         private static void ClearIngs(Thing thing)
         {
             CompIngredients comp = thing.TryGetComp<CompIngredients>();

@@ -13,12 +13,16 @@ using System.Reflection.Emit;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(RCellFinder), "CanWanderToCell")]
-    public static class RCellFinder_CanWanderToCell_CommonSensePatch
+    static class RCellFinder_CanWanderToCell_CommonSensePatch
     {
-        public static void Postfix(ref bool __result, IntVec3 c, IntVec3 root, Pawn pawn)
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.polite_wander;
+        }
+        internal static void Postfix(ref bool __result, IntVec3 c, Pawn pawn)
         {
             if (!__result) return;
-            if (!Settings.polite_wander || pawn.Faction.HostileTo(Faction.OfPlayer)) return;
+            if (!Settings.polite_wander || pawn.Faction.HostileTo(Find.FactionManager.OfPlayer)) return;
             //
             RoomRoleDef def = c.GetRoom(pawn.Map)?.Role;
             if (def == RoomRoleDefOf.Bedroom && !pawn.GetRoom().Owners.Contains(pawn)
@@ -33,8 +37,12 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(JobGiver_Wander), "TryGiveJob")]
-    public static class JobGiver_Wander_TryGiveJob_CommonSensePatch
+    static class JobGiver_Wander_TryGiveJob_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.safe_wander;
+        }
         private static IntVec3 FindRoofedInHomeArea(Pawn pawn)
         {
             bool cellValidator(IntVec3 x) => pawn.Map.areaManager.Home[x] && !PawnUtility.KnownDangerAt(x, pawn.Map, pawn) && !x.GetTerrain(pawn.Map).avoidWander && x.Standable(pawn.Map) && x.Roofed(pawn.Map);
@@ -52,9 +60,9 @@ namespace CommonSense
             return RCellFinder.RandomWanderDestFor(pawn, root, 7, ((Pawn p, IntVec3 v1, IntVec3 v2) => v1.Roofed(p.Map)), PawnUtility.ResolveMaxDanger(pawn, Danger.Deadly));
         }
 
-        public static bool Prefix(Pawn pawn, ref Job __result, JobGiver_Wander __instance)
+        internal static bool Prefix(Pawn pawn, ref Job __result)
         {
-            if (!pawn.ShouldHideFromWeather() || pawn.Position.Roofed(pawn.Map))
+            if (!Settings.safe_wander || !pawn.ShouldHideFromWeather() || pawn.Position.Roofed(pawn.Map))
                 return true;
 
             var root = FindRoofedInHomeArea(pawn);
@@ -72,7 +80,7 @@ namespace CommonSense
             return true;
         }
 
-        public static void Postfix(Pawn pawn, ref Job __result)
+        internal static void Postfix(Pawn pawn, ref Job __result)
         {
             if (!Settings.safe_wander
                 || __result == null
@@ -88,8 +96,13 @@ namespace CommonSense
     }
 
     [HarmonyPatch]
-    public static class JobDriver_Goto_MoveNext_CommonSensePatch
+    static class JobDriver_Goto_MoveNext_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.safe_wander;
+        }
+
         internal static MethodBase TargetMethod()
         {
             Type inner = AccessTools.Inner(typeof(JobDriver_Goto), "<MakeNewToils>d__1");
@@ -157,8 +170,9 @@ namespace CommonSense
             return Mathf.Max(num, 1f);
         }
 
-        static Toil GoToCellSafe(TargetIndex ind, PathEndMode peMode, TargetIndex paramind)
+        private static Toil GoToCellSafe(TargetIndex ind, PathEndMode peMode, TargetIndex paramind)
         {
+            if (!Settings.safe_wander) return Toils_Goto.GotoCell(ind, peMode);
             Toil toil = new Toil();
             toil.initAction = delegate ()
             {
@@ -241,7 +255,7 @@ namespace CommonSense
         }
         //
         [HarmonyTranspiler]
-        internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instrs, ILGenerator il)
+        internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instrs)
         {
             MethodInfo LGotoCell = AccessTools.Method(typeof(Toils_Goto), nameof(Toils_Goto.GotoCell), new Type[] { typeof(TargetIndex), typeof(PathEndMode) });
             MethodInfo LGotoCellSafe = AccessTools.Method(typeof(JobDriver_Goto_MoveNext_CommonSensePatch), nameof(JobDriver_Goto_MoveNext_CommonSensePatch.GoToCellSafe));

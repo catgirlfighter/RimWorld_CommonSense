@@ -13,6 +13,10 @@ namespace CommonSense
     {
         //optimazing the path to pick up items
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredients")]
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.adv_haul_all_ings;
+        }
         static class WorkGiver_DoBill_TryStartNewDoBillJob_CommonSensePatch
         {
             internal static void Postfix(bool __result, List<ThingCount> chosen)
@@ -28,6 +32,11 @@ namespace CommonSense
         [HarmonyPatch]
         static class WorkGiver_DoBill_TryFindBestIngredientsHelper_CommonSensePatch
         {
+            internal static bool Prepare()
+            {
+                return !Settings.optimal_patching_in_use || Settings.prefer_spoiling_ingredients;
+            }
+
             private static Type dc24_0;
             private static void PreProcess(Pawn pawn, Predicate<Thing> baseValidator, bool billGiverIsPawn, List<Thing> newRelevantThings, HashSet<Thing> processedThings)
             {
@@ -101,6 +110,10 @@ namespace CommonSense
         [HarmonyPatch(typeof(WorkGiver_DoBill), "TryFindBestBillIngredientsInSet_AllowMix")]
         static class WorkGiver_DoBill_TryFindBestBillIngredientsInSet_AllowMix_CommonSensePatch
         {
+            internal static bool Prepare()
+            {
+                return !Settings.optimal_patching_in_use || Settings.prefer_spoiling_ingredients;
+            }
             private static void DoSort(List<Thing> availableThings, Bill bill)
             {
                 if (!Settings.prefer_spoiling_ingredients || bill.recipe.addsHediff != null)
@@ -159,9 +172,12 @@ namespace CommonSense
         {
             private static FieldInfo LFoodOptimalityEffectFromMoodCurve = null;
 
-            internal static void Prepare()
+            internal static bool Prepare()
             {
                 LFoodOptimalityEffectFromMoodCurve = AccessTools.Field(typeof(FoodUtility), "FoodOptimalityEffectFromMoodCurve");
+                if (LFoodOptimalityEffectFromMoodCurve == null) Log.Message("couldn't find field FoodUtility.FoodOptimalityEffectFromMoodCurve");
+                return LFoodOptimalityEffectFromMoodCurve != null 
+                    && (!Settings.optimal_patching_in_use || Settings.prefer_spoiling_meals);
             }
 
             internal static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef)

@@ -11,8 +11,13 @@ using UnityEngine;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(JobGiver_GetJoy), "TryGiveJob", new Type[] { typeof(Pawn) })]
-    public static class JobGiver_GetJoy_TryGiveJob_CommonSensePatch
+    static class JobGiver_GetJoy_TryGiveJob_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.fulfill_outdoors;
+        }
+        
         public class JobCrutch : JobGiver_GetJoy
         {
             public bool CanDoDuringMedicalRestCrutch()
@@ -29,8 +34,8 @@ namespace CommonSense
             }
         }
 
-        //double pass on trying to give a joyjob. At first, we'll try to give a job, that located outside;
-        public static bool Prefix(ref Job __result, ref JobCrutch __instance, ref Pawn pawn)
+        //double pass on trying to give a joyjob. At first, we'll try to give a job that located outside;
+        internal static bool Prefix(ref Job __result, ref JobCrutch __instance, ref Pawn pawn)
         {
             if (!Settings.fulfill_outdoors || !__instance.CanDoDuringMedicalRestCrutch() && pawn.InBed() && HealthAIUtility.ShouldSeekMedicalRest(pawn)
                 || pawn.needs.outdoors == null || pawn.needs.outdoors.CurLevel >= 0.4f)

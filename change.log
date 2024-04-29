@@ -1,4 +1,9 @@
-﻿1.2.7+
+﻿1.2.8
+- fixed settings not showing number options;
+- added new option "optimal patching". It supposed to mimic what OwlChemist's fork did. Simply put, when option is toggled on, game doesn't patch in disabled options when restarted. Credit to OwlChemist where it's due;
+- did some other stuff you probably won't notice;
+
+1.2.7+
 - updated last version of the mod for 1.4 version of the game. Managed to leave debug messages;
 
 1.2.7

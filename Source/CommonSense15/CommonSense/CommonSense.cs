@@ -13,8 +13,21 @@ namespace CommonSense
         public CommonSense(ModContentPack content) : base(content)
         {
             var harmony = new Harmony("net.avilmask.rimworld.mod.CommonSense");
+            GetSettings<Settings>();
+            //
+            Settings.optimal_patching_in_use = Settings.optimal_patching;
+            if (Settings.optimal_patching_in_use && !Settings.fun_police)
+            {
+                var compJoyToppedOff = typeof(CompJoyToppedOff);
+                var list = DefDatabase<ThingDef>.AllDefsListForReading;
+                for (int i = list.Count; i-- > 0;)
+                {
+                    var def = list[i];
+                    if (def.HasComp(compJoyToppedOff)) def.comps.RemoveAll(x => x.compClass == compJoyToppedOff);
+                }
+            }
+            //
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-            base.GetSettings<Settings>();
         }
         
         public void Save()

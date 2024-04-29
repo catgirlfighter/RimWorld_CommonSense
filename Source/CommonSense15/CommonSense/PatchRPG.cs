@@ -12,7 +12,7 @@ namespace CommonSense
 
     static class RPGStyleInventory_PopupMenu_CommonSensePatch
     {
-        static readonly Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
+        private static readonly Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
 
         internal static void Postfix(object __instance, List<FloatMenuOption> __result, Pawn pawn, Thing thing, bool inventory)
         {
@@ -56,7 +56,7 @@ namespace CommonSense
 
     static class RPGStyleInventory_DrawSlotIcons_CommonSensePatch
     {
-        internal static void Postfix(object __instance, Thing thing, bool equipment, bool inventory, Rect slotRect, ref float x, ref float y)
+        internal static void Postfix(object __instance, Thing thing, Rect slotRect, ref float x, ref float y)
         {
             var c = CompUnloadChecker.GetChecker(thing);
             if (c?.ShouldUnload == true)
@@ -77,16 +77,21 @@ namespace CommonSense
             Type type;
             if ((type = AccessTools.TypeByName("Sandy_Detailed_RPG_GearTab")) != null)
             {
-                LDrawSlotIcon = AccessTools.Method(type, "DrawSlotIcon");
-                var mi = AccessTools.Method(type, "DrawThingRow");
-                HarmonyMethod hm = new HarmonyMethod(typeof(ITab_Pawn_Gear_DrawThingRow_CommonSensePatch), nameof(ITab_Pawn_Gear_DrawThingRow_CommonSensePatch.Prefix));
-                harmonyInstance.Patch(mi, hm, null);
-
-                mi = AccessTools.Method(type, "PopupMenu");
-                if (mi != null)
+                MethodInfo mi;
+                HarmonyMethod hm;
+                if (!Settings.optimal_patching_in_use || Settings.gui_manual_unload)
                 {
-                    hm = new HarmonyMethod(typeof(RPGStyleInventory_PopupMenu_CommonSensePatch), nameof(RPGStyleInventory_PopupMenu_CommonSensePatch.Postfix));
-                    harmonyInstance.Patch(mi, null, hm);
+                    LDrawSlotIcon = AccessTools.Method(type, "DrawSlotIcon");
+                    mi = AccessTools.Method(type, "DrawThingRow");
+                    hm = new HarmonyMethod(typeof(ITab_Pawn_Gear_DrawThingRow_CommonSensePatch), nameof(ITab_Pawn_Gear_DrawThingRow_CommonSensePatch.Prefix));
+                    harmonyInstance.Patch(mi, hm, null);
+
+                    mi = AccessTools.Method(type, "PopupMenu");
+                    if (mi != null)
+                    {
+                        hm = new HarmonyMethod(typeof(RPGStyleInventory_PopupMenu_CommonSensePatch), nameof(RPGStyleInventory_PopupMenu_CommonSensePatch.Postfix));
+                        harmonyInstance.Patch(mi, null, hm);
+                    }
                 }
 
                 mi = AccessTools.Method(type, "DrawSlotIcons");
@@ -100,7 +105,7 @@ namespace CommonSense
     }
 
     [StaticConstructorOnStartup]
-    public static class AwesomeInventory_CommonSensePatch
+    static class AwesomeInventory_CommonSensePatch
     {
         //private static readonly PropertyInfo LCanControl = null;
         static AwesomeInventory_CommonSensePatch()
@@ -109,15 +114,16 @@ namespace CommonSense
             Type type;
             if ((type = AccessTools.TypeByName("AwesomeInventory.UI.DrawGearTabWorker")) != null)
             {
-                //Log.Message("patched DrawGearTabWorker");
-                //LCanControl = AccessTools.Property(typeof(ITab_Pawn_Gear), "CanControl");
-                var mi = AccessTools.Method(type, "DrawThingRow", null, null);
-                HarmonyMethod hm = new HarmonyMethod(typeof(AwesomeInventory_CommonSensePatch), nameof(AwesomeInventory_CommonSensePatch.Prefix), null);
-                harmonyInstance.Patch(mi, hm, null);
+                if (!Settings.optimal_patching_in_use || Settings.gui_manual_unload)
+                {
+                    var mi = AccessTools.Method(type, "DrawThingRow", null, null);
+                    HarmonyMethod hm = new HarmonyMethod(typeof(AwesomeInventory_CommonSensePatch), nameof(AwesomeInventory_CommonSensePatch.Prefix), null);
+                    harmonyInstance.Patch(mi, hm, null);
+                }
             }
         }
 
-        public static void Prefix(object __instance, Pawn selPawn, ref float y, ref float width, Thing thing, ref bool inventory)
+        internal static void Prefix(object __instance, Pawn selPawn, ref float y, ref float width, Thing thing, ref bool inventory)
         {
             if (selPawn == null || thing == null) return;
             var val = Traverse.Create(__instance).Field("_gearTab").GetValue();

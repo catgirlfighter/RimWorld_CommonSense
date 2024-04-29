@@ -11,13 +11,17 @@ using Verse;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(Pawn_DrugPolicyTracker), "AllowedToTakeScheduledNow", new Type[] { typeof(ThingDef) })]
-    public static class Pawn_DrugPolicyTracker_AllowedToTakeScheduledNow_CommonSensePatch
+    static class Pawn_DrugPolicyTracker_AllowedToTakeScheduledNow_CommonSensePatch
     {
-        public static bool Prefix(ref bool __result, ref Pawn_DrugPolicyTracker __instance, ref ThingDef thingDef)
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.drugs_use_potential_mood;
+        }
+        internal static bool Prefix(ref bool __result, ref Pawn_DrugPolicyTracker __instance, ref ThingDef thingDef)
         {
             if (!Settings.drugs_use_potential_mood)
                 return true;
-            //i've failed trying to inject "actually changed part" in exact part of a code (result looked too monstrous to me)
+            //i've failed trying to inject "actually changed part" in exact part of the code (result looked too monstrous for me)
             //so I've used a simple solution
             //
             //duplicating initial part

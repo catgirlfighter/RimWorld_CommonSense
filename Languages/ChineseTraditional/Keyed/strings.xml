@@ -81,4 +81,7 @@
   <meditation_economy_note>除了在冥想的時段，若小人的精神力是滿的，且他不覺得冥想是快樂的事情，那他將會停止冥想。</meditation_economy_note>
   <advanced_respect_capacity_label>-- pawns will not exceed inventory capacity</advanced_respect_capacity_label>
   <advanced_respect_capacity_note>For immersion reasons or whatever</advanced_respect_capacity_note>
+  <optimal_patching_label>Optimal Patching</optimal_patching_label>
+  <optimal_patching_note>When this option is off, all options activate immediately after toggling them, at the cost of always being in the code, possibly affecting performance even they're toggled off. When option is on, options will require you to restart the game when changed, but patches needed for these options won't happen, removing extra performance impact when game launches with these options disabled</optimal_patching_note>
+  <optimal_patching_attention_label>ATTENTION: Optimal patching doesn't properly apply without restarting the game!</optimal_patching_attention_label>
 </LanguageData>

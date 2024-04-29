@@ -56,9 +56,13 @@ namespace CommonSense
     }
 
     [HarmonyPatch(typeof(WorkGiver_VisitSickPawn), "JobOnThing")]
-    public static class WorkGiver_VisitSickPawn_JobOnThing_CommonSensePatch
+    static class WorkGiver_VisitSickPawn_JobOnThing_CommonSensePatch
     {
-        public static bool Prefix(ref Job __result, Pawn pawn, Thing t)
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.give_sick_joy_drugs;
+        }
+        internal static bool Prefix(ref Job __result, Pawn pawn, Thing t)
         {
             if (!Settings.give_sick_joy_drugs)
                 return true;

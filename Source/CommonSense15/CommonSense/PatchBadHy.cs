@@ -16,11 +16,13 @@ namespace CommonSense
         {
             if (pawn.needs == null)
                 return null;
-            foreach (var i in (pawn.needs.AllNeeds))
+            var list = pawn.needs.AllNeeds;
+            for (int i = list.Count; i-->0;)
             {
                 if (i.GetType() == needType)
                 {
-                    return i;
+                    var need = list[i];
+                    if (ReferenceEquals(need.GetType(), needType)) return need;
                 }
             }
             return null;
@@ -191,20 +193,11 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_DrinkWater")) != null)
                 {
-                    if ((target = AccessTools.Method(type, "GetPriority")) == null)
-                    {
-                        Log.Error($"Couldn't get {type}.GetPriority");
-                        return false;
-                    }
-                    TNeed_Thirst = AccessTools.TypeByName("Need_Thirst");
-                    if (TNeed_Thirst == null)
-                    {
-                        Log.Error($"Couldn't get class Need_Thirst");
-                        return false;
-                    }
-                    return true;
-                }
-                return false;
+                    if ((target = AccessTools.Method(type, "GetPriority")) == null) Log.Error($"Couldn't get {type}.GetPriority");
+                    if ((TNeed_Thirst = AccessTools.TypeByName("Need_Thirst")) == null) Log.Error($"Couldn't find class Need_Thirst");
+                };
+                return target != null && TNeed_Thirst != null
+                    && (!Settings.optimal_patching_in_use || Settings.fun_police);
             }
 
             public static MethodBase TargetMethod()

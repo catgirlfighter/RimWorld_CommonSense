@@ -9,6 +9,10 @@ namespace CommonSense
     [HarmonyPatch(typeof(JobDriver_SocialRelax), "MakeNewToils")]
     public static class JobDriver_SocialRelax_MakeNewToils_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.social_relax_economy || Settings.adv_cleaning_ingest;
+        }
         //basically the same thing as vanilla JoyTickCheckEnd, but also has an offset
         private static void JoyTickCheckEndOffset(Pawn pawn, float joyoffset, JoyTickFullJoyAction fullJoyAction = JoyTickFullJoyAction.EndJob, float extraJoyGainFactor = 1f, Building joySource = null)
         {
@@ -223,7 +227,7 @@ namespace CommonSense
             yield break;
         }
 
-        public static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_SocialRelax __instance)
+        internal static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_SocialRelax __instance)
         {
             if (!Settings.social_relax_economy && !Settings.adv_cleaning_ingest)
                 return true;

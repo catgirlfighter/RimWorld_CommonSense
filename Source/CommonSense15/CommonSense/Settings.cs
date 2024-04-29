@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using Verse;
 
 namespace CommonSense
@@ -40,17 +41,30 @@ namespace CommonSense
         public static bool clean_gizmo = false;
         public static bool meditation_economy = true;
         public static bool adv_respect_capacity = true;
+        public static bool optimal_patching = false;
+        public static bool optimal_patching_in_use = false;
 
         public static void DoSettingsWindowContents(Rect inRect)
         {
+            int rowCount = 42; //increase that number as new options are added
             Listing_Standard listing_Standard = new Listing_Standard();
-            Rect viewRect = new Rect(0f, 0f, inRect.width, 36f*26f);
+            Rect viewRect = new Rect(0f, 0f, inRect.width, rowCount * 26f);
             viewRect.xMax *= 0.9f;
 
-            //listing_Standard.BeginScrollView(inRect, ref ScrollPos, ref viewRect);
             listing_Standard.Begin(viewRect);
             GUI.EndGroup();
             Widgets.BeginScrollView(inRect, ref ScrollPos, viewRect);
+            //
+            listing_Standard.CheckboxLabeled("optimal_patching_label".Translate(), ref optimal_patching, "optimal_patching_note".Translate());
+            if (optimal_patching || optimal_patching_in_use)
+            {
+                var col = GUI.color;
+                GUI.color = Color.red;
+                listing_Standard.Label("optimal_patching_attention_label".Translate());
+                GUI.color = col;
+            }
+            //
+            listing_Standard.GapLine();
             listing_Standard.Label("fulfill_needs_head".Translate());
             listing_Standard.CheckboxLabeled("fulfill_outdoors_label".Translate(), ref fulfill_outdoors, "fulfill_outdoors_note".Translate());
             listing_Standard.CheckboxLabeled("drugs_use_potential_mood_label".Translate(), ref drugs_use_potential_mood, "drugs_use_potential_mood_note".Translate());
@@ -97,6 +111,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("manual_unload_label".Translate(), ref gui_manual_unload, "manual_unload_note".Translate());
             listing_Standard.CheckboxLabeled("ingest_any_drugs_label".Translate(), ref ingest_any_drugs, "ingest_any_drugs_note".Translate());
             listing_Standard.CheckboxLabeled("mood_regen_label".Translate(), ref mood_regen, "mood_regen_note".Translate());
+            listing_Standard.CheckboxLabeled("gen_ingredients_label".Translate(), ref add_meal_ingredients, "gen_ingredients_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("numbers_head".Translate());
@@ -144,6 +159,7 @@ namespace CommonSense
             Scribe_Values.Look(ref clean_gizmo, "clean_gizmo", false, false);
             Scribe_Values.Look(ref meditation_economy, "meditation_economy", true, false);
             Scribe_Values.Look(ref adv_respect_capacity, "adv_respect_capacity", true, false);
+            Scribe_Values.Look(ref optimal_patching, "optimal_patching", false, false);
         }
     }
 }

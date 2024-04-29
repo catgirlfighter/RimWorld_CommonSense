@@ -9,12 +9,17 @@ using Verse;
 namespace CommonSense
 {
     [HarmonyPatch(typeof(Thing), "CanStackWith", new Type[] { typeof(Thing) })]
-    public static class CompIngredients_CanStackWith_CommonSensePatch
+    static class CompIngredients_CanStackWith_CommonSensePatch
     {
-        private static int getflags(CompIngredients compIngredients)
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.separate_meals;
+        }
+        private static int GetFlags(CompIngredients compIngredients)
         {
             if (compIngredients?.ingredients == null)
                 return 0;
+            //
             int b = 0;
             //0 - clean;
             //1 - positive
@@ -35,7 +40,7 @@ namespace CommonSense
             return b;
         }
 
-        public static void Postfix(ref bool __result, ref Thing __instance, ref Thing other)
+        internal static void Postfix(ref bool __result, ref Thing __instance, ref Thing other)
         {
             if (!Settings.separate_meals || __instance == null || !__result || other == null || !other.def.IsIngestible)
                 return;
@@ -50,7 +55,7 @@ namespace CommonSense
             if (otherings == null)
                 return;
 
-            __result = getflags(ings) == getflags(otherings);
+            __result = GetFlags(ings) == GetFlags(otherings);
         }
     }
 }

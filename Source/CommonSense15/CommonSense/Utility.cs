@@ -35,13 +35,15 @@ namespace CommonSense
 
         public static bool IncapableOfCleaning(Pawn pawn)
         {
-            return pawn.def.race == null ||
-            pawn.Faction != Faction.OfPlayer ||
-            pawn.def.race.intelligence < Intelligence.ToolUser ||
-            pawn.RaceProps.intelligence < Intelligence.ToolUser ||
-            pawn.InMentalState || pawn.IsBurning() ||
-            pawn.WorkTypeIsDisabled(CleaningDef) ||
-            pawn.workSettings == null || !pawn.workSettings.Initialized || !pawn.workSettings.WorkIsActive(CleaningDef);
+            return pawn.def.race == null
+                || pawn.RaceProps.intelligence < Intelligence.ToolUser
+                //|| pawn.def.race.intelligence < Intelligence.ToolUser
+                || pawn.Faction != Find.FactionManager.OfPlayer//Faction.OfPlayer
+                || pawn.workSettings == null
+                || !pawn.workSettings.Initialized
+                || !pawn.workSettings.WorkIsActive(CleaningDef)
+                || pawn.WorkTypeIsDisabled(CleaningDef)
+                || pawn.InMentalState || pawn.IsBurning();
         }
 
         public static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target, int Limit = int.MaxValue)
@@ -244,20 +246,23 @@ namespace CommonSense
 
         public static bool ShouldHideFromWeather(this Pawn pawn)
         {
-            if (!Settings.safe_wander
-                || pawn.Faction != Faction.OfPlayer
-                || !pawn.Map.IsPlayerHome
+            Map map;
+            if (pawn.Faction != Find.FactionManager.OfPlayer
+                || !(map = pawn.Map).IsPlayerHome
                 || pawn.mindState?.duty != null)
                 return false;
             //
             bool cares = pawn.needs?.mood != null;
             if (cares)
             {
-                if (JoyUtility.EnjoyableOutsideNow(pawn.Map))
+                if (JoyUtility.EnjoyableOutsideNow(map))
                     return false;
             }
-            else if (!pawn.RaceProps.IsFlesh || pawn.Map.gameConditionManager.ActiveConditions.FirstOrDefault(x => x is GameCondition_ToxicFallout) == null)
-                return false;
+            else
+            {
+                if (!pawn.RaceProps.IsFlesh || !map.gameConditionManager.ActiveConditions.Any(x => x is GameCondition_ToxicFallout))
+                    return false;
+            }
 
             return true;
         }

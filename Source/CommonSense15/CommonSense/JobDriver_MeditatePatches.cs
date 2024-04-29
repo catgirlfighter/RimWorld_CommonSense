@@ -9,6 +9,10 @@ namespace CommonSense
     [HarmonyPatch(typeof(JobDriver_Meditate), "MeditationTick")]
     public static class JobDriver_MeditationTick_CommonSensePatch
     {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.meditation_economy;
+        }
         internal static void Postfix(JobDriver_Meditate __instance)
         {
             if (!Settings.meditation_economy)

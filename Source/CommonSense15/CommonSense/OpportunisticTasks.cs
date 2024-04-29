@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace CommonSense
 {
-    public class OpportunisticTasks
+    class OpportunisticTasks
     {
         private static WorkGiverDef haulGeneral = null;
 
@@ -152,9 +152,13 @@ namespace CommonSense
         }
 
         [HarmonyPatch(typeof(Pawn_JobTracker), "StartJob")]
-        public static class Pawn_JobTracker_StartJob_CommonSensePatch
+        static class Pawn_JobTracker_StartJob_CommonSensePatch
         {
-            public static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, bool fromQueue)
+            internal static bool Prepare()
+            {
+                return !Settings.optimal_patching_in_use || Settings.fun_police || Settings.clean_before_work || Settings.hauling_over_bills;
+            }
+            internal static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, bool fromQueue)
             {
                 try
                 {
@@ -224,11 +228,15 @@ namespace CommonSense
         }
 
         [HarmonyPatch(typeof(Pawn_JobTracker), "EndCurrentJob")]
-        public static class Pawn_JobTracker_EndCurrentJob_CommonSensePatch
+        static class Pawn_JobTracker_EndCurrentJob_CommonSensePatch
         {
-            public static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition)
+            internal static bool Prepare()
             {
-                if (__instance == null || __instance._pawn == null || !__instance._pawn.IsColonistPlayerControlled || __instance.curJob == null)
+                return !Settings.optimal_patching_in_use || Settings.fun_police || Settings.clean_after_tending;
+            }
+            internal static bool Prefix(Pawn_JobTracker_Crutch __instance, JobCondition condition)
+            {
+                if (__instance == null || __instance.curJob == null || __instance._pawn == null  || !__instance._pawn.IsColonistPlayerControlled)
                     return true;
 
                 if (Settings.fun_police && __instance._pawn.needs.joy != null && __instance._pawn.needs.joy.CurLevel > 0.95f)
