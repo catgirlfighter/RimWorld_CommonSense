@@ -38,20 +38,10 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_UseToilet")) != null)
                 {
-                    if ((target = AccessTools.Method(type, "GetPriority")) == null)
-                    {
-                        Log.Error($"Couldn't get {type}.GetPriority");
-                        return false;
-                    }
-                    TNeed_Bladder = AccessTools.TypeByName("Need_Bladder");
-                    if (TNeed_Bladder == null)
-                    {
-                        Log.Error($"Couldn't get class Need_Bladder");
-                        return false;
-                    }
-                    return true;
+                    if ((target = AccessTools.Method(type, "GetPriority")) == null) Log.Error($"Couldn't find  method {type}.GetPriority");
+                    if ((TNeed_Bladder = AccessTools.TypeByName("Need_Bladder")) == null) Log.Error($"Couldn't find class Need_Bladder");
                 }
-                return false;
+                return target != null && TNeed_Bladder != null && (!Settings.optimal_patching_in_use || Settings.fun_police);
             }
             public static MethodBase TargetMethod()
             {
@@ -115,20 +105,11 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_HaveWash")) != null)
                 {
-                    if ((target = AccessTools.Method(type, "GetPriority")) == null)
-                    {
-                        Log.Error($"Couldn't get {type}.GetPriority");
-                        return false;
-                    }
+                    if ((target = AccessTools.Method(type, "GetPriority")) == null) Log.Error($"Couldn't find method {type}.GetPriority");
                     TNeed_Hygiene = AccessTools.TypeByName("Need_Hygiene");
-                    if (TNeed_Hygiene == null)
-                    {
-                        Log.Error($"Couldn't get class Need_Hygiene");
-                        return false;
-                    }
-                    return true;
+                    if ((TNeed_Hygiene = AccessTools.TypeByName("Need_Hygiene")) == null) Log.Error($"Couldn't find class Need_Hygiene");
                 }
-                return false;
+                return target != null && TNeed_Hygiene != null && (!Settings.optimal_patching_in_use || Settings.fun_police);
             }
 
             public static MethodBase TargetMethod()
@@ -193,11 +174,10 @@ namespace CommonSense
                 Type type;
                 if ((type = AccessTools.TypeByName("JobGiver_DrinkWater")) != null)
                 {
-                    if ((target = AccessTools.Method(type, "GetPriority")) == null) Log.Error($"Couldn't get {type}.GetPriority");
+                    if ((target = AccessTools.Method(type, "GetPriority")) == null) Log.Error($"Couldn't find method {type}.GetPriority");
                     if ((TNeed_Thirst = AccessTools.TypeByName("Need_Thirst")) == null) Log.Error($"Couldn't find class Need_Thirst");
                 };
-                return target != null && TNeed_Thirst != null
-                    && (!Settings.optimal_patching_in_use || Settings.fun_police);
+                return target != null && TNeed_Thirst != null && (!Settings.optimal_patching_in_use || Settings.fun_police);
             }
 
             public static MethodBase TargetMethod()

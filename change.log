@@ -1,4 +1,7 @@
-﻿1.2.8
+﻿1.2.8+
+- follow up for "optimal patching" option, regarding some comaptability patches;
+
+1.2.8
 - fixed settings not showing number options;
 - added new option "optimal patching". It supposed to mimic what OwlChemist's fork did. Simply put, when option is toggled on, game doesn't patch in disabled options when restarted. Credit to OwlChemist where it's due;
 - did some other stuff you probably won't notice;
