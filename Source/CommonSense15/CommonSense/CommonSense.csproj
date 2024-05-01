@@ -47,6 +47,7 @@
     <Compile Include="JobDriver_SocialRelaxPatches.cs" />
     <Compile Include="Need_MoodPatches.cs" />
     <Compile Include="PointlessWanderPatches.cs" />
+    <Compile Include="RoomRoleWorker_CooledStoreRoom.cs" />
     <Compile Include="SideArmsPatch.cs" />
     <Compile Include="TakeAnyDrugs.cs" />
     <Compile Include="WorkGiver_ClearSnow.cs" />

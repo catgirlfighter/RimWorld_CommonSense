@@ -28,7 +28,9 @@ namespace CommonSense
             if (def == RoomRoleDefOf.Bedroom && !pawn.GetRoom().Owners.Contains(pawn)
             || def == RoomRoleDefOf.Hospital
             || def == RoomRoleDefOf.PrisonCell
-            || def == RoomRoleDefOf.PrisonBarracks)
+            || def == RoomRoleDefOf.PrisonBarracks
+            || def == CSRoomRoleDefOf.CooledStoreroom
+            || def == CSRoomRoleDefOf.ContainmentCell)
             {
                 __result = false;
                 return;

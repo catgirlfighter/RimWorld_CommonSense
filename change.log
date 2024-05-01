@@ -1,4 +1,8 @@
-﻿1.2.8++
+﻿1.2.9
+- added new type of room - fridge room. It forms if it has adjusted coolers that set to cool the room below zero;
+- "polite_wander" now avoids walking into fridge rooms and containment cells. Don't forget that pawns still can WANDER THROUGH these rooms;
+
+1.2.8++
 - anoher follow up for "optimal patching", accidentaly broke Dubs BG;
 
 1.2.8+
