@@ -3,6 +3,7 @@ using System.Reflection;
 using Verse;
 using UnityEngine;
 using RimWorld;
+using System.Linq;
 
 namespace CommonSense
 {
@@ -19,12 +20,8 @@ namespace CommonSense
             if (Settings.optimal_patching_in_use && !Settings.fun_police)
             {
                 var compJoyToppedOff = typeof(CompJoyToppedOff);
-                var list = DefDatabase<ThingDef>.AllDefsListForReading;
-                for (int i = list.Count; i-- > 0;)
-                {
-                    var def = list[i];
-                    if (def.HasComp(compJoyToppedOff)) def.comps.RemoveAll(x => x.compClass == compJoyToppedOff);
-                }
+                var list = DefDatabase<ThingDef>.AllDefsListForReading.FindAll(x => x.HasComp(compJoyToppedOff));
+                foreach (var def in list) def.comps.RemoveAll(x => x.compClass == compJoyToppedOff);
             }
             //
             harmony.PatchAll(Assembly.GetExecutingAssembly());

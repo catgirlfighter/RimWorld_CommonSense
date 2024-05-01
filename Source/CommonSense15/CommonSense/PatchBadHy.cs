@@ -14,17 +14,9 @@ namespace CommonSense
     {
         private static Need TryGetNeed(this Pawn pawn, Type needType)
         {
-            if (pawn.needs == null)
-                return null;
+            if (pawn.needs == null) return null;
             var list = pawn.needs.AllNeeds;
-            for (int i = list.Count; i-->0;)
-            {
-                if (i.GetType() == needType)
-                {
-                    var need = list[i];
-                    if (ReferenceEquals(need.GetType(), needType)) return need;
-                }
-            }
+            for (int i = list.Count; i-- > 0;) if (list[i].GetType() == needType) return list[i];
             return null;
         }
 
