@@ -213,8 +213,8 @@ namespace CommonSense
 
                     if (job != null)
                     {
-                        if (Settings.add_to_que)
-                            __instance.jobQueue.EnqueueFirst(newJob);
+                        //if (Settings.add_to_que)
+                        __instance.jobQueue.EnqueueFirst(newJob);
                         __instance.jobQueue.EnqueueFirst(job);
                         return false;
                     }

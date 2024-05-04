@@ -13,7 +13,7 @@ namespace CommonSense
         public static bool clean_after_tending = true;
         public static bool calculate_full_path = true;
         public static bool add_meal_ingredients = false;
-        public static bool add_to_que = true;
+        //public static bool add_to_que = true;
         public static bool hauling_over_bills = true;
         public static bool drugs_use_potential_mood = true;
         public static bool adv_cleaning = true;
@@ -111,7 +111,7 @@ namespace CommonSense
             listing_Standard.CheckboxLabeled("manual_unload_label".Translate(), ref gui_manual_unload, "manual_unload_note".Translate());
             listing_Standard.CheckboxLabeled("ingest_any_drugs_label".Translate(), ref ingest_any_drugs, "ingest_any_drugs_note".Translate());
             listing_Standard.CheckboxLabeled("mood_regen_label".Translate(), ref mood_regen, "mood_regen_note".Translate());
-            listing_Standard.CheckboxLabeled("gen_ingredients_label".Translate(), ref add_meal_ingredients, "gen_ingredients_note".Translate());
+            //listing_Standard.CheckboxLabeled("gen_ingredients_label".Translate(), ref add_meal_ingredients, "gen_ingredients_note".Translate());
 
             listing_Standard.GapLine();
             listing_Standard.Label("numbers_head".Translate());

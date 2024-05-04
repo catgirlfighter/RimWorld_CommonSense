@@ -41,7 +41,7 @@ namespace CommonSense
                     num += 10;
                 }
             }
-            return 3f * num;
+            return 3f * num - 1f;
         }
     }
 }

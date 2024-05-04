@@ -1,4 +1,8 @@
-﻿1.2.9
+﻿1.2.10
+- removed duplicate of add_meal_ingredients option;
+- fixed a very specific crash. It appears ONLY if you've saved under specific conditions and then loaded the game. So this crash can happen ONLY soon after loading the game. With conditions so ideal for debugging can't believe nobody sent me a save for checking sooner... All thanks to @Moonchill for showing bravery in these trying times. Anyway, probably should be better now. You might need to draft-undraft your pawns before unpausing for one last time, to clear out bugged tasks (if it helped you before, you definitely a victim of this bug).
+
+1.2.9
 - added new type of room - fridge room. It forms if it has adjusted coolers that set to cool the room below zero;
 - "polite_wander" now avoids walking into fridge rooms and containment cells. Don't forget that pawns still can WANDER THROUGH these rooms;
 
