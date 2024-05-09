@@ -1,4 +1,8 @@
-﻿1.2.10
+﻿1.2.11
+- made so an option to prefer close to spoiling meals is a bit more aggressive;
+- made more nullckecks for meditation patch, to probably fix a problem that may be happening;
+
+1.2.10
 - removed duplicate of add_meal_ingredients option;
 - fixed a very specific crash. It appears ONLY if you've saved under specific conditions and then loaded the game. So this crash can happen ONLY soon after loading the game. With conditions so ideal for debugging can't believe nobody sent me a save for checking sooner... All thanks to @Moonchill for showing bravery in these trying times. Anyway, probably should be better now. You might need to draft-undraft your pawns before unpausing for one last time, to clear out bugged tasks (if it helped you before, you definitely a victim of this bug).
 

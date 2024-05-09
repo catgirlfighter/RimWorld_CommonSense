@@ -17,7 +17,6 @@ namespace CommonSense
     }
     public class RoomRoleWorker_CooledStoreRoom : RoomRoleWorker
     {
-        // Token: 0x06006A54 RID: 27220 RVA: 0x0023D334 File Offset: 0x0023B534
         private bool IsFridgeCooler(Building_Cooler cooler, Room room)
         {
             var vec = cooler.Position + IntVec3.South.RotatedBy(cooler.Rotation);

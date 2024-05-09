@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -186,29 +187,17 @@ namespace CommonSense
                 if (!Settings.prefer_spoiling_meals)
                     return;
 
-                const float qday = 2500f * 6f;
-                const float aday = qday * 4f;
+                const float ahour = 2500f;
+                //const float qday = ahour * 6f;
+                const float aday = ahour * 24f;
                 CompRottable compRottable = foodSource.TryGetComp<CompRottable>();
                 if (compRottable != null)
                 {
-                    float t = compRottable.PropsRot.TicksToRotStart - compRottable.RotProgress;
-
-                    float num = 0;
-                    if (eater.needs != null && eater.needs.mood != null)
+                    float t = (compRottable.PropsRot.TicksToRotStart - compRottable.RotProgress) / aday;
+                    if (t > 0 && t < 3f)
                     {
-                        List<FoodUtility.ThoughtFromIngesting> list = FoodUtility.ThoughtsFromIngesting(eater, foodSource, foodDef);
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            num += ((SimpleCurve)LFoodOptimalityEffectFromMoodCurve.GetValue(null)).Evaluate(list[i].thought.stages[0].baseMoodEffect);
-                        }
-                    }
-                    //
-                    if (num < 6f)
-                        num = 6f;
-                    //
-                    if (t > 0 && t < aday * 2f)
-                    {
-                        __result += (float)Math.Truncate(num * (1f + (aday * 2f - t) / qday) * 0.5f);
+                        var delta = 6f - t * 2f;
+                        __result += delta * delta;
                     }
                 }
             }

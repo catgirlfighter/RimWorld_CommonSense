@@ -15,17 +15,17 @@ namespace CommonSense
         }
         internal static void Postfix(JobDriver_Meditate __instance)
         {
-            if (!Settings.meditation_economy)
+            if (!Settings.meditation_economy || __instance?.pawn == null)
                 return;
             //
             bool meditating = __instance.pawn.GetTimeAssignment() == TimeAssignmentDefOf.Meditate;
             //
             var entropy = __instance.pawn.psychicEntropy;
             var joy = __instance.pawn.needs?.joy;
-            var joyKind = __instance.pawn.CurJob.def.joyKind;
+            var joyKind = __instance.pawn.CurJob?.def?.joyKind;
             if (!meditating
-                && (joy?.CurLevel >= 0.98f || joyKind != null && joy?.tolerances?.BoredOf(joyKind) == true)
-                && (!entropy.NeedsPsyfocus || entropy.CurrentPsyfocus == 1f))
+                && (joy == null || joy.CurLevel >= 0.98f || joyKind != null && joy.tolerances?.BoredOf(joyKind) == true)
+                && (entropy == null || !entropy.NeedsPsyfocus || entropy.CurrentPsyfocus == 1f))
             {
                 __instance.EndJobWith(JobCondition.InterruptForced);
             }
