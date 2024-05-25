@@ -19,9 +19,9 @@ namespace CommonSense
     {
         private bool IsFridgeCooler(Building_Cooler cooler, Room room)
         {
-            var vec = cooler.Position + IntVec3.South.RotatedBy(cooler.Rotation);
-            return cooler.compTempControl.targetTemperature < 0f
-                && !vec.Impassable(cooler.Map)
+            IntVec3 vec;
+            return cooler?.compTempControl?.targetTemperature < 0f
+                && !(vec = cooler.Position + IntVec3.South.RotatedBy(cooler.Rotation)).Impassable(cooler.Map)
                 && vec.GetRoom(cooler.Map) == room;
         }
         

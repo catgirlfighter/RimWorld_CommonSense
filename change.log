@@ -1,4 +1,7 @@
-﻿1.2.11
+﻿1.2.12
+- little fix to take into account that some modded in coolers may have the same class as vanilla electric cooler but in fact have very little in common with it.
+
+1.2.11
 - made so an option to prefer close to spoiling meals is a bit more aggressive;
 - made more nullckecks for meditation patch, to probably fix a problem that may be happening;
 
