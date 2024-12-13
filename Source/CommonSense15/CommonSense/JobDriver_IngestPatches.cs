@@ -5,6 +5,7 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 using System.Reflection;
+using UnityEngine;
 
 namespace CommonSense
 {
@@ -56,19 +57,27 @@ namespace CommonSense
             {
                 Filth filth = toil.actor.jobs.curJob.GetTarget(filthListIndex).Thing as Filth;
                 var progQue = toil.actor.jobs.curJob.GetTargetQueue(progListIndex);
-                progQue[0] = new IntVec3(0, 0, (int)filth.def.filth.cleaningWorkToReduceThickness * filth.thickness);
+                progQue[0] = new IntVec3(0, 0, (int)filth.def.filth.cleaningWorkToReduceThickness * filth.thickness * 100);
             };
             toil.tickAction = delegate ()
             {
                 Filth filth = toil.actor.jobs.curJob.GetTarget(filthListIndex).Thing as Filth;
+                //
+                float statValueAbstract = filth.Position.GetTerrain(filth.Map).GetStatValueAbstract(StatDefOf.CleaningTimeFactor, null);
+                float num = toil.actor.GetStatValue(StatDefOf.CleaningSpeed, true, -1);
+                if (statValueAbstract != 0f)
+                {
+                    num /= statValueAbstract;
+                }
+                //
                 var progQue = toil.actor.jobs.curJob.GetTargetQueue(progListIndex);
                 IntVec3 iv = progQue[0].Cell;
-                iv.x += 1;
-                iv.y += 1;
-                if (iv.x > filth.def.filth.cleaningWorkToReduceThickness)
+                iv.x += Mathf.Max(1, Mathf.RoundToInt(num * 100));
+                iv.y += Mathf.Max(1, Mathf.RoundToInt(num * 100));
+                if (iv.x > filth.def.filth.cleaningWorkToReduceThickness * 100)
                 {
                     filth.ThinFilth();
-                    iv.x = 0;
+                    iv.x -= (int)(filth.def.filth.cleaningWorkToReduceThickness * 100);
                     if (filth.Destroyed)
                     {
                         toil.actor.records.Increment(RecordDefOf.MessesCleaned);

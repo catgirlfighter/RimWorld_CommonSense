@@ -1,4 +1,7 @@
-﻿1.2.12
+﻿1.2.13
+- made so "in-between" cleaning takes into account cleaning efficiency.
+
+1.2.12
 - little fix to take into account that some modded in coolers may have the same class as vanilla electric cooler but in fact have very little in common with it.
 
 1.2.11

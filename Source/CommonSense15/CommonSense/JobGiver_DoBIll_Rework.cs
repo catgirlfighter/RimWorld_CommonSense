@@ -379,17 +379,23 @@ namespace CommonSense
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
                     __instance.billStartTick = 0;
                     __instance.ticksSpentDoingRecipeWork = 0;
-                    __instance.workLeft = filth.def.filth.cleaningWorkToReduceThickness * filth.thickness;
+                    __instance.workLeft = filth.def.filth.cleaningWorkToReduceThickness * filth.thickness * 100;
                 };
                 clean.tickAction = delegate ()
                 {
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
-                    __instance.billStartTick += 1;
-                    __instance.ticksSpentDoingRecipeWork += 1;
-                    if (__instance.billStartTick > filth.def.filth.cleaningWorkToReduceThickness)
+                    float statValueAbstract = filth.Position.GetTerrain(filth.Map).GetStatValueAbstract(StatDefOf.CleaningTimeFactor, null);
+                    float num = clean.actor.GetStatValue(StatDefOf.CleaningSpeed, true, -1);
+                    if (statValueAbstract != 0f)
+                    {
+                        num /= statValueAbstract;
+                    }
+                    __instance.billStartTick += Mathf.Max(1, Mathf.RoundToInt(num * 100));
+                    __instance.ticksSpentDoingRecipeWork += Mathf.Max(1, Mathf.RoundToInt(num * 100));
+                    if (__instance.billStartTick > filth.def.filth.cleaningWorkToReduceThickness * 100)
                     {
                         filth.ThinFilth();
-                        __instance.billStartTick = 0;
+                        __instance.billStartTick -= (int)(filth.def.filth.cleaningWorkToReduceThickness * 100);
                         if (filth.Destroyed)
                         {
                             clean.actor.records.Increment(RecordDefOf.MessesCleaned);

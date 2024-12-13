@@ -138,19 +138,27 @@ namespace CommonSense
                 {
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
                     var progQue = clean.actor.jobs.curJob.GetTargetQueue(TargetIndex.B);
-                    progQue[0] = new IntVec3(0, 0, (int)filth.def.filth.cleaningWorkToReduceThickness * filth.thickness);
+                    progQue[0] = new IntVec3(0, 0, (int)filth.def.filth.cleaningWorkToReduceThickness * filth.thickness * 100);
                 };
                 clean.tickAction = delegate ()
                 {
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
+                    //
+                    float statValueAbstract = filth.Position.GetTerrain(filth.Map).GetStatValueAbstract(StatDefOf.CleaningTimeFactor, null);
+                    float num = clean.actor.GetStatValue(StatDefOf.CleaningSpeed, true, -1);
+                    if (statValueAbstract != 0f)
+                    {
+                        num /= statValueAbstract;
+                    }
+                    //
                     var progQue = clean.actor.jobs.curJob.GetTargetQueue(TargetIndex.B);
                     IntVec3 iv = progQue[0].Cell;
-                    iv.x += 1;
-                    iv.y += 1;
-                    if (iv.x > filth.def.filth.cleaningWorkToReduceThickness)
+                    iv.x += Mathf.Max(100, Mathf.RoundToInt(num * 100));
+                    iv.y += Mathf.Max(100, Mathf.RoundToInt(num * 100));
+                    if (iv.x > filth.def.filth.cleaningWorkToReduceThickness * 100)
                     {
                         filth.ThinFilth();
-                        iv.x = 0;
+                        iv.x -= (int)(filth.def.filth.cleaningWorkToReduceThickness * 100);
                         if (filth.Destroyed)
                         {
                             clean.actor.records.Increment(RecordDefOf.MessesCleaned);
