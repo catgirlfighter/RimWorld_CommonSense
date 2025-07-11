@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RoomRoleDef>
+    <defName>CooledStoreroom</defName>
+    <label>fridge room</label>
+    <workerClass>CommonSense.RoomRoleWorker_CooledStoreRoom</workerClass>
+  </RoomRoleDef>
+</Defs>
