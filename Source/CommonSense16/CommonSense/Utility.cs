@@ -18,6 +18,7 @@ namespace CommonSense
         public static readonly Texture2D texMoteClean = ContentFinder<Texture2D>.Get("Things/Mote/Clean");
 
         private static WorkGiverDef cleanFilth = null;
+        private static WorkGiverDef CleanFilth { get { return cleanFilth ?? (cleanFilth = DefDatabase<WorkGiverDef>.GetNamed("CleanFilth")); } }
         public const byte largeRoomSize = 160;
 
         private static WorkTypeDef fCleaningDef = null;
@@ -66,8 +67,11 @@ namespace CommonSense
             if (pathGrid == null)
                 return new List<Filth>();
 
-            if (cleanFilth == null)
-                cleanFilth = DefDatabase<WorkGiverDef>.GetNamed("CleanFilth");
+            var cleanFilth = CleanFilth;
+            //if (cleanFilth == null)
+            //{
+            //    cleanFilth = DefDatabase<JobDef>.GetNamed('Clean').driverClass; //DefDatabase<WorkGiverDef>.GetNamed("CleanFilth");
+            //}
 
             if (cleanFilth.Worker == null)
                 return new List<Filth>();

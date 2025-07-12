@@ -30,7 +30,7 @@ namespace CommonSense
 
             //if (ings != null)
             //Log.Message($"{__result} x{__result.stackCount}, {def}, {stuff}");
-            if (ings == null || ings.ingredients.Count > 0)
+            if (ings?.ingredients == null || ings.ingredients.Count > 0)
                 return;
 
             RecipeDef d = hTable.TryGetValue(def);

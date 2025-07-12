@@ -2,8 +2,6 @@
 using System.Reflection;
 using Verse;
 using UnityEngine;
-using RimWorld;
-using System.Linq;
 
 namespace CommonSense
 {
