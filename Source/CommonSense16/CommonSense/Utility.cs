@@ -1,12 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
-using UnityEngine;
+using static HarmonyLib.AccessTools;
 
 namespace CommonSense
 {
@@ -46,16 +48,26 @@ namespace CommonSense
                 || pawn.InMentalState || pawn.IsBurning();
         }
 
+        public static WorkGiver_Scanner GetWorkGiver(Room room)
+        {
+            if(CategorizedCleaningCompat.active)
+                return CategorizedCleaningCompat.GetWorkGiver(room);
+
+            if (cleanFilth == null)
+                cleanFilth = DefDatabase<WorkGiverDef>.GetNamed("CleanFilth");
+            return cleanFilth.Worker as WorkGiver_Scanner;
+        }
+
         public static IEnumerable<Filth> SelectAllFilth(Pawn pawn, LocalTargetInfo target, int Limit = int.MaxValue)
         {
             Room room = null;
             if (target.Thing == null)
             {
-                if((room = GridsUtility.GetRoom(target.Cell, pawn.Map)) == null)//(target.Cell == null)
+                if ((room = GridsUtility.GetRoom(target.Cell, pawn.Map)) == null)//(target.Cell == null)
                     Log.Error("Invalid target: cell or thing it must be");
                 //else
                 //    room = GridsUtility.GetRoom(target.Cell, pawn.Map);
-             }
+            }
             else
                 room = target.Thing.GetRoom();
 
@@ -66,11 +78,7 @@ namespace CommonSense
             if (pathGrid == null)
                 return new List<Filth>();
 
-            if (cleanFilth == null)
-                cleanFilth = DefDatabase<WorkGiverDef>.GetNamed("CleanFilth");
-
-            if (cleanFilth.Worker == null)
-                return new List<Filth>();
+            var worker = GetWorkGiver(room);
 
             IEnumerable<Filth> enumerable = null;
             if (room.IsHuge || room.CellCount > largeRoomSize)
@@ -85,7 +93,7 @@ namespace CommonSense
                         .AddRange(intVec.GetThingList(pawn.Map).OfType<Filth>()
                             .Where(
                                 f => !f.Destroyed
-                                && ((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f)
+                                && worker.HasJobOnThing(pawn, f)
                             ).Take(Limit == 0 ? int.MaxValue : Limit)
                         );
                     }
@@ -97,7 +105,7 @@ namespace CommonSense
             {
                 enumerable = room.ContainedAndAdjacentThings.OfType<Filth>().Where(delegate (Filth f)
                 {
-                    if (f == null || f.Destroyed || !f.Position.InAllowedArea(pawn) || !((WorkGiver_Scanner)cleanFilth.Worker).HasJobOnThing(pawn, f))
+                    if (f == null || f.Destroyed || !f.Position.InAllowedArea(pawn) || !worker.HasJobOnThing(pawn, f))
                         return false;
 
                     Room room2 = f.GetRoom();
@@ -132,7 +140,7 @@ namespace CommonSense
                     //if (q[0].Cell == null)
                     //    n = int.MaxValue;
                     //else
-                        n = q[0].Cell.DistanceToSquared(Starter.Position);
+                    n = q[0].Cell.DistanceToSquared(Starter.Position);
 
                     for (int i = 1; i < q.Count(); i++)
                     {
