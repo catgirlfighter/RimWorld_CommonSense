@@ -374,12 +374,13 @@ namespace CommonSense
                 yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.A).NullOrEmpty());
                 yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList).JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
                 Toil clean = ToilMaker.MakeToil("CleanBillPlace");
+                JobDriverData data = JobDriverData.Get(__instance);
                 clean.initAction = delegate ()
                 {
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
-                    __instance.billStartTick = 0;
-                    __instance.ticksSpentDoingRecipeWork = 0;
-                    __instance.workLeft = filth.def.filth.cleaningWorkToReduceThickness * filth.thickness * 100;
+                    data.cleaningWorkDone = 0f;
+                    data.totalCleaningWorkDone = 0f;
+                    data.totalCleaningWorkRequired = filth.def.filth.cleaningWorkToReduceThickness * (float)filth.thickness;
                 };
                 clean.tickAction = delegate ()
                 {
@@ -390,12 +391,12 @@ namespace CommonSense
                     {
                         num /= statValueAbstract;
                     }
-                    __instance.billStartTick += Mathf.Max(1, Mathf.RoundToInt(num * 100));
-                    __instance.ticksSpentDoingRecipeWork += Mathf.Max(1, Mathf.RoundToInt(num * 100));
-                    if (__instance.billStartTick > filth.def.filth.cleaningWorkToReduceThickness * 100)
+                    data.cleaningWorkDone += num;
+                    data.totalCleaningWorkDone += num;
+                    if (data.cleaningWorkDone > filth.def.filth.cleaningWorkToReduceThickness)
                     {
                         filth.ThinFilth();
-                        __instance.billStartTick -= (int)(filth.def.filth.cleaningWorkToReduceThickness * 100);
+                        data.cleaningWorkDone = 0;
                         if (filth.Destroyed)
                         {
                             clean.actor.records.Increment(RecordDefOf.MessesCleaned);
@@ -406,7 +407,12 @@ namespace CommonSense
                 };
                 clean.defaultCompleteMode = ToilCompleteMode.Never;
                 clean.WithEffect(EffecterDefOf.Clean, TargetIndex.A);
-                clean.WithProgressBar(TargetIndex.A, () => __instance.ticksSpentDoingRecipeWork / __instance.workLeft, true, -0.5f);
+                clean.WithProgressBar(TargetIndex.A,
+                    delegate ()
+                    {
+                        return data.totalCleaningWorkDone / data.totalCleaningWorkRequired;
+                    }
+                    , true, -0.5f);
                 clean.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
                 clean.JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList);
                 clean.JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
@@ -431,6 +437,23 @@ namespace CommonSense
 
             __result = DoMakeToils(__instance);
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(JobDriver_DoBill), "ExposeData")]
+    static class JobDriver_DoBill_ExposeData_CommonSensePatch
+    {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.adv_cleaning || Settings.adv_haul_all_ings;
+        }
+
+        internal static void Postfix(JobDriver_DoBill __instance)
+        {
+            if (!Settings.adv_cleaning && !Settings.adv_haul_all_ings)
+                return;
+
+            JobDriverData.Get(__instance).ExposeData();
         }
     }
 }

@@ -50,14 +50,16 @@ namespace CommonSense
             return toil;
         }
 
-        public static Toil MakeCleanToil(TargetIndex progListIndex, TargetIndex filthListIndex, Toil nextTarget)
+        public static Toil MakeCleanToil(JobDriver_Ingest driver, TargetIndex progListIndex, TargetIndex filthListIndex, Toil nextTarget)
         {
             Toil toil = new Toil();
+            JobDriverData data = JobDriverData.Get(driver);
             toil.initAction = delegate ()
             {
                 Filth filth = toil.actor.jobs.curJob.GetTarget(filthListIndex).Thing as Filth;
-                var progQue = toil.actor.jobs.curJob.GetTargetQueue(progListIndex);
-                progQue[0] = new IntVec3(0, 0, (int)filth.def.filth.cleaningWorkToReduceThickness * filth.thickness * 100);
+                data.cleaningWorkDone = 0f;
+                data.totalCleaningWorkDone = 0f;
+                data.totalCleaningWorkRequired = filth.def.filth.cleaningWorkToReduceThickness * (float)filth.thickness;
             };
             toil.tickAction = delegate ()
             {
@@ -70,14 +72,12 @@ namespace CommonSense
                     num /= statValueAbstract;
                 }
                 //
-                var progQue = toil.actor.jobs.curJob.GetTargetQueue(progListIndex);
-                IntVec3 iv = progQue[0].Cell;
-                iv.x += Mathf.Max(1, Mathf.RoundToInt(num * 100));
-                iv.y += Mathf.Max(1, Mathf.RoundToInt(num * 100));
-                if (iv.x > filth.def.filth.cleaningWorkToReduceThickness * 100)
+                data.cleaningWorkDone += num;
+                data.totalCleaningWorkDone += num;
+                if (data.cleaningWorkDone > filth.def.filth.cleaningWorkToReduceThickness)
                 {
                     filth.ThinFilth();
-                    iv.x -= (int)(filth.def.filth.cleaningWorkToReduceThickness * 100);
+                    data.cleaningWorkDone = 0;
                     if (filth.Destroyed)
                     {
                         toil.actor.records.Increment(RecordDefOf.MessesCleaned);
@@ -85,16 +85,13 @@ namespace CommonSense
                         return;
                     }
                 }
-                progQue[0] = iv;
             };
             toil.defaultCompleteMode = ToilCompleteMode.Never;
             toil.WithEffect(EffecterDefOf.Clean, filthListIndex);
             toil.WithProgressBar(filthListIndex,
                 delegate ()
                 {
-                    var q = toil.actor.CurJob.GetTargetQueue(progListIndex)[0];
-                    float result = (float)q.Cell.y / q.Cell.z;
-                    return result;
+                    return data.totalCleaningWorkDone / data.totalCleaningWorkRequired;
                 }
                 , true, -0.5f);
             toil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
@@ -148,7 +145,7 @@ namespace CommonSense
                     if (driver.job.GetTargetQueue(progListIndex).Count == 0)
                         driver.job.GetTargetQueue(progListIndex).Add(new IntVec3(0, 0, 0));
                     //
-                    Toil clean = MakeCleanToil(progListIndex, filthListIndex, nextTarget);
+                    Toil clean = MakeCleanToil(driver, progListIndex, filthListIndex, nextTarget);
                     yield return clean;
                     yield return Toils_Jump.Jump(nextTarget);
                 }
@@ -228,7 +225,7 @@ namespace CommonSense
                     if (driver.job.GetTargetQueue(progListIndex).Count == 0)
                         driver.job.GetTargetQueue(progListIndex).Add(new IntVec3(0, 0, 0));
                     //
-                    Toil clean = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.MakeCleanToil(progListIndex, filthListIndex, nextTarget);
+                    Toil clean = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.MakeCleanToil(driver, progListIndex, filthListIndex, nextTarget);
                     yield return clean;
                     yield return Toils_Jump.Jump(nextTarget);
                 }
@@ -245,6 +242,23 @@ namespace CommonSense
             __result = PrepToils(__instance);
 
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(JobDriver_Ingest), "ExposeData")]
+    static class JobDriver_Ingest_ExposeData_CommonSensePatch
+    {
+        internal static bool Prepare()
+        {
+            return !Settings.optimal_patching_in_use || Settings.adv_cleaning_ingest;
+        }
+
+        internal static void Postfix(JobDriver_Ingest __instance)
+        {
+            if (!Settings.adv_cleaning_ingest)
+                return;
+
+            JobDriverData.Get(__instance).ExposeData();
         }
     }
 }

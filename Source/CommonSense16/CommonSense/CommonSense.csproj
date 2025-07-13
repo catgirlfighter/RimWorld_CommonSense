@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="CleanOnOpportunity.cs" />
     <Compile Include="DoCleanComp.cs" />
+    <Compile Include="JobDriverData.cs" />
     <Compile Include="JobDriver_IngestPatches.cs" />
     <Compile Include="JobDriver_MeditatePatches.cs" />
     <Compile Include="JobDriver_SocialRelaxPatches.cs" />
