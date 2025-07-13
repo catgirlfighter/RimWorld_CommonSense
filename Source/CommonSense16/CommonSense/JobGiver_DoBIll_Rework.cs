@@ -375,6 +375,7 @@ namespace CommonSense
                 yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList).JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
                 Toil clean = ToilMaker.MakeToil("CleanBillPlace");
                 JobDriverData data = JobDriverData.Get(__instance);
+                __instance.AddFinishAction( (JobCondition) => JobDriverData.Clear(__instance));
                 clean.initAction = delegate ()
                 {
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;

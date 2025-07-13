@@ -25,6 +25,11 @@ namespace CommonSense
             return data;
         }
 
+        public static void Clear(JobDriver driver)
+        {
+            dict.Remove(driver);
+        }
+
         public void ExposeData()
         {
             Scribe_Values.Look(ref cleaningWorkDone, "CommonSense.cleaningWorkDone", 0f);

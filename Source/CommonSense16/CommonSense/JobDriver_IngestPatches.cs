@@ -54,6 +54,7 @@ namespace CommonSense
         {
             Toil toil = new Toil();
             JobDriverData data = JobDriverData.Get(driver);
+            driver.AddFinishAction( (JobCondition) => JobDriverData.Clear(driver));
             toil.initAction = delegate ()
             {
                 Filth filth = toil.actor.jobs.curJob.GetTarget(filthListIndex).Thing as Filth;

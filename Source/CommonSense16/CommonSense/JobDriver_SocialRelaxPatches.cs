@@ -135,6 +135,7 @@ namespace CommonSense
                 driver.job.GetTargetQueue(TargetIndex.B).Add(new IntVec3(0, 0, 0));
                 Toil clean = new Toil();
                 JobDriverData data = JobDriverData.Get(driver);
+                driver.AddFinishAction( (JobCondition) => JobDriverData.Clear(driver));
                 clean.initAction = delegate ()
                 {
                     Filth filth = clean.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
