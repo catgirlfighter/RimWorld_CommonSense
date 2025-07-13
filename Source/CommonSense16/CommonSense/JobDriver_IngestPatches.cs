@@ -40,7 +40,7 @@ namespace CommonSense
                 if (curJob.GetTargetQueue(targetIndex).NullOrEmpty())
                 {
                     LocalTargetInfo filthListTarget = curJob.GetTarget(targetIndex);
-                    if (!filthListTarget.HasThing) return;
+                    if (!filthListTarget.IsValid) return;
                     IEnumerable<Filth> l = Utility.SelectAllFilth(toil.actor, filthListTarget, Settings.adv_clean_num);
                     Utility.AddFilthToQueue(curJob, targetIndex, l, toil.actor);
                     toil.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(targetIndex), curJob);
@@ -160,76 +160,21 @@ namespace CommonSense
 
         public static Toil ReserveChewSpot(TargetIndex ingestibleInd, TargetIndex StoreToInd)
         {
-            Toil toil = new Toil();
+            Toil toil = ToilMaker.MakeToil("CommonSense.ReserveChewSpot");
             toil.initAction = delegate ()
             {
                 Pawn actor = toil.actor;
-                IntVec3 intVec = IntVec3.Invalid;
-                Thing thing = null;
-                Thing thing2 = actor.CurJob.GetTarget(ingestibleInd).Thing;
-                bool baseChairValidator(Thing t)
+                Thing thing = actor.CurJob.GetTarget(ingestibleInd).Thing;
+                if (!Toils_Ingest.TryFindChairOrSpot(actor, thing, out var cell))
                 {
-                    if (t.def.building == null || !t.def.building.isSittable)
-                    {
-                        return false;
-                    }
-                    if (t.IsForbidden(actor))
-                    {
-                        return false;
-                    }
-                    if (!actor.CanReserve(t, 1, -1, null, false))
-                    {
-                        return false;
-                    }
-                    if (!t.IsSociallyProper(actor))
-                    {
-                        return false;
-                    }
-                    if (t.IsBurning())
-                    {
-                        return false;
-                    }
-                    if (t.HostileTo(actor))
-                    {
-                        return false;
-                    }
-                    bool result = false;
-                    for (int i = 0; i < 4; i++)
-                    {
-                        Building edifice = (t.Position + GenAdj.CardinalDirections[i]).GetEdifice(t.Map);
-                        if (edifice != null && edifice.def.surfaceType == SurfaceType.Eat)
-                        {
-                            result = true;
-                            break;
-                        }
-                    }
-                    return result;
-                }
-
-                if (thing2.def.ingestible.chairSearchRadius > 0f)
-                {
-                    thing = GenClosest.ClosestThingReachable(actor.Position, actor.Map, ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial), PathEndMode.OnCell, TraverseParms.For(actor, Danger.Deadly, TraverseMode.ByPawn, false), thing2.def.ingestible.chairSearchRadius, (Thing t) => baseChairValidator(t) && t.Position.GetDangerFor(actor, t.Map) == Danger.None, null, 0, -1, false, RegionType.Set_Passable, false);
-                }
-                if (thing == null)
-                {
-                    intVec = RCellFinder.SpotToChewStandingNear(actor, actor.CurJob.GetTarget(ingestibleInd).Thing);
-                    Danger chewSpotDanger = intVec.GetDangerFor(actor, actor.Map);
-                    if (chewSpotDanger != Danger.None)
-                    {
-                        thing = GenClosest.ClosestThingReachable(actor.Position, actor.Map, ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial), PathEndMode.OnCell, TraverseParms.For(actor, Danger.Deadly, TraverseMode.ByPawn, false), thing2.def.ingestible.chairSearchRadius, (Thing t) => baseChairValidator(t) && t.Position.GetDangerFor(actor, t.Map) <= chewSpotDanger, null, 0, -1, false, RegionType.Set_Passable, false);
-                    }
-                }
-                if (thing == null)
-                {
-                    actor.Map.pawnDestinationReservationManager.Reserve(actor, actor.CurJob, intVec);
-                    actor.CurJob.SetTarget(StoreToInd, intVec);
+                    Log.WarningOnce($"Can't find valid chair or spot for {actor} trying to ingest {thing}", HashCode.Combine(actor, thing));
+                    actor.CurJob.SetTarget(StoreToInd, actor.Position);
                 }
                 else
                 {
-                    intVec = thing.Position;
-                    actor.Reserve(thing, actor.CurJob, 1, -1, null, true);
-                    actor.Map.pawnDestinationReservationManager.Reserve(actor, actor.CurJob, intVec);
-                    actor.CurJob.SetTarget(StoreToInd, thing);
+                    actor.ReserveSittableOrSpot(cell, actor.CurJob);
+                    actor.Map.pawnDestinationReservationManager.Reserve(actor, actor.CurJob, cell);
+                    actor.CurJob.SetTarget(StoreToInd, cell);
                 }
             };
             toil.defaultCompleteMode = ToilCompleteMode.Instant;
@@ -238,14 +183,7 @@ namespace CommonSense
 
         public static Toil GotoSpot(TargetIndex gotoInd)
         {
-            Toil toil = new Toil();
-            toil.initAction = delegate ()
-            {
-                Pawn actor = toil.actor;
-                actor.pather.StartPath(actor.CurJob.GetTarget(gotoInd), PathEndMode.OnCell);
-            };
-            toil.defaultCompleteMode = ToilCompleteMode.PatherArrival;
-            return toil;
+            return Toils_Goto.GotoCell(gotoInd, PathEndMode.OnCell);
         }
 
         internal static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance, Toil chewToil)
