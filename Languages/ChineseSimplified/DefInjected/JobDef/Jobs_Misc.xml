@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
-
-  <UnloadMarkedItems.reportString>正在放下携带物。</UnloadMarkedItems.reportString>
-
-
+  
+  <!-- EN: unloading inventory. -->
+  <UnloadMarkedItems.reportString>正在放下携带的物品。</UnloadMarkedItems.reportString>
+  
 </LanguageData>

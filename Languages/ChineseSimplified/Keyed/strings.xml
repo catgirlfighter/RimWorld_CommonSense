@@ -1,87 +1,170 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
-  <!-- settings -->
-  <fulfill_outdoors_head>户外需求</fulfill_outdoors_head>
-  <fulfill_outdoors_label>小人会自己到室外去娱乐一会儿来满足户外需求</fulfill_outdoors_label>
-  <fulfill_outdoors_note>注：不要在室内和室外放置相同的娱乐来源，不然小人会纠结</fulfill_outdoors_note>
+	<!-- settings -->
+	<!-- EN: Need of Outdoors -->
+  <fulfill_outdoors_head>室外需求</fulfill_outdoors_head>
+	<!-- EN: Pawns are encouraged to fulfill their need of outdoors by seeking recreation outdoors -->
+  <fulfill_outdoors_label>殖民者会自己到室外去娱乐以满足室外需求</fulfill_outdoors_label>
+	<!-- EN: NOTE: Don't place the same joy giving sources both indoors and outdoors, to avoid indecisiveness. -->
+  <fulfill_outdoors_note>注：不要在室内与室外放置相同的娱乐来源，否则殖民者会纠结。</fulfill_outdoors_note>
+	<!-- EN: Opportunistic jobs -->
   <clean_head>机智地工作</clean_head>
-  <clean_before_working_label>小人会在一个建筑做事（包括研究、烹饪或制作、睡觉等）之前优先清理房间</clean_before_working_label>
-  <clean_before_working_note>注：别指望那些无法从事清洁的小人会去清理房间</clean_before_working_note>
-  <bill_job_pathing_label>更精确地计算小人去完成清单工作的路径</bill_job_pathing_label>
-  <bill_job_pathing_note>这可以让你避免小人在需要拿原材料去工作的情况下不科学地绕远路，但是可能会加大CPU的负荷</bill_job_pathing_note>
-  <clean_after_tending_label>小人会在治疗完病人后清理病房</clean_after_tending_label>
-  <clean_after_tending_note>注：别指望那些无法从事清洁的小人会去清理房间</clean_after_tending_note>
+	<!-- EN: Pawns are encouraged to clean the room before operating a station in it -->
+  <clean_before_working_label>殖民者在进行某些操作之前优先清理房间</clean_before_working_label>
+	<!-- EN: NOTE: Don't expect pawns who cannot clean to suddenly begin cleaning. -->
+  <clean_before_working_note>包括研究、烹饪、制作、睡眠等。注：无法从事清洁的殖民者不会清洁房间。</clean_before_working_note>
+	<!-- EN: Calculate accurate path to the building for bill jobs -->
+  <bill_job_pathing_label>更精确地计算殖民者去完成清单工作的路径</bill_job_pathing_label>
+	<!-- EN: It'll help to avoid making unreasonable hooks around when your pawns need to bring resources first, but it may be costly on CPU -->
+  <bill_job_pathing_note>令殖民者避免在需要拿原材料去工作的情况下绕远路，但可能会加大CPU负荷。</bill_job_pathing_note>
+	<!-- EN: Pawns are encouraged to clean the room after tending to a patient -->
+  <clean_after_tending_label>殖民者会在治疗完病人后清理病房</clean_after_tending_label>
+	<!-- EN: NOTE: Don't expect pawns who cannot clean to suddenly begin cleaning. -->
+  <clean_after_tending_note>注：无法从事清洁的殖民者不会清洁房间。</clean_after_tending_note>
+	<!-- EN: Meal stacking -->
   <meal_stacking_head>食物堆叠</meal_stacking_head>
-  <meal_stacking_label>小人不会把奇怪的食物和正常的食物堆叠在一起</meal_stacking_label>
-  <meal_stacking_note>这样小人就不会把恶心的食物（比如用人肉或者虫肉做的）和其他食物堆叠在一起了</meal_stacking_note>
-  <dont_count_odd_label>小人可以接受把虫肉做的食物和正常的食物堆叠在一起，但是人肉做的不行</dont_count_odd_label>
-  <dont_count_odd_note>其实虫肉好像没那么恶心...</dont_count_odd_note>
+	<!-- EN: Pawns avoid mixing negative thoughts when stacking meals -->
+  <meal_stacking_label>殖民者不会把奇怪的食物和正常的食物堆叠在一起</meal_stacking_label>
+	<!-- EN: That way pawns will never mix disgusting meals with normal ones -->
+  <meal_stacking_note>这样殖民者便不会把恶心的食物（如用人肉或者虫肉制成的）与其他食物堆叠。</meal_stacking_note>
+	<!-- EN: Count odd meat (ex.: insect) as normal, allowing to stack it with normal meals -->
+  <dont_count_odd_label>将虫肉制成的食物与正常食物堆叠</dont_count_odd_label>
+	<!-- EN: Insect meat isn't so bad... -->
+  <dont_count_odd_note>其实虫肉好像没那么恶心……但是人肉做的不行。</dont_count_odd_note>
+	<!-- EN: Meal generation -->
   <gen_ingredients_head>食物生成</gen_ingredients_head>
-  <gen_ingredients_label>在不是你制作的食物中添加随机的原料</gen_ingredients_label>
-  <gen_ingredients_note>比如：随机事件送你的，商人那买来的，非殖民者的尸体上捡的，等等。不会添加恶心的原料比如虫肉或人肉。开启了这个选项后，这个游戏就再也不一样了哦</gen_ingredients_note>
-  <add_to_que_label>把之前的任务添加到序列</add_to_que_label>
-  <add_to_que_note>这样一来小人在“机智地工作”之后会继续原先要做的工作，不过有时候如果原先要做的工作被别人占用了，小人会懵逼</add_to_que_note>
-  <hauling_over_bills_label>小人制作清单时会把一整堆原材料搬过去</hauling_over_bills_label>
-  <hauling_over_bills_note>当小人制作一个清单的时候, 有可能的话他们会优先搬运一整堆材料, 而不是一次制作的材料</hauling_over_bills_note>
+	<!-- EN: Add random ingredients to randomly generated meals -->
+  <gen_ingredients_label>为随机生成的食物添加随机的原料</gen_ingredients_label>
+	<!-- EN: Ex.: gifted by story teller, sold by a trader, looted from corpse. Only mood neutral components are used. With this option on, the game will never be the same -->
+  <gen_ingredients_note>例如：随机事件赠礼、商人售卖、尸体上搜刮战利品等等。不会添加恶心的原料比如虫肉或人肉。开启该选项后，游戏体验将截然不同。</gen_ingredients_note>
+	<!-- EN: Add former task to queue -->
+  <add_to_que_label>将原本的任务添加到行动队列</add_to_que_label>
+	<!-- EN: That way pawns will not change their mind after performing an opportunistic task, but sometimes it can cause confusion if a job was already taken -->
+  <add_to_que_note>如此则殖民者在“机智地工作”后会继续原本要做的工作。但有时如果原本的任务被他人执行，可能会导致混乱。</add_to_que_note>
+	<!-- EN: Pawns are encouraged to haul ingredients for a bill to a stockpile -->
+  <hauling_over_bills_label>殖民者制作清单时会优先搬运一整堆原材料</hauling_over_bills_label>
+	<!-- EN: When working on a bill, pawns will prefer hauling ingredients to a stockpile, instead of taking a small fraction, required for a recipe -->
+  <hauling_over_bills_note>殖民者制作时会优先搬运一整堆材料, 而非仅取用制作所需的少量材料。</hauling_over_bills_note>
+	<!-- EN: Fulfillment of needs -->
   <fulfill_needs_head>满足需求</fulfill_needs_head>
-  <drugs_use_potential_mood_label>小人会在遵从有心情阈值设定的成瘾品方案时考虑到潜在心情值</drugs_use_potential_mood_label>
-  <drugs_use_potential_mood_note>如果“潜在心情值”（即正在变化中的心情的目标值）高于成瘾品方案设定的心情指标，小人不会使用成瘾品。可以防止小人在不必要的情况下使用成瘾品</drugs_use_potential_mood_note>
-  <miscellaneous_head>其它</miscellaneous_head>
-  <extended_recipe_label>配方可以显示完整的原料表</extended_recipe_label>
-  <extended_recipe_note>而不是模糊不清的“原料”</extended_recipe_note>
+	<!-- EN: Pawns are encouraged to take account of potential mood in drug policies -->
+  <drugs_use_potential_mood_label>殖民者会在遵从有心情阈值设定的用药方案时考虑到潜在心情值</drugs_use_potential_mood_label>
+	<!-- EN: Pawns will not use drugs if "potential" mood is above a limit, preventing overuse of drugs to achieve a set mood level. -->
+  <drugs_use_potential_mood_note>若“潜在心情值”（即正在变化中的心情的目标值）高于用药方案设定的心情阈值，殖民者不会使用成瘾品，以防殖民者滥用成瘾品。</drugs_use_potential_mood_note>
+	<!-- EN: Miscellaneous -->
+  <miscellaneous_head>其他</miscellaneous_head>
+	<!-- EN: Recipes display complete list of ingredients -->
+  <extended_recipe_label>配方可显示完整的原料表</extended_recipe_label>
+	<!-- EN: Instead of just vague "ingredients" -->
+  <extended_recipe_note>而非模糊不清的“原料”。</extended_recipe_note>
+	<!-- EN: Advanced behaviors -->
   <advanced_head>高级智能</advanced_head>
-  <advanced_inbetween_cleaning_label>小人会在搬运之后、制作之前清扫房间</advanced_inbetween_cleaning_label>
-  <advanced_inbetween_cleaning_note>前面的“机智地工作”中的功能只会让他们在搬运前清理房间</advanced_inbetween_cleaning_note>
-  <advanced_haul_all_ings_label>小人会在制作前把所有的原材料搬运到制作处</advanced_haul_all_ings_label>
-  <advanced_haul_all_ings_note>小人会把所有需要的原材料放到自己的身上，然后一起拿到制作的地方进行制作</advanced_haul_all_ings_note>
-  <prefer_spoiling_ingredients_label>小人会优先使用那些快要腐烂的东西</prefer_spoiling_ingredients_label>
-  <prefer_spoiling_ingredients_note>包括选择烹饪原料、食物、草药时。警告：如果选择范围内的东西数量过多，此选项有可能导致卡顿</prefer_spoiling_ingredients_note>
+	<!-- EN: Pawns will clean rooms in between hauling ingredients and crafting -->
+  <advanced_inbetween_cleaning_label>殖民者会在搬运之后、制作之前清洁房间</advanced_inbetween_cleaning_label>
+	<!-- EN: Basic behavior would let them clean only before hauling -->
+  <advanced_inbetween_cleaning_note>“机智地工作”中的功能只会让他们在搬运前清理房间。</advanced_inbetween_cleaning_note>
+	<!-- EN: Pawns are encouraged to pick up all ingredients before hauling them to the crafting place -->
+  <advanced_haul_all_ings_label>殖民者会在制作前把所有的原材料搬运到制作地点</advanced_haul_all_ings_label>
+	<!-- EN: Pawns will take all necessary ingredients to their hauling inventory before delivering them to the crafting place -->
+  <advanced_haul_all_ings_note>殖民者制作时会携带所有需要的原材料，然后再一同运到制作地点</advanced_haul_all_ings_note>
+	<!-- EN: Pawns are encouraged to use ingredients and materials that are closer to spoiling. -->
+  <prefer_spoiling_ingredients_label>殖民者优先使用临近腐烂的材料</prefer_spoiling_ingredients_label>
+	<!-- EN: WARNING: A large amount of items to choose from may cause lag when this option is enabled. -->
+  <prefer_spoiling_ingredients_note>包括烹饪原料、食物、草药等。警告：若选择范围内物品数量过多，此选项可能导致卡顿。</prefer_spoiling_ingredients_note>
+	<!-- EN: Unload -->
   <UnloadThing>放下物品</UnloadThing>
+	<!-- EN: Cancel unload -->
   <UnloadThingCancel>取消放下物品</UnloadThingCancel>
-  <manual_unload_label>在殖民者的货物中添加一个标记按钮以将其搬运到库存中。</manual_unload_label>
-  <manual_unload_note>如果储存区没有标记物的库存，殖民者会将物品丢在身边。</manual_unload_note>
-  <put_back_to_inv_label>被打断时把手中的物品放回身上</put_back_to_inv_label>
-  <put_back_to_inv_note>当小人把身上的物品拿在手上去做什么而中途被打断时，他们会把物品放回身上</put_back_to_inv_note>
-  <pick_proper_amount_label>小人不会再拿多到吃不完的甜品去吃了</pick_proper_amount_label>
-  <pick_proper_amount_note>不会再有到处乱丢的巧克力了</pick_proper_amount_note>
+	<!-- EN: Enable a button in colonist's inventory to mark items for hauling to stockpile -->
+  <manual_unload_label>在殖民者的装备栏中添加一个将物品搬运至储存区的按钮。</manual_unload_label>
+	<!-- EN: If there are no stockpiles to haul to, the colonist will drop the item near him -->
+  <manual_unload_note>若没有可搬运的储存区，殖民者会将物品原地丢下。</manual_unload_note>
+	<!-- EN: Pawns will put items back in their inventory when interrupted -->
+  <put_back_to_inv_label>中断操作时将手中的物品放回装备栏</put_back_to_inv_label>
+	<!-- EN: When pawns are holding an inventory item in their hands, they'll put them back if action was interrupted -->
+  <put_back_to_inv_note>当殖民者手持物品时，若操作中断，他们会将物品放回装备栏。</put_back_to_inv_note>
+	<!-- EN: Pawns will stop taking more sweets than they can eat -->
+  <pick_proper_amount_label>殖民者不会再拿取多到吃不完的甜品</pick_proper_amount_label>
+	<!-- EN: No more chocolate lying around -->
+  <pick_proper_amount_note>不会再有到处乱丢的巧克力了。</pick_proper_amount_note>
+	<!-- EN: Category -->
   <Category>分类</Category>
-  <fun_police_label>如果小人在原本管制的睡眠时段中提早起床，会去满足自己的娱乐需求</fun_police_label>
-  <fun_police_note>在此基础上，小人只会在娱乐度低于80%时才会去满足自己的娱乐需求，而不是永远试图将娱乐度保持在95%以上</fun_police_note>
-  <numbers_head>污秽容忍度(0=不控制)</numbers_head>
-  <op_clean_number_label>工作前打扫</op_clean_number_label>
-  <adv_clean_number_label>清单制作前打扫</adv_clean_number_label>
-  <doc_clean_number_label>护理后打扫</doc_clean_number_label>
-  <skip_snow_clean_label>当处于雪天和雨天时，小人将被禁止清理区域内的雪。</skip_snow_clean_label>
-  <skip_snow_clean_note>该选项是为了防止大雨或大雪这种糟糕的天气</skip_snow_clean_note>
-  <prefer_spoiling_meals_label>小人优先吃快要腐烂的食物</prefer_spoiling_meals_label>
-  <prefer_spoiling_meals_note>警告：如果选择范围内的东西数量过多，此选项有可能导致卡顿</prefer_spoiling_meals_note>
-  <allow_feeding_with_plants_label>小人优先使用干草喂养和训练动物。</allow_feeding_with_plants_label>
-  <allow_feeding_with_plants_note>动物更倾向于非小人食物。</allow_feeding_with_plants_note>
-  <give_sick_joy_drugs_label>小人更倾向于给予病人用药方针里允许的社交类成瘾品或提升娱乐值的食物</give_sick_joy_drugs_label>
-  <give_sick_joy_drugs_note>你直说给他们根巧克力棒就完事了嘛，扯那么多？</give_sick_joy_drugs_note>
-  <social_relax_economy_label>改变小人在社交放松中使用成瘾品的方式来避免"虚耗良辰"</social_relax_economy_label>
-  <social_relax_economy_note>一般而言小人会在实际使用成瘾品前闲坐1~2小时，这浪费了成瘾品的功效</social_relax_economy_note>
-  <advanced_cleaning_ingest_label>小人倾向于在进食或社交放松前清扫桌子周围</advanced_cleaning_ingest_label>
-  <advanced_cleaning_ingest_note>小人在入座前会清扫桌子周围</advanced_cleaning_ingest_note>
-  <mood_regen_label>条件允许的话入眠时小人心情缓慢向50%靠拢</mood_regen_label>
-  <mood_regen_note>"来日方长"</mood_regen_note>
-  <safe_wander_label>小人在闲逛时尽量避免坏天气的影响</safe_wander_label>
-  <safe_wander_note>笨比你能别在毒雾里漫步了吗？</safe_wander_note>
+	<!-- EN: Pawns are encouraged to fulfill secondary needs during joy assignment, or if woken early -->
+  <fun_police_label>若殖民者在管制的睡眠时段提前起床，会去满足娱乐需求</fun_police_label>
+	<!-- EN: Pawns will try to top off their joy need only after it goes below 80%, they'll prefer to pick up a spare meal to their inventory, and fulfill all their hygiene needs (if dubs mod is present) -->
+  <fun_police_note>殖民者只会在娱乐度低于80%时才会去尝试满足娱乐需求，而非永远试图将娱乐度保持在95%以上。殖民者更倾向于从装备栏拿出食物进食，如果安装了Dubs MOD还会去满足所有卫生需求。</fun_police_note>
+	<!-- EN: Tweakable numbers (0 = Unlimited) -->
+  <numbers_head>污秽值(0=永远清洁)</numbers_head>
+	<!-- EN: Filth limit for pre-task cleaning -->
+  <op_clean_number_label>工作前清洁阈值</op_clean_number_label>
+	<!-- EN: Filth limit for pre-bill cleaning -->
+  <adv_clean_number_label>制作前清洁阈值</adv_clean_number_label>
+	<!-- EN: Filth limit for post-tending cleaning -->
+  <doc_clean_number_label>护理后清洁阈值</doc_clean_number_label>
+	<!-- EN: Pawns are discouraged from clearing snow from areas when it's snowing or raining -->
+  <skip_snow_clean_label>雨雪天气时，殖民者将暂停户外除雪工作</skip_snow_clean_label>
+	<!-- EN: When raining just in case if it's a tricky weather -->
+  <skip_snow_clean_note>该选项是为防止大雨或大雪等恶劣天气。</skip_snow_clean_note>
+	<!-- EN: Pawns are encouraged to eat meals that are closer to spoiling -->
+  <prefer_spoiling_meals_label>殖民者会优先食用临近腐烂的食物</prefer_spoiling_meals_label>
+	<!-- EN: WARNING: A large amount of items to choose from may cause lag when this option is enabled. -->
+  <prefer_spoiling_meals_note>警告：若可选物品数量过多，此选项有可能导致卡顿。</prefer_spoiling_meals_note>
+	<!-- EN: Allow and encourage pawns to feed animals with hay. -->
+  <allow_feeding_with_plants_label>殖民者优先使用干草喂养与训练动物。</allow_feeding_with_plants_label>
+	<!-- EN:  Animals will also be encouraged to prefer non-human food. -->
+  <allow_feeding_with_plants_note>动物也会优先食用非人类食物（如干草）。</allow_feeding_with_plants_note>
+	<!-- EN: Pawns are encouraged to give allowed social drugs or joy-giving food to sick pawns -->
+  <give_sick_joy_drugs_label>殖民者优先为病人提供用药方案允许的社交成瘾品或提升娱乐值的食物</give_sick_joy_drugs_label>
+	<!-- EN: Why talk if you can give them a chocolate bar? -->
+  <give_sick_joy_drugs_note>与其言语安慰，不如递块巧克力？</give_sick_joy_drugs_note>
+	<!-- EN: Change how pawns use drugs when relaxing socially to prevent them from "wasting joy" -->
+  <social_relax_economy_label>优化殖民者在社交放松中使用成瘾品的方式，以免浪费娱乐值</social_relax_economy_label>
+	<!-- EN: Normally pawns sit down for a hour or two before actually consuming the drug, wasting the effect -->
+  <social_relax_economy_note>原机制下殖民者先闲坐1~2小时再服用成瘾品，导致药效浪费。</social_relax_economy_note>
+	<!-- EN: Pawns are encouraged to clean before eating at a table or relaxing socially -->
+  <advanced_cleaning_ingest_label>殖民者在桌子旁进食或社交放松前会优先清洁</advanced_cleaning_ingest_label>
+	<!-- EN: Pawns will clean around the table where they're planning to sit -->
+  <advanced_cleaning_ingest_note>殖民者在就座前会清洁桌子周围。</advanced_cleaning_ingest_note>
+	<!-- EN: Pawn's mood slowly moves towards 50% while they're asleep if possible -->
+  <mood_regen_label>条件允许时，殖民者睡眠时心情值将缓慢向50%移动</mood_regen_label>
+	<!-- EN: Just let pawns "sleep on it" and they should be fine -->
+  <mood_regen_note>“来日方长”。</mood_regen_note>
+	<!-- EN: Pawns are encouraged to avoid bad weather when wandering aimlessly -->
+  <safe_wander_label>殖民者在闲逛时尽量避开恶劣天气</safe_wander_label>
+	<!-- EN: Just stop walking out into the toxic fallout, you idiots -->
+  <safe_wander_note>别再傻乎乎地走进有毒尘埃里了！</safe_wander_note>
+	<!-- EN: Pathing -->
   <pathing_head>寻路调整</pathing_head>
-  <polite_wander_label>避免友方生物闲逛到卧室及牢房</polite_wander_label>
-  <polite_wander_note>这种行为不仅无礼还危险</polite_wander_note>
-  <ingest_any_drugs_label>可直接使用货物中的药物</ingest_any_drugs_label>
-  <ingest_any_drugs_note>若该物品可食用，则不会掉落在地上而是直接使用</ingest_any_drugs_note>
-  <DoCleanCompToggleLabel>清扫</DoCleanCompToggleLabel>
-  <DoCleanCompToggleDescActive>小人入座前会清扫该工作台周围区域</DoCleanCompToggleDescActive>
-  <DoCleanCompToggleDescInactive>入座前不会清扫该工作台周围区域</DoCleanCompToggleDescInactive>
-  <advanced_inbetween_cleaning_gizmo_label>点选工作台后，显示清扫/不清扫的按钮</advanced_inbetween_cleaning_gizmo_label>
-  <advanced_inbetween_cleaning_gizmo_note>可禁用已设置工作台周围的清扫</advanced_inbetween_cleaning_gizmo_note>
-  <meditation_economy_label>Pawns will meditate as much as they need</meditation_economy_label>
-  <meditation_economy_note>Unless under meditation assignment, pawns will stop meditating if their psyfocus is full and they don't see meditation as a good source of joy (i. e. full or bored)</meditation_economy_note>
-  <advanced_respect_capacity_label>-- pawns will not exceed inventory capacity</advanced_respect_capacity_label>
-  <advanced_respect_capacity_note>For immersion reasons or whatever</advanced_respect_capacity_note>
-  <optimal_patching_label>Optimal Patching</optimal_patching_label>
-  <optimal_patching_note>When this option is off, all options activate immediately after toggling them, at the cost of always being in the code, possibly affecting performance even if they're toggled off. When option is on, options will require you to restart the game when changed, but patches needed for these options won't happen, removing extra performance impact when game launches with these options toggled off</optimal_patching_note>
-  <optimal_patching_attention_label>ATTENTION: Optimal patching doesn't properly apply without restarting the game!</optimal_patching_attention_label>
+	<!-- EN: Any friendly pawns are encouraged to avoid wandering into bedrooms, prison cells and prison barracks -->
+  <polite_wander_label>避免友方进入卧室及牢房</polite_wander_label>
+	<!-- EN: This is just indecent or even dangerous, isn't it? -->
+  <polite_wander_note>这种行为不仅无礼还可能招致危险。</polite_wander_note>
+	<!-- EN: Allow to take any drugs from inventory -->
+  <ingest_any_drugs_label>可直接使用货物栏中的药物</ingest_any_drugs_label>
+	<!-- EN: If it's ingestible, it should be possible to eat it without dropping on the ground -->
+  <ingest_any_drugs_note>若该物品可食用，则可直接使用而无需丢弃至地面。</ingest_any_drugs_note>
+	<!-- EN: Clean around this bench -->
+  <DoCleanCompToggleLabel>清洁</DoCleanCompToggleLabel>
+	<!-- EN: Pawns will clean around this bench -->
+  <DoCleanCompToggleDescActive>殖民者就座前会清洁该工作台周围区域。</DoCleanCompToggleDescActive>
+	<!-- EN: Pawns will NOT clean around this bench -->
+  <DoCleanCompToggleDescInactive>殖民者就座前不会清洁该工作台周围区域。</DoCleanCompToggleDescInactive>
+	<!-- EN: Show a toggle to be able switch which benches need cleaning -->
+  <advanced_inbetween_cleaning_gizmo_label>点选工作台后，显示清洁/不清洁的按钮</advanced_inbetween_cleaning_gizmo_label>
+	<!-- EN: It will be possible to disable cleaning around some benches -->
+  <advanced_inbetween_cleaning_gizmo_note>可以此禁用某些工作台周围的清洁。</advanced_inbetween_cleaning_gizmo_note>
+	  <!-- EN: Pawns will meditate only as much as they need -->
+  <meditation_economy_label>按需冥想</meditation_economy_label>
+	<!-- EN: Unless under meditation assignment, pawns will stop meditating if their psyfocus is full and they don't see meditation as a good source of joy (i. e. full or bored of it) -->
+  <meditation_economy_note>除非被分配冥想任务，否则殖民者会在精神力已满且不将冥想视为有效娱乐来源（即满足或厌倦）时停止冥想。</meditation_economy_note>
+	<!-- EN: - - pawns will not exceed inventory capacity -->
+  <advanced_respect_capacity_label>--殖民者不会超出携带容量限制</advanced_respect_capacity_label>
+	<!-- EN: For immersion reasons or whatever -->
+  <advanced_respect_capacity_note>出于沉浸感或其他原因可开启该选项。</advanced_respect_capacity_note>
+	<!-- EN: Optimal Patching -->
+  <optimal_patching_label>优化补丁</optimal_patching_label>
+	<!-- EN: When this option is off, all options activate immediately after toggling them, at the cost of always being in the code, possibly affecting performance even if they're toggled off. When option is on, options will require you to restart the game when changed, but patches needed for these options won't happen, removing extra performance impact when game launches with these options toggled off -->
+  <optimal_patching_note>此选项关闭时，所有设置在更改后立即生效，代价是它们会常驻于代码中，即使被关闭也可能影响性能。此选项开启后，设置更改后需重启游戏才能生效，但设置所需的补丁不会被加载，从而在选项禁用时减少性能开销。</optimal_patching_note>
+	<!-- EN: ATTENTION: Optimal patching doesn't properly apply without restarting the game! -->
+  <optimal_patching_attention_label>注意：优化补丁需重启游戏才能完全生效！</optimal_patching_attention_label>
 </LanguageData>

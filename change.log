@@ -1,4 +1,11 @@
-﻿1.3.1
+﻿1.3.3
+- thanks @llunak for contribution;
+- complete chinese simplified by @qqcswc. Thank you!;
+
+1.3.2
+- fixed fridge room having way too high of a score;
+
+1.3.1
 - minor changes for the sake of easier compatibility.
 
 1.3.0

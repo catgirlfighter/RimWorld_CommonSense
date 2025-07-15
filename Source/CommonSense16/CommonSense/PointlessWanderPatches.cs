@@ -25,6 +25,7 @@ namespace CommonSense
             if (!Settings.polite_wander || pawn.Faction.HostileTo(Find.FactionManager.OfPlayer)) return;
             //
             RoomRoleDef def = c.GetRoom(pawn.Map)?.Role;
+            //Log.Message($"pawn={pawn} is trying to get to {c} ({def})");
             if (def == RoomRoleDefOf.Bedroom && !pawn.GetRoom().Owners.Contains(pawn)
             || def == RoomRoleDefOf.Hospital
             || def == RoomRoleDefOf.PrisonCell
@@ -174,11 +175,13 @@ namespace CommonSense
 
         private static Toil GoToCellSafe(TargetIndex ind, PathEndMode peMode, TargetIndex paramind)
         {
+            //Log.Message("I'm trying");
             if (!Settings.safe_wander) return Toils_Goto.GotoCell(ind, peMode);
             Toil toil = new Toil();
             toil.initAction = delegate ()
             {
                 Pawn actor = toil.actor;
+                //Log.Message($"actor={actor} is trying to get to {ind} like a {peMode}({paramind})");
                 var param = actor.jobs.curJob.GetTarget(paramind);
                 var target = actor.jobs.curJob.GetTarget(ind);
                 //
@@ -261,16 +264,19 @@ namespace CommonSense
         {
             MethodInfo LGotoCell = AccessTools.Method(typeof(Toils_Goto), nameof(Toils_Goto.GotoCell), new Type[] { typeof(TargetIndex), typeof(PathEndMode) });
             MethodInfo LGotoCellSafe = AccessTools.Method(typeof(JobDriver_Goto_MoveNext_CommonSensePatch), nameof(JobDriver_Goto_MoveNext_CommonSensePatch.GoToCellSafe));
+            bool b = false;
             foreach (var i in (instrs))
             {
                 if (i.opcode == OpCodes.Call && i.operand == (object)LGotoCell)
                 {
                     yield return new CodeInstruction(OpCodes.Ldc_I4_3);
                     i.operand = LGotoCellSafe;
+                    b = true;
                 }
 
                 yield return i;
             }
+            if (!b) Log.Message($"patch0 didn't work");
         }
     }
 }
