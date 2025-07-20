@@ -124,12 +124,6 @@ namespace CommonSense
         }
     }
 
-    [DefOf]
-    public static class CommonSenseJobDefOf
-    {
-        public static JobDef UnloadMarkedItems;
-    }
-
     //slightly modified UnloadYourInventory
     public class JobDriver_UnloadMarkedItems : JobDriver
     {

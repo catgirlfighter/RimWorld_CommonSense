@@ -10,6 +10,15 @@ using UnityEngine;
 
 namespace CommonSense
 {
+    [DefOf]
+    public static class CommonSenseJobDefOf
+    {
+        public static JobDef UnloadMarkedItems;
+        //public static JobDef DoBillCommonSense;
+        public static JobDef SocialRelax;
+        public static JobDef SocialRelaxCommonSense;
+    }
+
     [StaticConstructorOnStartup]
     public static class Utility
     {
@@ -21,16 +30,16 @@ namespace CommonSense
         private static WorkGiverDef CleanFilth { get { return cleanFilth ?? (cleanFilth = DefDatabase<WorkGiverDef>.GetNamed("CleanFilth")); } }
         public const byte largeRoomSize = 160;
 
-        private static WorkTypeDef fCleaningDef = null;
+        private static WorkTypeDef cleaningDef = null;
         public static WorkTypeDef CleaningDef
         {
             get
             {
-                if (fCleaningDef == null)
+                if (cleaningDef == null)
                 {
-                    fCleaningDef = DefDatabase<WorkTypeDef>.GetNamed("Cleaning");
+                    cleaningDef = DefDatabase<WorkTypeDef>.GetNamed("Cleaning");
                 }
-                return fCleaningDef;
+                return cleaningDef;
             }
         }
 
@@ -133,15 +142,10 @@ namespace CommonSense
 
                 if (Starter != null)
                 {
-                    //if (q[0].Cell == null)
-                    //    n = int.MaxValue;
-                    //else
-                        n = q[0].Cell.DistanceToSquared(Starter.Position);
+                    n = q[0].Cell.DistanceToSquared(Starter.Position);
 
                     for (int i = 1; i < q.Count(); i++)
                     {
-                        //if (q[i].Cell == null)
-                        //    continue;
                         x = q[i].Cell.DistanceToSquared(Starter.Position);
                         if (Math.Abs(x) < Math.Abs(n))
                         {
@@ -160,16 +164,10 @@ namespace CommonSense
 
                 for (int i = 0; i < q.Count() - 1; i++)
                 {
-                    //if (q[i + 1].Cell == null)
-                    //    continue;
-
                     n = q[i].Cell.DistanceToSquared(q[i + 1].Cell);
                     idx = i + 1;
                     for (int c = i + 2; c < q.Count(); c++)
                     {
-                        //if (q[c].Cell == null)
-                        //    continue;
-
                         x = q[i].Cell.DistanceToSquared(q[c].Cell);
                         if (Math.Abs(x) < Math.Abs(n))
                         {
@@ -334,6 +332,24 @@ namespace CommonSense
                 width -= 24f;
             }
             return true;
+        }
+
+        public static Toil ListFilth(TargetIndex ind)
+        {
+            Toil toil = new Toil();
+            toil.initAction = delegate ()
+            {
+                Job curJob = toil.actor.jobs.curJob;
+                if (curJob.GetTargetQueue(ind).NullOrEmpty())
+                {
+                    LocalTargetInfo target = curJob.GetTarget(ind);
+                    IEnumerable<Filth> l = SelectAllFilth(toil.actor, target, Settings.adv_clean_num);
+                    AddFilthToQueue(curJob, ind, l, toil.actor);
+                    toil.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(ind), curJob);
+                    curJob.targetQueueA.Add(target);
+                }
+            };
+            return toil;
         }
     }
 }

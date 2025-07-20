@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HarmonyLib;
+using System;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -8,10 +8,15 @@ using System.Reflection;
 using UnityEngine;
 
 namespace CommonSense
-{
+{    
     [HarmonyPatch(typeof(JobDriver_Ingest), "PrepareToIngestToils_ToolUser")]
     static class JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch
     {
+        //public static int HashCodeCombine(int val1, int val2)
+        //{
+        //    return (int)MixFinal(QueueRound(QueueRound(MixEmptyState() + 8, queuedValue), queuedValue2));
+        //}
+
         static FieldInfo LeatingFromInventory = null;
         static MethodInfo LReserveFood = null;
         static MethodInfo LTakeExtraIngestibles = null;
@@ -167,7 +172,7 @@ namespace CommonSense
                 Thing thing = actor.CurJob.GetTarget(ingestibleInd).Thing;
                 if (!Toils_Ingest.TryFindChairOrSpot(actor, thing, out var cell))
                 {
-                    Log.WarningOnce($"Can't find valid chair or spot for {actor} trying to ingest {thing}", HashCode.Combine(actor, thing));
+                    Log.Warning($"Can't find valid chair or spot for {actor} trying to ingest {thing}");
                     actor.CurJob.SetTarget(StoreToInd, actor.Position);
                 }
                 else
