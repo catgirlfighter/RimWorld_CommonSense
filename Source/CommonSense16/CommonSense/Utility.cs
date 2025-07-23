@@ -248,6 +248,20 @@ namespace CommonSense
             }
         }
 
+        public static bool ConcernedByVacuumAtAll(this Pawn pawn)
+        {
+            if (!ModsConfig.OdysseyActive)
+            {
+                return false;
+            }
+
+            if (pawn.RaceProps.IsMechanoid || (pawn.IsMutant && !pawn.mutant.Def.breathesAir))
+            {
+                return false;
+            }
+
+            return pawn.GetStatValue(StatDefOf.VacuumResistance, applyPostProcess: true, 60) < 100f;
+        }
         public static bool ShouldHideFromWeather(this Pawn pawn)
         {
             Map map;
@@ -256,19 +270,15 @@ namespace CommonSense
                 || pawn.mindState?.duty != null)
                 return false;
             //
-            bool cares = pawn.needs?.mood != null;
-            if (cares)
-            {
-                if (JoyUtility.EnjoyableOutsideNow(map))
-                    return false;
-            }
-            else
-            {
-                if (!pawn.RaceProps.IsFlesh || !map.gameConditionManager.ActiveConditions.Any(x => x is GameCondition_ToxicFallout))
-                    return false;
-            }
+            //bool cares = pawn.needs?.mood != null;
 
-            return true;
+            return
+                //bad weather
+                pawn.needs?.mood != null && !JoyUtility.EnjoyableOutsideNow(map)
+                //toxic fallout
+                || pawn.RaceProps.IsFlesh && Mathf.Max(pawn.GetStatValue(StatDefOf.ToxicResistance), pawn.GetStatValue(StatDefOf.ToxicEnvironmentResistance)) < 100f && map.gameConditionManager.ActiveConditions.Any(x => x is GameCondition_ToxicFallout)
+                //vaacum
+                || pawn.Map.Biome.inVacuum && pawn.ConcernedByVacuumAtAll();
         }
 
         public static bool IsBiocodedOrLinked(this Pawn pawn, Thing thing, bool? inventory = null)

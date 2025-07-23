@@ -48,6 +48,7 @@ namespace CommonSense
         }
 
         private static readonly MethodInfo LJumpIfTargetInsideBillGiver = AccessTools.Method(typeof(JobDriver_DoBill), "JumpIfTargetInsideBillGiver");
+        private static readonly MethodInfo LIngredientPlaceCellsInOrder = AccessTools.Method(typeof(Toils_JobTransforms), "IngredientPlaceCellsInOrder");
 
         private static Toil CheckList()
         {
@@ -114,12 +115,22 @@ namespace CommonSense
                         int stackCount = thing.stackCount;
                         int num = Mathf.Min(new int[] { curJob.count, stackCount });
                         num = actor.carryTracker.TryStartCarry(thing, num);
+
                         if (num == 0) actor.jobs.EndCurrentJob(JobCondition.Incompletable);
+                        if (num < stackCount)
+                        {
+                            num = curJob.count - num;
+                            if (num > 0)
+                            {
+                                curJob.GetTargetQueue(ind).Insert(0, thing);
+                                if (curJob.countQueue == null) curJob.countQueue = new List<int>();
+                                curJob.countQueue.Insert(0, num);
+                            }
+                        }
                         splitThing = actor.carryTracker.CarriedThing;
+                        actor.records.Increment(RecordDefOf.ThingsHauled);
                     }
 
-                    if (!actor.Map.reservationManager.ReservedBy(splitThing, actor))
-                        actor.Reserve(splitThing, curJob);
                     curJob.SetTarget(ind, splitThing);
                     //add to que to move it to the bottom of haul list later, important for thing material
                     curJob.GetTargetQueue(ind).Add(splitThing);
@@ -171,7 +182,7 @@ namespace CommonSense
                                 actor.jobs.curDriver.EndJobWith(JobCondition.Incompletable);
                                 return;
                             }
-                        } //or from ground to backpack
+                        } //or from ground or from other inventory to backpack
                         else if (thing.ParentHolder != actor.carryTracker)
                             if (thing.ParentHolder != actor.carryTracker & !actor.inventory.GetDirectlyHeldThings().TryAdd(thing, false))
                             {
@@ -206,7 +217,6 @@ namespace CommonSense
                 Pawn actor = toil.actor;
                 if (actor.IsCarrying())
                 {
-
                     return;
                 }
                 Job curJob = actor.jobs.curJob;
@@ -214,16 +224,17 @@ namespace CommonSense
                 //if capacity is respected, list can has more items to carry later
                 var i = curJob.countQueue.Count;
                 //only pick items from invetory, in normal case it's possible that item is already in hands
-                if (!targetQueue.NullOrEmpty() && targetQueue[i].Thing.ParentHolder == actor.inventory)
+
+                var nextThing = targetQueue[i].Thing;
+
+                if (!targetQueue.NullOrEmpty() && nextThing.ParentHolder == actor.inventory)
                 {
-                    actor.inventory.innerContainer.TryTransferToContainer(targetQueue[i].Thing, actor.carryTracker.innerContainer, false);
+                    actor.inventory.innerContainer.TryTransferToContainer(nextThing, actor.carryTracker.innerContainer, false);
                     actor.Reserve(targetQueue[i], curJob);
                 }
 
                 curJob.SetTarget(TargetIndex.B, targetQueue[i]);
-
                 targetQueue.RemoveAt(i);
-
             };
             return toil;
         }
@@ -250,6 +261,46 @@ namespace CommonSense
             return toil;
         }
 
+        public static Toil SetTargetToIngredientPlaceCell(TargetIndex facilityInd, TargetIndex carryItemInd, TargetIndex cellTargetInd)
+        {
+            //lets NOT stack items in the same cell
+            //becaue it breaks order of hauled items, and order is important to primary resource
+            Toil toil = ToilMaker.MakeToil("SetTargetToIngredientPlaceCell");
+            toil.initAction = delegate ()
+            {
+                Pawn actor = toil.actor;
+                Job curJob = actor.jobs.curJob;
+                Thing thing = curJob.GetTarget(carryItemInd).Thing;
+                IntVec3 c = IntVec3.Invalid;
+                foreach (IntVec3 intVec in (IEnumerable<IntVec3>)LIngredientPlaceCellsInOrder.Invoke(null, new object[] { curJob.GetTarget(facilityInd).Thing }))
+                {
+                    if (GenSpawn.CanSpawnAt(thing.def, intVec, actor.Map, null, true))
+                    {
+                        if (!c.IsValid)
+                        {
+                            c = intVec;
+                        }
+                        bool flag = false;
+                        List<Thing> list = actor.Map.thingGrid.ThingsListAt(intVec);
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            if (list[i].def.category == ThingCategory.Item/* && (!list[i].CanStackWith(thing) || list[i].stackCount == list[i].def.stackLimit)*/)
+                            {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (!flag)
+                        {
+                            curJob.SetTarget(cellTargetInd, intVec);
+                            return;
+                        }
+                    }
+                }
+                curJob.SetTarget(cellTargetInd, c);
+            };
+            return toil;
+        }
         private static Toil CleanFilth(JobDriver_DoBill __instance)
         {
             Toil toil = ToilMaker.MakeToil("CleanBillPlace");
@@ -345,7 +396,6 @@ namespace CommonSense
             //
             //hauling patch
             //
-            //Log.Message($"{pawn}'s doing it!");
             if (Settings.adv_haul_all_ings && __instance.pawn.Faction == Faction.OfPlayer && __instance.pawn.RaceProps.Humanlike)
             {
                 Toil TakeToHands = JobDriver_DoBill_MakeNewToils_CommonSensePatch.TakeToHands();
@@ -373,9 +423,8 @@ namespace CommonSense
                 }
                 else
                 {
-                    Toil findPlaceTarget = Toils_JobTransforms.SetTargetToIngredientPlaceCell(TargetIndex.A, TargetIndex.B, TargetIndex.C);
+                    Toil findPlaceTarget = SetTargetToIngredientPlaceCell(TargetIndex.A, TargetIndex.B, TargetIndex.C);
                     yield return findPlaceTarget;
-                    //yield return this.UpdateJobWithPlacedThings();
                     yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.C, findPlaceTarget, false, false);
                     Toil physReserveToil = ToilMaker.MakeToil("CollectIngredientsToils");
                     physReserveToil.initAction = delegate ()

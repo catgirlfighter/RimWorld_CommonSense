@@ -1,4 +1,9 @@
-﻿1.3.4
+﻿1.3.5
+- fixed pawns sometimes not using full cost to make an item;
+- fixed pawns using wrong primary material to make an item;
+- made so "safe wander" doesn't let to walk in vaacum;
+
+1.3.4
 - allegedly fixed a problem that caused 10 jobs per tick issue;
 - made some mostly cosmetic changes to SocialRelax job;
 
