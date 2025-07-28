@@ -14,7 +14,6 @@ namespace CommonSense
     public static class CommonSenseJobDefOf
     {
         public static JobDef UnloadMarkedItems;
-        //public static JobDef DoBillCommonSense;
         public static JobDef SocialRelax;
         public static JobDef SocialRelaxCommonSense;
     }
@@ -47,7 +46,6 @@ namespace CommonSense
         {
             return pawn.def.race == null
                 || pawn.RaceProps.intelligence < Intelligence.ToolUser
-                //|| pawn.def.race.intelligence < Intelligence.ToolUser
                 || pawn.Faction != Find.FactionManager.OfPlayer//Faction.OfPlayer
                 || pawn.workSettings == null
                 || !pawn.workSettings.Initialized
@@ -61,10 +59,8 @@ namespace CommonSense
             Room room = null;
             if (target.Thing == null)
             {
-                if((room = GridsUtility.GetRoom(target.Cell, pawn.Map)) == null)//(target.Cell == null)
+                if((room = GridsUtility.GetRoom(target.Cell, pawn.Map)) == null)
                     Log.Error("Invalid target: cell or thing it must be");
-                //else
-                //    room = GridsUtility.GetRoom(target.Cell, pawn.Map);
              }
             else
                 room = target.Thing.GetRoom();
@@ -77,10 +73,6 @@ namespace CommonSense
                 return new List<Filth>();
 
             var cleanFilth = CleanFilth;
-            //if (cleanFilth == null)
-            //{
-            //    cleanFilth = DefDatabase<JobDef>.GetNamed('Clean').driverClass; //DefDatabase<WorkGiverDef>.GetNamed("CleanFilth");
-            //}
 
             if (cleanFilth.Worker == null)
                 return new List<Filth>();
@@ -190,19 +182,14 @@ namespace CommonSense
         {
             if (q.Count > 0)
             {
-                //int x;// = 0;
-                //int idx = 0;
-                //int n;// = 0;
-                ThingCount out_of_all_things_they_didnt_add_a_simple_swap;// = default(ThingCount);
+                ThingCount out_of_all_things_they_didnt_add_a_simple_swap;
 
                 if (Starter != null)
                 {
-                    var n = /* q[0].Thing.Position == null ? int.MaxValue : */q[0].Thing.Position.DistanceToSquared(Starter.Position);
+                    var n = q[0].Thing.Position.DistanceToSquared(Starter.Position);
                     int idx = 0;
                     for (int i = 1; i < q.Count(); i++)
                     {
-                        //if (q[i].Thing.Position == null)
-                        //    continue;
                         var x = q[i].Thing.Position.DistanceToSquared(Starter.Position);
                         if (Math.Abs(x) < Math.Abs(n))
                         {
@@ -220,15 +207,11 @@ namespace CommonSense
 
                 for (int i = 0; i < q.Count() - 1; i++)
                 {
-                    //if (q[i + 1].Thing.Position == null)
-                    //    continue;
 
                     var n = q[i].Thing.Position.DistanceToSquared(q[i + 1].Thing.Position);
                     var idx = i + 1;
                     for (int c = i + 2; c < q.Count(); c++)
                     {
-                        //if (q[c].Thing.Position == null)
-                        //    continue;
 
                         var x = q[i].Thing.Position.DistanceToSquared(q[c].Thing.Position);
                         if (Math.Abs(x) < Math.Abs(n))
@@ -300,7 +283,6 @@ namespace CommonSense
             Pawn SelPawn = (Pawn)ITab_Pawn_Gear_Utility.LSelPawnForGear.GetValue(tab);
             bool CanControl = (bool)ITab_Pawn_Gear_Utility.LCanControl.GetValue(tab);
             Color hColor = new Color(1f, 0.8f, 0.8f, 1f);
-            //Log.Message($"CanControl={CanControl}, pc={SelPawn.IsColonistPlayerControlled}, spawned={SelPawn.Spawned}, pcHome={SelPawn.Map.IsPlayerHome}, bcoded={IsBiocodedOrLinked(SelPawn, thing, inventory)}, locked={IsLocked(SelPawn, thing)}");
 
             Rect rect = new Rect(0f, y, width, 28f);
             if ((thing is ThingWithComps)
@@ -344,21 +326,65 @@ namespace CommonSense
             return true;
         }
 
-        public static Toil ListFilth(TargetIndex ind)
+        public static Toil ListFilthToil(TargetIndex Ind)
         {
-            Toil toil = new Toil();
+            Toil toil = ToilMaker.MakeToil("ListFilth");
             toil.initAction = delegate ()
             {
                 Job curJob = toil.actor.jobs.curJob;
-                if (curJob.GetTargetQueue(ind).NullOrEmpty())
+                if (curJob.GetTargetQueue(Ind).NullOrEmpty())
                 {
-                    LocalTargetInfo target = curJob.GetTarget(ind);
+                    LocalTargetInfo target = curJob.GetTarget(Ind);
+                    if (!target.IsValid) return;
                     IEnumerable<Filth> l = SelectAllFilth(toil.actor, target, Settings.adv_clean_num);
-                    AddFilthToQueue(curJob, ind, l, toil.actor);
-                    toil.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(ind), curJob);
-                    curJob.targetQueueA.Add(target);
+                    AddFilthToQueue(curJob, Ind, l, toil.actor);
+                    toil.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(Ind), curJob);
+                    curJob.GetTargetQueue(Ind).Add(target);
                 }
             };
+            return toil;
+        }
+
+        public static Toil CleanFilthToil(TargetIndex Ind)
+        {
+            Toil toil = ToilMaker.MakeToil("CleanFilth");
+            toil.initAction = delegate ()
+            {
+                Pawn actor = toil.actor;
+                Filth filth = actor.jobs.curJob.GetTarget(Ind).Thing as Filth;
+                actor.jobs.curDriver.ticksLeftThisToil = (int)filth.def.filth.cleaningWorkToReduceThickness * filth.thickness * 101;
+            };
+
+            toil.tickAction = delegate ()
+            {
+                Pawn actor = toil.actor;
+                Filth filth = actor.jobs.curJob.GetTarget(Ind).Thing as Filth;
+                //
+                float statValueAbstract = filth.Position.GetTerrain(filth.Map).GetStatValueAbstract(StatDefOf.CleaningTimeFactor, null);
+                float num = toil.actor.GetStatValue(StatDefOf.CleaningSpeed, true, -1);
+                if (statValueAbstract != 0f)
+                {
+                    num /= statValueAbstract;
+                }
+                //
+                actor.jobs.curDriver.ticksLeftThisToil -= (int)(num * 100);
+                actor.jobs.curDriver.debugTicksSpentThisToil += (int)(num * 100);
+
+                if (actor.jobs.curDriver.ticksLeftThisToil - 1 <= (int)filth.def.filth.cleaningWorkToReduceThickness * (filth.thickness - 1) * 100)
+                {
+                    filth.ThinFilth();
+                    if (filth.Destroyed) toil.actor.records.Increment(RecordDefOf.MessesCleaned);
+                }
+            };
+            toil.defaultCompleteMode = ToilCompleteMode.Delay;
+            toil.WithEffect(EffecterDefOf.Clean, Ind);
+            toil.WithProgressBar(Ind,
+                delegate ()
+                {
+                    return 1f - (float)toil.actor.jobs.curDriver.ticksLeftThisToil / (toil.actor.jobs.curDriver.ticksLeftThisToil + toil.actor.jobs.curDriver.debugTicksSpentThisToil);
+                }
+                , true, -0.5f);
+            toil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
             return toil;
         }
     }

@@ -14,30 +14,6 @@ using Unity.Jobs;
 
 namespace CommonSense
 {
-    /*
-    [HarmonyPatch(typeof(WorkGiver_DoBill), "JobOnThing")]
-    internal static class WorkGiver_DoBill_JobOnThing_CommonSensePatch
-    {        internal static bool Prepare()
-        {
-            return !Settings.optimal_patching_in_use || Settings.adv_cleaning || Settings.adv_haul_all_ings;
-        }
-
-        internal static void Postfix(ref Job __result)
-        {
-            if (__result?.def != JobDefOf.DoBill || !Settings.adv_cleaning && !Settings.adv_haul_all_ings)
-                return;
-
-            var job = JobMaker.MakeJob(CommonSenseJobDefOf.DoBillCommonSense, __result.targetA);
-            if (__result.targetQueueA != null) job.targetQueueA = new List<LocalTargetInfo> (__result.targetQueueA);
-            if (__result.targetQueueB != null) job.targetQueueB = new List<LocalTargetInfo>(__result.targetQueueB);
-            if (__result.countQueue != null) job.countQueue = new List<int>(__result.countQueue);
-            job.haulMode = __result.haulMode;
-            job.bill = __result.bill;
-            __result = job;
-        }
-    }
-    */
-
     //protected override IEnumerable<Toil> JobDriver_DoBill.MakeNewToils()
     [HarmonyPatch(typeof(JobDriver_DoBill), "MakeNewToils")]
     static class JobDriver_DoBill_MakeNewToils_CommonSensePatch
@@ -301,45 +277,6 @@ namespace CommonSense
             };
             return toil;
         }
-        private static Toil CleanFilth(JobDriver_DoBill __instance)
-        {
-            Toil toil = ToilMaker.MakeToil("CleanBillPlace");
-            toil.initAction = delegate ()
-            {
-                Filth filth = toil.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
-                __instance.billStartTick = 0;
-                __instance.ticksSpentDoingRecipeWork = 0;
-                __instance.workLeft = filth.def.filth.cleaningWorkToReduceThickness * filth.thickness * 100;
-            };
-            toil.tickAction = delegate ()
-            {
-                Filth filth = toil.actor.jobs.curJob.GetTarget(TargetIndex.A).Thing as Filth;
-                float statValueAbstract = filth.Position.GetTerrain(filth.Map).GetStatValueAbstract(StatDefOf.CleaningTimeFactor, null);
-                float num = toil.actor.GetStatValue(StatDefOf.CleaningSpeed, true, -1);
-                if (statValueAbstract != 0f)
-                {
-                    num /= statValueAbstract;
-                }
-                __instance.billStartTick += Mathf.Max(1, Mathf.RoundToInt(num * 100));
-                __instance.ticksSpentDoingRecipeWork += Mathf.Max(1, Mathf.RoundToInt(num * 100));
-                if (__instance.billStartTick > filth.def.filth.cleaningWorkToReduceThickness * 100)
-                {
-                    filth.ThinFilth();
-                    __instance.billStartTick -= (int)(filth.def.filth.cleaningWorkToReduceThickness * 100);
-                    if (filth.Destroyed)
-                    {
-                        toil.actor.records.Increment(RecordDefOf.MessesCleaned);
-                        __instance.ReadyForNextToil();
-                        return;
-                    }
-                }
-            };
-            toil.defaultCompleteMode = ToilCompleteMode.Never;
-            toil.WithEffect(EffecterDefOf.Clean, TargetIndex.A);
-            toil.WithProgressBar(TargetIndex.A, () => __instance.ticksSpentDoingRecipeWork / __instance.workLeft, true, -0.5f);
-            toil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
-            return toil;
-        }
 
         private static IEnumerable<Toil> DoMakeToils(JobDriver_DoBill __instance)
         {
@@ -448,7 +385,7 @@ namespace CommonSense
             //
             if (Settings.adv_cleaning && !Utility.IncapableOfCleaning(__instance.pawn))
             {
-                yield return Utility.ListFilth(TargetIndex.A);
+                yield return Utility.ListFilthToil(TargetIndex.A);
                 yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.A).NullOrEmpty());
                 Toil CleanFilthList = Toils_JobTransforms.ClearDespawnedNullOrForbiddenQueuedTargets(TargetIndex.A, null);
                 yield return CleanFilthList;
@@ -456,9 +393,7 @@ namespace CommonSense
                 yield return Toils_Jump.JumpIf(gotoBillGiver, () => __instance.job.GetTargetQueue(TargetIndex.A).NullOrEmpty());
                 yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList).JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
 
-                Toil CleanFilth = JobDriver_DoBill_MakeNewToils_CommonSensePatch.CleanFilth(__instance);
-                CleanFilth.JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList);
-                CleanFilth.JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
+                Toil CleanFilth = Utility.CleanFilthToil(TargetIndex.A).JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, CleanFilthList).JumpIfOutsideHomeArea(TargetIndex.A, CleanFilthList);
                 yield return CleanFilth;
                 yield return Toils_Jump.Jump(CleanFilthList);
             }

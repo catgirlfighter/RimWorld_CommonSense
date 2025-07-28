@@ -8,15 +8,10 @@ using System.Reflection;
 using UnityEngine;
 
 namespace CommonSense
-{    
+{
     [HarmonyPatch(typeof(JobDriver_Ingest), "PrepareToIngestToils_ToolUser")]
     static class JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch
     {
-        //public static int HashCodeCombine(int val1, int val2)
-        //{
-        //    return (int)MixFinal(QueueRound(QueueRound(MixEmptyState() + 8, queuedValue), queuedValue2));
-        //}
-
         static FieldInfo LeatingFromInventory = null;
         static MethodInfo LReserveFood = null;
         static MethodInfo LTakeExtraIngestibles = null;
@@ -34,81 +29,6 @@ namespace CommonSense
                 && LTakeExtraIngestibles != null
                 && (!Settings.optimal_patching_in_use || Settings.adv_cleaning_ingest);
         }
-
-        public static Toil MakeFilthListToil(TargetIndex targetIndex)
-        {
-            Toil toil = new Toil();
-            toil.initAction = delegate ()
-            {
-                Job curJob = toil.actor.jobs.curJob;
-                //
-                if (curJob.GetTargetQueue(targetIndex).NullOrEmpty())
-                {
-                    LocalTargetInfo filthListTarget = curJob.GetTarget(targetIndex);
-                    if (!filthListTarget.IsValid) return;
-                    IEnumerable<Filth> l = Utility.SelectAllFilth(toil.actor, filthListTarget, Settings.adv_clean_num);
-                    Utility.AddFilthToQueue(curJob, targetIndex, l, toil.actor);
-                    toil.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(targetIndex), curJob);
-                    curJob.GetTargetQueue(targetIndex).Add(filthListTarget);
-                }
-            };
-            return toil;
-        }
-
-        public static Toil MakeCleanToil(TargetIndex progListIndex, TargetIndex filthListIndex, Toil nextTarget)
-        {
-            Toil toil = new Toil();
-            toil.initAction = delegate ()
-            {
-                Filth filth = toil.actor.jobs.curJob.GetTarget(filthListIndex).Thing as Filth;
-                var progQue = toil.actor.jobs.curJob.GetTargetQueue(progListIndex);
-                progQue[0] = new IntVec3(0, 0, (int)filth.def.filth.cleaningWorkToReduceThickness * filth.thickness * 100);
-            };
-            toil.tickAction = delegate ()
-            {
-                Filth filth = toil.actor.jobs.curJob.GetTarget(filthListIndex).Thing as Filth;
-                //
-                float statValueAbstract = filth.Position.GetTerrain(filth.Map).GetStatValueAbstract(StatDefOf.CleaningTimeFactor, null);
-                float num = toil.actor.GetStatValue(StatDefOf.CleaningSpeed, true, -1);
-                if (statValueAbstract != 0f)
-                {
-                    num /= statValueAbstract;
-                }
-                //
-                var progQue = toil.actor.jobs.curJob.GetTargetQueue(progListIndex);
-                IntVec3 iv = progQue[0].Cell;
-                iv.x += Mathf.Max(1, Mathf.RoundToInt(num * 100));
-                iv.y += Mathf.Max(1, Mathf.RoundToInt(num * 100));
-                if (iv.x > filth.def.filth.cleaningWorkToReduceThickness * 100)
-                {
-                    filth.ThinFilth();
-                    iv.x -= (int)(filth.def.filth.cleaningWorkToReduceThickness * 100);
-                    if (filth.Destroyed)
-                    {
-                        toil.actor.records.Increment(RecordDefOf.MessesCleaned);
-                        toil.actor.jobs.curDriver.ReadyForNextToil();
-                        return;
-                    }
-                }
-                progQue[0] = iv;
-            };
-            toil.defaultCompleteMode = ToilCompleteMode.Never;
-            toil.WithEffect(EffecterDefOf.Clean, filthListIndex);
-            toil.WithProgressBar(filthListIndex,
-                delegate ()
-                {
-                    var q = toil.actor.CurJob.GetTargetQueue(progListIndex)[0];
-                    float result = (float)q.Cell.y / q.Cell.z;
-                    return result;
-                }
-                , true, -0.5f);
-            toil.PlaySustainerOrSound(() => SoundDefOf.Interact_CleanFilth);
-            toil.JumpIfDespawnedOrNullOrForbidden(filthListIndex, nextTarget);
-            toil.JumpIfOutsideHomeArea(filthListIndex, nextTarget);
-            toil.FailOnDestroyedOrNull(TargetIndex.A);
-            return toil;
-        }
-
         private static IEnumerable<Toil> PrepToils(JobDriver_Ingest driver, Toil chewToil)
         {
             if ((bool)LeatingFromInventory.GetValue(driver))
@@ -136,25 +56,20 @@ namespace CommonSense
             if (!driver.pawn.Drafted)
             {
                 yield return ReserveChewSpot(TargetIndex.A, TargetIndex.B);
-                Toil gotospot = GotoSpot(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A);
+                Toil gotospot = Toils_Goto.GotoCell(TargetIndex.B, PathEndMode.OnCell).FailOnDestroyedOrNull(TargetIndex.A);
 
                 if (!Utility.IncapableOfCleaning(driver.pawn))
                 {
                     TargetIndex filthListIndex = TargetIndex.B;
-                    TargetIndex progListIndex = TargetIndex.A;
-                    Toil FilthList = MakeFilthListToil(filthListIndex);
+                    Toil FilthList = Utility.ListFilthToil(filthListIndex);
                     yield return FilthList;
                     yield return Toils_Jump.JumpIf(gotospot, () => driver.job.GetTargetQueue(filthListIndex).NullOrEmpty());
                     Toil nextTarget = Toils_JobTransforms.ExtractNextTargetFromQueue(filthListIndex, true);
                     yield return nextTarget;
                     yield return Toils_Jump.JumpIf(gotospot, () => driver.job.GetTargetQueue(filthListIndex).NullOrEmpty());
                     yield return Toils_Goto.GotoThing(filthListIndex, PathEndMode.Touch).JumpIfDespawnedOrNullOrForbidden(filthListIndex, nextTarget).JumpIfOutsideHomeArea(filthListIndex, nextTarget);
-                    //
-                    if (driver.job.GetTargetQueue(progListIndex).Count == 0)
-                        driver.job.GetTargetQueue(progListIndex).Add(new IntVec3(0, 0, 0));
-                    //
-                    Toil clean = MakeCleanToil(progListIndex, filthListIndex, nextTarget);
-                    yield return clean;
+                    Toil CleanFilth = Utility.CleanFilthToil(filthListIndex);
+                    yield return CleanFilth;
                     yield return Toils_Jump.Jump(nextTarget);
                 }
                 yield return gotospot;
@@ -186,11 +101,6 @@ namespace CommonSense
             return toil;
         }
 
-        public static Toil GotoSpot(TargetIndex gotoInd)
-        {
-            return Toils_Goto.GotoCell(gotoInd, PathEndMode.OnCell);
-        }
-
         internal static bool Prefix(ref IEnumerable<Toil> __result, JobDriver_Ingest __instance, Toil chewToil)
         {
             if (!Settings.adv_cleaning_ingest)
@@ -215,30 +125,26 @@ namespace CommonSense
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedNullOrForbidden(TargetIndex.A);
             yield return Toils_Ingest.TakeMealFromDispenser(TargetIndex.A, driver.pawn);
             if (!driver.pawn.Drafted)
+            {
                 yield return JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.ReserveChewSpot(TargetIndex.A, TargetIndex.B);
-                Toil gotospot = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.GotoSpot(TargetIndex.B).FailOnDestroyedOrNull(TargetIndex.A);
+                Toil GoToSpot = Toils_Goto.GotoCell(TargetIndex.B, PathEndMode.OnCell).FailOnDestroyedOrNull(TargetIndex.A);
 
                 if (!Utility.IncapableOfCleaning(driver.pawn))
                 {
                     TargetIndex filthListIndex = TargetIndex.B;
-                    TargetIndex progListIndex = TargetIndex.A;
-                    Toil FilthList = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.MakeFilthListToil(filthListIndex);
+                    Toil FilthList = Utility.ListFilthToil(filthListIndex);
                     yield return FilthList;
-                    yield return Toils_Jump.JumpIf(gotospot, () => driver.job.GetTargetQueue(filthListIndex).NullOrEmpty());
+                    yield return Toils_Jump.JumpIf(GoToSpot, () => driver.job.GetTargetQueue(filthListIndex).NullOrEmpty());
                     Toil nextTarget = Toils_JobTransforms.ExtractNextTargetFromQueue(filthListIndex, true);
                     yield return nextTarget;
-                    yield return Toils_Jump.JumpIf(gotospot, () => driver.job.GetTargetQueue(filthListIndex).NullOrEmpty());
+                    yield return Toils_Jump.JumpIf(GoToSpot, () => driver.job.GetTargetQueue(filthListIndex).NullOrEmpty());
                     yield return Toils_Goto.GotoThing(filthListIndex, PathEndMode.Touch).JumpIfDespawnedOrNullOrForbidden(filthListIndex, nextTarget).JumpIfOutsideHomeArea(filthListIndex, nextTarget);
-                    //
-                    if (driver.job.GetTargetQueue(progListIndex).Count == 0)
-                        driver.job.GetTargetQueue(progListIndex).Add(new IntVec3(0, 0, 0));
-                    //
-                    Toil clean = JobDriver_PrepareToIngestToils_ToolUser_CommonSensePatch.MakeCleanToil(progListIndex, filthListIndex, nextTarget);
-                    yield return clean;
+                    Toil CleanFilth = Utility.CleanFilthToil(filthListIndex).JumpIfDespawnedOrNullOrForbidden(filthListIndex, FilthList).JumpIfOutsideHomeArea(filthListIndex, FilthList);
+                    yield return CleanFilth;
                     yield return Toils_Jump.Jump(nextTarget);
                 }
-                yield return gotospot;
-
+                yield return GoToSpot;
+            }
             yield return Toils_Ingest.FindAdjacentEatSurface(TargetIndex.B, TargetIndex.A);
         }
 
