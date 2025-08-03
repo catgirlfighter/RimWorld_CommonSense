@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: dummy_label -->
+  <avCSDummyRecipeForNutrientPaste.label>假的營養膏配方</avCSDummyRecipeForNutrientPaste.label>
+  <!-- EN: dummy_desc -->
+  <avCSDummyRecipeForNutrientPaste.description>假的營養膏</avCSDummyRecipeForNutrientPaste.description>
+  <!-- EN: dummy_jobString -->
+  <avCSDummyRecipeForNutrientPaste.jobString>正在製作假的營養膏（都說了是假的啊！還看！）</avCSDummyRecipeForNutrientPaste.jobString>
+  
+</LanguageData>
