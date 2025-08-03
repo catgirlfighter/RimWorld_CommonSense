@@ -79,9 +79,9 @@
   <advanced_inbetween_cleaning_gizmo_note>這將禁止打掃某些工作台</advanced_inbetween_cleaning_gizmo_note>
   <meditation_economy_label>殖民者會根據需求進行冥想</meditation_economy_label>
   <meditation_economy_note>除了在冥想的時段，若小人的精神力是滿的，且他不覺得冥想是快樂的事情，那他將會停止冥想。</meditation_economy_note>
-  <advanced_respect_capacity_label>-- pawns will not exceed inventory capacity</advanced_respect_capacity_label>
-  <advanced_respect_capacity_note>For immersion reasons or whatever</advanced_respect_capacity_note>
-  <optimal_patching_label>Optimal Patching</optimal_patching_label>
-  <optimal_patching_note>When this option is off, all options activate immediately after toggling them, at the cost of always being in the code, possibly affecting performance even if they're toggled off. When option is on, options will require you to restart the game when changed, but patches needed for these options won't happen, removing extra performance impact when game launches with these options toggled off</optimal_patching_note>
-  <optimal_patching_attention_label>ATTENTION: Optimal patching doesn't properly apply without restarting the game!</optimal_patching_attention_label>
+  <advanced_respect_capacity_label>-- 殖民者不會超出物品欄容量</advanced_respect_capacity_label>
+  <advanced_respect_capacity_note>為了沉浸感或其他原因</advanced_respect_capacity_note>
+  <optimal_patching_label>最佳化修補</optimal_patching_label>
+  <optimal_patching_note>當此選項關閉時，所有功能會立即啟用，但其程式碼會一直存在，即使關閉也可能影響效能。當此選項開啟時，更改功能需要重新啟動遊戲，但遊戲啟動時未啟用的功能將不會載入額外的程式碼，從而減少對效能的影響。</optimal_patching_note>
+  <optimal_patching_attention_label>注意：若未重新啟動遊戲，最佳化修補將無法正確套用！</optimal_patching_attention_label>
 </LanguageData>
