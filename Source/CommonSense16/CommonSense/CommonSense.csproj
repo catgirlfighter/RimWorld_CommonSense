@@ -69,6 +69,7 @@
     <Compile Include="JobDriver_IngestPatches.cs" />
     <Compile Include="JobDriver_MeditatePatches.cs" />
     <Compile Include="JobDriver_SocialRelaxPatches.cs" />
+    <Compile Include="JobDriver_SocialRelaxPatches_depricated.cs" />
     <Compile Include="Need_MoodPatches.cs" />
     <Compile Include="PointlessWanderPatches.cs" />
     <Compile Include="RoomRoleWorker_CooledStoreRoom.cs" />

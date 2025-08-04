@@ -1,4 +1,7 @@
-﻿1.3.8
+﻿1.3.8.0
+- added safe exit from JobDriver_SocialRelax_CommonSense driver to transition into regular one.
+
+1.3.8
 - fixed SocialRelax giving less joy. Also don't get scared by missing def at loading the save first time. It's normal.
 
 1.3.7
