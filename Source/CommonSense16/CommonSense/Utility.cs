@@ -14,8 +14,6 @@ namespace CommonSense
     public static class CommonSenseJobDefOf
     {
         public static JobDef UnloadMarkedItems;
-        public static JobDef SocialRelax;
-        public static JobDef SocialRelaxCommonSense;
     }
 
     [StaticConstructorOnStartup]

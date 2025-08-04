@@ -6,22 +6,4 @@
     <reportString>unloading inventory.</reportString>
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>
-
-<!--
-  <JobDef>
-    <defName>DoBillCommonSense</defName>
-    <driverClass>CommonSense.JobDriver_DoBill_CommonSense</driverClass>
-    <reportString>doing bill at TargetA.</reportString>
-    <suspendable>false</suspendable>
-    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
-  </JobDef>
--->
-
-  <JobDef>
-    <defName>SocialRelaxCommonSense</defName>
-    <driverClass>CommonSense.JobDriver_SocialRelax_CommonSense</driverClass>
-    <reportString>relaxing socially.</reportString>
-    <joyDuration>4000</joyDuration>
-    <joyKind>Social</joyKind>
-  </JobDef>
 </Defs>
