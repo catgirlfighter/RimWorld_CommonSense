@@ -313,7 +313,7 @@ namespace CommonSense
                 return false;
             });
 
-            bool placeInBillGiver = __instance.BillGiver is Building_MechGestator;
+            bool placeInBillGiver = __instance.BillGiver is Building_WorkTableAutonomous;
             Toil gotoBillGiver = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
             Toil toil = ToilMaker.MakeToil("MakeNewToils");
             toil.initAction = delegate ()
@@ -375,7 +375,7 @@ namespace CommonSense
             }
             else
             {
-                foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, __instance.BillGiver is Building_WorkTableAutonomous))
+                foreach (Toil toil2 in JobDriver_DoBill.CollectIngredientsToils(TargetIndex.B, TargetIndex.A, TargetIndex.C, false, true, placeInBillGiver))
                 {
                     yield return toil2;
                 }
