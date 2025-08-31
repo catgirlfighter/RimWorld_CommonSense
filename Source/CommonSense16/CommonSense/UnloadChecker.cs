@@ -53,10 +53,12 @@ namespace CommonSense
         public static Thing GetFirstMarked(Pawn pawn)
         {
             Thing t = null;
-            if (pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
-            if (!Settings.gui_manual_unload) return t;
-            if (t == null && pawn.equipment != null) t = pawn.equipment.AllEquipmentListForReading.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
-            if (t == null && pawn.apparel != null) t = pawn.apparel.WornApparel.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
+            if (Settings.gui_manual_unload)
+            {
+                if (pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
+                if (t == null && pawn.equipment != null) t = pawn.equipment.AllEquipmentListForReading.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
+                if (t == null && pawn.apparel != null) t = pawn.apparel.WornApparel.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
+            }
             return t;
         }
     }

@@ -334,9 +334,12 @@ namespace CommonSense
                 {
                     LocalTargetInfo target = curJob.GetTarget(Ind);
                     if (!target.IsValid) return;
-                    IEnumerable<Filth> l = SelectAllFilth(toil.actor, target, Settings.adv_clean_num);
-                    AddFilthToQueue(curJob, Ind, l, toil.actor);
-                    toil.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(Ind), curJob);
+                    if (!Settings.clean_gizmo || target.Thing?.TryGetComp<DoCleanComp>()?.Active != false)
+                    {
+                        IEnumerable<Filth> l = SelectAllFilth(toil.actor, target, Settings.adv_clean_num);
+                        AddFilthToQueue(curJob, Ind, l, toil.actor);
+                        toil.actor.ReserveAsManyAsPossible(curJob.GetTargetQueue(Ind), curJob);
+                    }
                     curJob.GetTargetQueue(Ind).Add(target);
                 }
             };
