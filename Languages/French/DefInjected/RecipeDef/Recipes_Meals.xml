@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: dummy_label -->
+  <avCSDummyRecipeForNutrientPaste.label>étiquette factice</avCSDummyRecipeForNutrientPaste.label>
+  
+  <!-- EN: dummy_desc -->
+  <avCSDummyRecipeForNutrientPaste.description>description factice</avCSDummyRecipeForNutrientPaste.description>
+  
+  <!-- EN: aliments crus -->
+  <avCSDummyRecipeForNutrientPaste.ingredients.0.filter.customSummary>aliments crus</avCSDummyRecipeForNutrientPaste.ingredients.0.filter.customSummary>
+  
+  <!-- EN: dummy_jobString -->
+  <avCSDummyRecipeForNutrientPaste.jobString>tâche factice</avCSDummyRecipeForNutrientPaste.jobString>
+  
+</LanguageData>
