@@ -53,9 +53,9 @@ namespace CommonSense
         public static Thing GetFirstMarked(Pawn pawn)
         {
             Thing t = null;
+            if (pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
             if (Settings.gui_manual_unload)
             {
-                if (pawn.inventory != null) t = pawn.inventory.innerContainer.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
                 if (t == null && pawn.equipment != null) t = pawn.equipment.AllEquipmentListForReading.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
                 if (t == null && pawn.apparel != null) t = pawn.apparel.WornApparel.FirstOrDefault(x => x.TryGetComp<CompUnloadChecker>()?.ShouldUnload == true);
             }
@@ -276,6 +276,18 @@ namespace CommonSense
                         Sidearms_Utility.ForgetSidearm(GetActor(), thing);
                     }
                 };
+            yield return new Toil
+            {
+                initAction = delegate ()
+                {
+                    Thing thing = job.GetTarget(TargetIndex.A).Thing;
+                    CompUnloadChecker c = thing?.TryGetComp<CompUnloadChecker>();
+                    if (c != null && c.ShouldUnload)
+                    {
+                        c.ShouldUnload = false;
+                    }
+                }
+            };
             yield break;
         }
 

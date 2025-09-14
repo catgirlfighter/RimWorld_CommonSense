@@ -1,4 +1,7 @@
-﻿1.3.9
+﻿1.3.10
+- made a minor change to reduce the fallout that mostly affects my mental state than anything else, connected to a problem with compatibility issue with some unknown mod that appears to be used by a half of rimworld players, but nobody can figure out that name of it. It's solely an order issue and fixed just by shuffling mods around and figuring the good order. But it appears that most people tend to ask questions first and then look for solutions, which is the other way around from what they're supposed to do. If you read this and feel called out you also should feel bad. Also no, I can't make a mod order hint for a mod I don't know the name of.
+
+1.3.9
 - improved compatibility with autonomous buildings (like gestators), contribution by @ArcaneZedric;
 - made so if an option to mark items for unloading is switched off pawns won't pick up and drop items that are marked for unloading in a cycle anymore. It's not a problem that I can fix because that's a mod order issue with a mod that I don't even know a name of;
 - fixed switching off cleaning gizmo doing nothing.
