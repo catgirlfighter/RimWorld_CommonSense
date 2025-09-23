@@ -1,5 +1,8 @@
-﻿1.3.10
-- made a minor change to reduce the fallout that mostly affects my mental state than anything else, connected to a problem with compatibility issue with some unknown mod that appears to be used by a half of rimworld players, but nobody can figure out that name of it. It's solely an order issue and fixed just by shuffling mods around and figuring the good order. But it appears that most people tend to ask questions first and then look for solutions, which is the other way around from what they're supposed to do. If you read this and feel called out you also should feel bad. Also no, I can't make a mod order hint for a mod I don't know the name of.
+﻿other
+- updated french translation.
+
+1.3.10
+- made a minor change to reduce the fallout that mostly affects my mental state than anything else, connected to a problem with compatibility issue with some unknown mod that affects unequipping (making pawns stack equipping and unequipping non-stop).
 
 1.3.9
 - improved compatibility with autonomous buildings (like gestators), contribution by @ArcaneZedric;
