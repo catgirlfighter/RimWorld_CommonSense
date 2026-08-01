@@ -3,6 +3,7 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 using Verse.AI;
+using UnityEngine;
 namespace CommonSense
 {
     //[HarmonyPatch(typeof(JobDriver_Meditate), "<MakeNewToils>b__15_3")]
@@ -19,9 +20,11 @@ namespace CommonSense
             var entropy = __instance.pawn.psychicEntropy;
             var joy = __instance.pawn.needs?.joy;
             var joyKind = __instance.pawn.CurJob.def.joyKind;
+            // stop a little above the target: JobGiver_Meditate re-issues meditation as soon as
+            // psyfocus drops below the same value, and natural decay crosses it within one tick
             if (!meditating
                 && (joy?.CurLevel >= 0.98f || joyKind != null && joy?.tolerances?.BoredOf(joyKind) == true)
-                && (!entropy.NeedsPsyfocus || entropy.CurrentPsyfocus == 1f))
+                && (!entropy.NeedsPsyfocus || entropy.CurrentPsyfocus >= Mathf.Min(entropy.TargetPsyfocus, 0.95f) + 0.05f))
             {
                 __instance.EndJobWith(JobCondition.InterruptForced);
             }
