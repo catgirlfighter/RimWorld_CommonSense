@@ -109,7 +109,7 @@ namespace CommonSense
             if (driver.HasDrink())
             {
                 driver.FailOnDestroyedNullOrForbidden(TargetIndex.C);
-                yield return Toils_Goto.GotoThing(TargetIndex.C, PathEndMode.OnCell).FailOnSomeonePhysicallyInteracting(TargetIndex.C);
+                yield return Toils_Goto.GotoThing(TargetIndex.C, PathEndMode.ClosestTouch).FailOnSomeonePhysicallyInteracting(TargetIndex.C);
                 yield return Toils_Haul.StartCarryThing(TargetIndex.C, false, false, false);
             }
 
