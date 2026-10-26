@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<!-- settings -->
+	<fulfill_outdoors_head>Açık Hava İhtiyacı</fulfill_outdoors_head>
+	<fulfill_outdoors_label>Koloniciler dışarıda eğlenerek açık hava ihtiyaçlarını karşılamaya teşvik edilir</fulfill_outdoors_label>
+	<fulfill_outdoors_note>NOT: Kararsızlığın önüne geçmek için, aynı eğlence kaynaklarını hem içeriye hem de dışarıya yerleştirmeyin.</fulfill_outdoors_note>
+	<clean_head>Fırsattan istifade işler</clean_head>
+	<clean_before_working_label>Koloniciler bir çalışma masasını kullanmadan önce o odayı temizlemeye teşvik edilir</clean_before_working_label>
+	<clean_before_working_note>NOT: Temizlik yapamayan kolonicilerin birdenbire temizliğe başlamasını beklemeyin.</clean_before_working_note>
+	<bill_job_pathing_label>Görevler için binaya giden doğru güzergâhı hesapla</bill_job_pathing_label>
+	<bill_job_pathing_note>Kolonicilerin önce malzeme getirmesi gerektiğinde gereksiz kavisler yapılmasını önlemeye yardımcı olur, ancak işlemcinize daha çok yük binebilir.</bill_job_pathing_note>
+	<clean_after_tending_label>Koloniciler bir hastayla ilgilendikten sonra odayı temizlemeye teşvik edilir</clean_after_tending_label>
+	<clean_after_tending_note>NOT: Temizlik yapamayan kolonicilerin birdenbire temizliğe başlamasını beklemeyin.</clean_after_tending_note>
+	<meal_stacking_head>Yemek istifleme</meal_stacking_head>
+	<meal_stacking_label>Koloniciler yemekleri istiflerken araya olumsuz düşüncelerin karışmasından kaçınır</meal_stacking_label>
+	<meal_stacking_note>Bu sayede koloniciler iğrenç yemekleri asla normal olanlarla karıştırmazlar.</meal_stacking_note>
+	<dont_count_odd_label>Tuhaf etler (örn. böcek eti) normal sayılır ve normal yemeklerle istiflenmesine izin verilir</dont_count_odd_label>
+	<dont_count_odd_note>Böcek eti aslında o kadar da kötü değil...</dont_count_odd_note>
+	<gen_ingredients_head>Yemek oluşumu</gen_ingredients_head>
+	<gen_ingredients_label>Rastgele oluşturulan yemeklere rastgele bileşenler ekle</gen_ingredients_label>
+	<gen_ingredients_note>Örn. hikâye anlatıcısı tarafından verilen, bir tüccarca satılan, cesetten yağmalanan. Yalnızca ruh hâlini etkilemeyen bileşenler kullanılır. Bu seçenek açıkken oyun asla aynı olmayacak.</gen_ingredients_note>
+	<add_to_que_label>Eski görevi kuyruğa ekle</add_to_que_label>
+	<add_to_que_note>Bu sayede koloniciler fırsattan istifade bir görev gerçekleştirdikten sonra fikirlerini değiştirmezler. Ancak bir iş hâlihazırda alınmışsa bazen kargaşaya neden olabilir.</add_to_que_note>
+	<hauling_over_bills_label>Koloniciler üretim siparişleri için gereken malzemeleri bir depo alanına taşımaya teşvik edilir</hauling_over_bills_label>
+	<hauling_over_bills_note>Koloniciler bir sipariş üzerinde çalışırken, tarif için gereken küçük bir kısmı almak yerine malzemeleri doğrudan depo alanına taşımayı tercih ederler.</hauling_over_bills_note>
+	<fulfill_needs_head>İhtiyaçların karşılanması</fulfill_needs_head>
+	<drugs_use_potential_mood_label>Koloniciler uyuşturucu politikalarında olası ruh hâlini dikkate almaya teşvik edilir</drugs_use_potential_mood_label>
+	<drugs_use_potential_mood_note>Koloniciler, "olası" ruh hâli belirli bir sınırın üzerindeyse uyuşturucu kullanmaz, böylece belirli bir ruh hâli seviyesine ulaşmak için aşırı uyuşturucu tüketiminin önüne geçilir.</drugs_use_potential_mood_note>
+	<miscellaneous_head>Çeşitli</miscellaneous_head>
+	<extended_recipe_label>Tarifler eksiksiz malzeme listesini gösterir</extended_recipe_label>
+	<extended_recipe_note>Yalnızca belirsiz bir "malzemeler" ifadesi yerine...</extended_recipe_note>
+	<advanced_head>Gelişmiş davranışlar</advanced_head>
+	<advanced_inbetween_cleaning_label>Koloniciler malzeme taşımak ve üretim yapmak arasında geçen sürede odaları temizler</advanced_inbetween_cleaning_label>
+	<advanced_inbetween_cleaning_note>Temel davranış biçimi onların yalnızca taşıma işleminden önce temizlik yapmasına izin verir.</advanced_inbetween_cleaning_note>
+	<advanced_haul_all_ings_label>Koloniciler malzemeleri üretim yerine taşımadan önce tüm malzemeleri yanlarına almaya teşvik edilir</advanced_haul_all_ings_label>
+	<advanced_haul_all_ings_note>Koloniciler, gerekli tüm malzemeleri üretim yerine teslim etmeden önce envanterlerine alacaklar.</advanced_haul_all_ings_note>
+	<prefer_spoiling_ingredients_label>Koloniciler bozulmaya daha yakın olan malzemeleri ve hammaddeleri kullanmaya teşvik edilir</prefer_spoiling_ingredients_label>
+	<prefer_spoiling_ingredients_note>UYARI: Bu seçenek etkinleştirildiğinde, aralarında seçim yapılabilecek çok fazla eşya olması performans düşüklüğüne yol açabilir.</prefer_spoiling_ingredients_note>
+	<UnloadThing>Boşalt</UnloadThing>
+	<UnloadThingCancel>Boşaltmaktan vazgeç</UnloadThingCancel>
+	<manual_unload_label>Kolonicinin envanterinde, eşyaları depo alanına taşınmak üzere işaretleyen bir tuşu etkinleştir</manual_unload_label>
+	<manual_unload_note>Taşınacak bir depo alanı yoksa kolonici eşyayı yanına bırakır.</manual_unload_note>
+	<put_back_to_inv_label>Koloniciler kesintiye uğradıklarında eşyaları envanterlerine geri koyar</put_back_to_inv_label>
+	<put_back_to_inv_note>Koloniciler, envanterlerindeki bir eşyayı ellerinde tutarken eylemleri kesintiye uğrarsa o eşyayı envanterlerine geri koyarlar.</put_back_to_inv_note>
+	<pick_proper_amount_label>Koloniciler haddinden fazla tatlı yemeyi bırakır</pick_proper_amount_label>
+	<pick_proper_amount_note>Artık etrafta çikolata kalmayacak.</pick_proper_amount_note>
+	<Category>Kategori</Category>
+	<fun_police_label>Koloniciler eğlence zamanında veya erken uyandırıldıklarında ikincil ihtiyaçlarını karşılamaya teşvik edilir</fun_police_label>
+	<fun_police_note>Koloniciler, eğlence ihtiyaçlarını yalnızca %80'in altına düştüğünde tamamlamaya çalışır. Bu vakitte ise envanterlerine yedek bir yemek almayı ve (eğer "Dubs" modu yüklüyse) tüm hijyen ihtiyaçlarını gidermeyi tercih edeceklerdir.</fun_police_note>
+	<numbers_head>Ayarlanabilir sayılar (0 = Sınırsız)</numbers_head>
+	<op_clean_number_label>Görev öncesi temizlik için kir sınırı</op_clean_number_label>
+	<adv_clean_number_label>Üretim öncesi temizlik için kir sınırı</adv_clean_number_label>
+	<doc_clean_number_label>Tedavi sonrası temizlik için kir sınırı</doc_clean_number_label>
+	<skip_snow_clean_label>Koloniciler kar veya yağmur yağarken etraftaki karları temizlemekten caydırılır</skip_snow_clean_label>
+	<skip_snow_clean_note>Hava koşullarının ne olacağı belli olmazsa diye yağmur yağarken de geçerlidir.</skip_snow_clean_note>
+	<prefer_spoiling_meals_label>Koloniciler bozulmaya daha yakın olan yemekleri yemeye teşvik edilir</prefer_spoiling_meals_label>
+	<prefer_spoiling_meals_note>UYARI: Bu seçenek etkinleştirildiğinde, aralarında seçim yapılabilecek çok fazla eşya olması performans düşüklüğüne yol açabilir.</prefer_spoiling_meals_note>
+	<allow_feeding_with_plants_label>Kolonicilerin hayvanları samanla beslemesine izin ver ve onları buna teşvik et</allow_feeding_with_plants_label>
+	<allow_feeding_with_plants_note>Ayrıca hayvanlar da insan dışı gıdaları tercih etmeye teşvik edilecektir.</allow_feeding_with_plants_note>
+	<give_sick_joy_drugs_label>Koloniciler hastalara izin verilen sosyal uyuşturucular veya keyif veren yiyecekler vermeye teşvik edilir</give_sick_joy_drugs_label>
+	<give_sick_joy_drugs_note>Onlara çikolata verip geçmek varken neden lafla uğraşasın ki?</give_sick_joy_drugs_note>
+	<social_relax_economy_label>Sosyalleşerek dinlenen kolonicilerin uyuşturucu kullanımları, "eğlenceyi boşa harcamayacak" şekilde değiştirilir</social_relax_economy_label>
+	<social_relax_economy_note>Koloniciler normalde uyuşturucuyu tüketmeden önce bir iki saat oturarak etkiyi boşa harcarlar.</social_relax_economy_note>
+	<advanced_cleaning_ingest_label>Koloniciler masada yemek yemeden veya sosyalleşerek dinlenmeden önce temizlik yapmaya teşvik edilir</advanced_cleaning_ingest_label>
+	<advanced_cleaning_ingest_note>Koloniciler oturmayı planladıkları masanın etrafını temizlerler.</advanced_cleaning_ingest_note>
+	<mood_regen_label>Kolonicinin ruh hâli, mümkünse uyurken yavaşça %50 seviyesine doğru hareket eder</mood_regen_label>
+	<mood_regen_note>Kolonicilerin "gece uyuyup atlatmasına" izin verin, her şey yoluna girecektir</mood_regen_note>
+	<safe_wander_label>Koloniciler aylak aylak dolaşırken kötü havadan kaçınmaya teşvik edilir</safe_wander_label>
+	<safe_wander_note>Şu toksik serpintide yürümeyi kesin artık, aptallar!</safe_wander_note>
+	<pathing_head>Güzergâh</pathing_head>
+	<polite_wander_label>Koloniciler; yatak odalarına, mahkûm hücrelerine ve mahkûm koğuşlarına rastgele girmekten kaçınmaya teşvik edilir</polite_wander_label>
+	<polite_wander_note>Bu hem hoş bir şey değil hem de oldukça tehlikeli, değil mi?</polite_wander_note>
+	<ingest_any_drugs_label>Envanterdeki herhangi bir uyuşturucuyu almaya izin ver</ingest_any_drugs_label>
+	<ingest_any_drugs_note>Yenebilir bir şeyse yere düşürmeye gerek kalmadan tüketmek mümkün olmalı.</ingest_any_drugs_note>
+	<DoCleanCompToggleLabel>Bu masanın etrafını temizle</DoCleanCompToggleLabel>
+	<DoCleanCompToggleDescActive>Koloniciler bu masanın etrafını temizleyecek</DoCleanCompToggleDescActive>
+	<DoCleanCompToggleDescInactive>Koloniciler bu masanın etrafını temizlemeyecek</DoCleanCompToggleDescInactive>
+	<advanced_inbetween_cleaning_gizmo_label>Hangi masaların etrafında temizlik yapılacağını ayarlayan bir tuş göster</advanced_inbetween_cleaning_gizmo_label>
+	<advanced_inbetween_cleaning_gizmo_note>Bazı masaların etrafında yapılacak temizliği devre dışı bırakmak mümkün olacak.</advanced_inbetween_cleaning_gizmo_note>
+	<meditation_economy_label>Koloniciler yalnızca ihtiyaç duydukları kadar meditasyon yapar</meditation_economy_label>
+	<meditation_economy_note>Koloniciler, meditasyon görevinde olmadıkları sürece psişik odakları tamamen dolduğunda ve meditasyonu iyi bir eğlence kaynağı olarak görmediklerinde (örn. eğlence ihtiyaçları doluysa veya bundan sıkıldılarsa) meditasyon yapmayı bırakırlar.</meditation_economy_note>
+	<advanced_respect_capacity_label>-- koloniciler envanter kapasitesini aşmaz</advanced_respect_capacity_label>
+	<advanced_respect_capacity_note>İster gerçekçilik uğruna ister başka bir sebepten.</advanced_respect_capacity_note>
+	<optimal_patching_label>Optimum Yama</optimal_patching_label>
+	<optimal_patching_note>Bu seçenek kapalıyken, ayarlarda yapılan değişiklikler anında devreye girer. Ancak bunun sıkıntısı, hâlihazırda kapalı olan seçeneklerin kodlarının her zaman çalışır durumda olmasıdır. Dolayısıyla seçenekler kapalı olsa bile performansı etkileyebilir. Bu seçenek açık olduğunda, ayarları değiştirdiğinizde oyunu yeniden başlatmanız gerekir. Bu sayede şu anda kapalı olan seçenekler için arka planda gereken kodlar etkin olmaz, sonuç olarak oyun başlatıldığında kapalı olan seçenekler performans üzerinde ek yük oluşturmaz.</optimal_patching_note>
+	<optimal_patching_attention_label>DİKKAT: Optimum yamanın düzgün uygulanabilmesi için oyunu yeniden başlatmanız gerekir!</optimal_patching_attention_label>
+</LanguageData>
