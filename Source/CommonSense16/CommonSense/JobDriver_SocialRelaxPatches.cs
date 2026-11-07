@@ -12,7 +12,9 @@ namespace CommonSense
     {
         internal static bool Prepare()
         {
-            return !Settings.optimal_patching_in_use || Settings.social_relax_economy || Settings.adv_cleaning_ingest;
+            // Keep vanilla SocialRelax toils. Cleaning is a separate job in
+            // CleanBeforeTaskPatch and must not overwrite the gathering targets.
+            return false;
         }
         //basically the same thing as vanilla JoyTickCheckEnd, but also has an offset
         private static void JoyTickCheckEndOffset(Pawn pawn, int delta, float joyoffset, JoyTickFullJoyAction fullJoyAction = JoyTickFullJoyAction.EndJob, float extraJoyGainFactor = 1f, Building joySource = null)

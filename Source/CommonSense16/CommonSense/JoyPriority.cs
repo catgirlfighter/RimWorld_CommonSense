@@ -26,7 +26,9 @@ namespace CommonSense
     {
         internal static bool Prepare()
         {
-            return !Settings.optimal_patching_in_use || Settings.fun_police;
+            // Match Common Sense - Fix: keep vanilla recreation priority rather
+            // than applying this transpiler on RimWorld 1.6.
+            return false;
         }
         private static float JoyPolicePriority(Pawn pawn)
         {

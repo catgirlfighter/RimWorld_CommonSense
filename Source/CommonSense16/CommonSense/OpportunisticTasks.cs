@@ -156,7 +156,9 @@ namespace CommonSense
         {
             internal static bool Prepare()
             {
-                return !Settings.optimal_patching_in_use || Settings.fun_police || Settings.clean_before_work || Settings.hauling_over_bills;
+                // Replaced by CleanBeforeTaskPatch. Do not run both prefixes:
+                // queued bill/haul jobs can otherwise keep inserting themselves.
+                return false;
             }
             internal static bool Prefix(ref Pawn_JobTracker_Crutch __instance, Job newJob, bool fromQueue)
             {
