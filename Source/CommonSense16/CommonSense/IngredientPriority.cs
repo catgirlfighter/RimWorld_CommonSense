@@ -170,27 +170,35 @@ namespace CommonSense
     [HarmonyPatch(typeof(FoodUtility), "FoodOptimality")]
     static class FoodUtility_FoodOptimality
     {
+        private static FieldInfo LFoodOptimalityEffectFromMoodCurve = null;
+
         internal static bool Prepare()
         {
-            return !Settings.optimal_patching_in_use || Settings.prefer_spoiling_meals;
+            LFoodOptimalityEffectFromMoodCurve = AccessTools.Field(typeof(FoodUtility), "FoodOptimalityEffectFromMoodCurve");
+            if (LFoodOptimalityEffectFromMoodCurve == null) Log.Message("couldn't find field FoodUtility.FoodOptimalityEffectFromMoodCurve");
+            return LFoodOptimalityEffectFromMoodCurve != null
+                && (!Settings.optimal_patching_in_use || Settings.prefer_spoiling_meals);
         }
 
-        internal static void Postfix(ref float __result, Thing foodSource, bool takingToInventory)
+        internal static void Postfix(ref float __result, Pawn eater, Thing foodSource, ThingDef foodDef)
         {
-            if (!Settings.prefer_spoiling_meals || takingToInventory || foodSource == null)
+
+            if (!Settings.prefer_spoiling_meals)
                 return;
 
+            const float ahour = 2500f;
+            //const float qday = ahour * 6f;
+            const float aday = ahour * 24f;
             CompRottable compRottable = foodSource.TryGetComp<CompRottable>();
-            if (compRottable == null || compRottable.Stage != RotStage.Fresh)
-                return;
-
-            const int threeDays = 180000;
-            int ticks = compRottable.TicksUntilRotAtCurrentTemp;
-            if (ticks <= 0 || ticks >= threeDays)
-                return;
-
-            float urgency = 1f - (float)ticks / threeDays;
-            __result += 20f + urgency * urgency * 100f;
+            if (compRottable != null)
+            {
+                float t = (compRottable.PropsRot.TicksToRotStart - compRottable.RotProgress) / aday;
+                if (t > 0 && t < 3f)
+                {
+                    var delta = 6f - t * 2f;
+                    __result += delta * delta;
+                }
+            }
         }
     }
 }

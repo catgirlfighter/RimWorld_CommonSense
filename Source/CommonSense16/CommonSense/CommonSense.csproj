@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CleanOnOpportunity.cs" />
-    <Compile Include="CleanBeforeTaskPatch.cs" />
     <Compile Include="DoCleanComp.cs" />
     <Compile Include="DoctorTriage.cs" />
     <Compile Include="JobDriver_IngestPatches.cs" />

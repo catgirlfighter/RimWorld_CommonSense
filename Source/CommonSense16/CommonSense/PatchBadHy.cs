@@ -33,9 +33,7 @@ namespace CommonSense
                     if ((target = AccessTools.Method(type, "GetPriority")) == null) Log.Error($"Couldn't find  method {type}.GetPriority");
                     if ((TNeed_Bladder = AccessTools.TypeByName("Need_Bladder")) == null) Log.Error($"Couldn't find class Need_Bladder");
                 }
-                // Preserve DBH's own priority checks, as Common Sense - Fix does.
-                return !ModsConfig.IsActive("Dubwise.DubsBadHygiene")
-                    && target != null && TNeed_Bladder != null && (!Settings.optimal_patching_in_use || Settings.fun_police);
+                return target != null && TNeed_Bladder != null && (!Settings.optimal_patching_in_use || Settings.fun_police);
             }
             public static MethodBase TargetMethod()
             {
@@ -103,9 +101,7 @@ namespace CommonSense
                     TNeed_Hygiene = AccessTools.TypeByName("Need_Hygiene");
                     if ((TNeed_Hygiene = AccessTools.TypeByName("Need_Hygiene")) == null) Log.Error($"Couldn't find class Need_Hygiene");
                 }
-                // Preserve DBH's own priority checks, as Common Sense - Fix does.
-                return !ModsConfig.IsActive("Dubwise.DubsBadHygiene")
-                    && target != null && TNeed_Hygiene != null && (!Settings.optimal_patching_in_use || Settings.fun_police);
+                return target != null && TNeed_Hygiene != null && (!Settings.optimal_patching_in_use || Settings.fun_police);
             }
 
             public static MethodBase TargetMethod()
